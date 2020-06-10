@@ -14,6 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class Book {
+    @Id
+    private String id;
     private String author;
     private String title;
     private String subtitle;
