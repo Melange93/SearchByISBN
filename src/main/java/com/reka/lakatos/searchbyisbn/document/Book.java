@@ -15,6 +15,8 @@ import java.util.List;
 @Document("Book")
 @AllArgsConstructor
 @Data
+@ToString
+@Slf4j
 public class Book {
     @Id
     private String id;
