@@ -27,7 +27,7 @@ public class Book {
     private String authorNotice;
     private String publisher;
     private String yearOfRelease;
-    @Indexed(unique = true)
+    @Indexed
     private String isbn;
     private Set<String> contributors;
     private PhysicalCharacteristics physicalCharacteristics;
