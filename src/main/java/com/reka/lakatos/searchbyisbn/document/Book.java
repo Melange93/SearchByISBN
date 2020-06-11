@@ -31,9 +31,13 @@ public class Book {
     private String isbn;
     private Set<String> contributors;
     private PhysicalCharacteristics physicalCharacteristics;
+    private Set<String> booksIdsWhatContainThisBook;
+    private Set<String> booksIdsWhatPartThisBook;
 
     public Book() {
-        this.contributors = new ArrayList<>();
+        this.contributors = new HashSet<>();
+        this.booksIdsWhatContainThisBook = new HashSet<>();
+        this.booksIdsWhatPartThisBook = new HashSet<>();
     }
 
     public Book(String author,
@@ -43,8 +47,10 @@ public class Book {
                 String publisher,
                 String yearOfRelease,
                 String isbn,
-                List<String> contributors,
-                PhysicalCharacteristics physicalCharacteristics) {
+                Set<String> contributors,
+                PhysicalCharacteristics physicalCharacteristics,
+                Set<String> booksIdsWhatContainThisBook,
+                Set<String> booksIdsWhatPartThisBook) {
         this.author = author;
         this.title = title;
         this.subtitle = subtitle;
@@ -54,5 +60,7 @@ public class Book {
         this.isbn = isbn;
         this.contributors = contributors;
         this.physicalCharacteristics = physicalCharacteristics;
+        this.booksIdsWhatContainThisBook = booksIdsWhatContainThisBook;
+        this.booksIdsWhatPartThisBook = booksIdsWhatPartThisBook;
     }
 }
