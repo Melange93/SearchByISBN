@@ -1,5 +1,7 @@
 package com.reka.lakatos.searchbyisbn.document;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,8 @@ import java.util.List;
 @Data
 @ToString
 @Slf4j
+@Builder
+@AllArgsConstructor
 public class Book {
     @Id
     private String id;
