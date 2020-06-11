@@ -44,7 +44,18 @@ public class Initializer implements CommandLineRunner {
         chilrdern.setBooksIdsWhatContainThisBook(new HashSet<>(Arrays.asList(simpleBook.getId())));
         bookRepository.save(chilrdern);
 
-        System.out.println(bookRepository.findAllById(chilrdern.getBooksIdsWhatContainThisBook()));
+        Book book = Book.builder()
+                .author("Robin Hobb")
+                .title("Az arany Bolond")
+                .subtitle("a borostyánférfi-ciklus második része")
+                .authorNotice("Robin Hobb ; [ford. Gubó Luca]")
+                .publisher("Delta Vision")
+                .yearOfRelease("2019")
+                .isbn("978-963-395-297-9")
+                .build();
+
+        bookRepository.save(book);
+
     }
 
     @Bean
