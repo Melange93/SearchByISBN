@@ -4,7 +4,9 @@ import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.CoverType;
 import com.reka.lakatos.searchbyisbn.document.PhysicalCharacteristics;
 import com.reka.lakatos.searchbyisbn.repository.BookRepository;
+import org.apache.commons.validator.routines.ISBNValidator;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -43,6 +45,10 @@ public class Initializer implements CommandLineRunner {
         bookRepository.save(chilrdern);
 
         System.out.println(bookRepository.findAllById(chilrdern.getBooksIdsWhatContainThisBook()));
+    }
 
+    @Bean
+    public ISBNValidator getISBNValidator() {
+        return new ISBNValidator();
     }
 }
