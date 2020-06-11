@@ -16,16 +16,39 @@ public class BookService {
     private BookRepository bookRepository;
 
     public boolean saveBook(Book book) {
-        String isbn = book.getIsbn().replaceAll("[^0-9]", "");
-        if (isbnValidator.isValid(isbn)) {
-            if (isbn.length() == 10) {
+        String isbn = getCleanJustNumericalISBN(book.getIsbn());
+        if (isISBNValid(isbn)) {
+            if (isISBN10(isbn)) {
                 isbn = isbnValidator.convertToISBN13(isbn);
             }
-            book.setIsbn(isbn);
-            saveBook(bookRepository.save(book));
-            return true;
+            isbn = getDashedISBN(isbn);
+            if (isBookNotRegisted(isbn)) {
+                book.setIsbn(isbn);
+                bookRepository.save(book);
+                return true;
+            }
         }
         return false;
+    }
+
+    String getCleanJustNumericalISBN(String isbn) {
+        return isbn.replaceAll("[^0-9]", "");
+    }
+
+    boolean isISBNValid(String isbn) {
+        return isbnValidator.isValid(isbn);
+    }
+
+    boolean isISBN10(String isbn) {
+        return isbn.length() == 10;
+    }
+
+    boolean isBookNotRegisted(String isbn) {
+        return bookRepository.findBookByIsbn(isbn) == null;
+    }
+
+    String getDashedISBN(String isbn) {
+        return isbn.replaceAll(".{3}", "$0-");
     }
 
 }
