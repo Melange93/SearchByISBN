@@ -16,12 +16,11 @@ public class BookService {
     private BookRepository bookRepository;
 
     public boolean saveBook(Book book) {
-        String isbn = getCleanJustNumericalISBN(book.getIsbn());
-        if (isISBNValid(isbn)) {
+        if (isISBNValid(book.getIsbn())) {
+            String isbn = book.getIsbn();
             if (isISBN10(isbn)) {
-                isbn = isbnValidator.convertToISBN13(isbn);
+                isbn = convertISBN10ToISBN13(isbn);
             }
-            isbn = getDashedISBN(isbn);
             if (isBookNotRegisted(isbn)) {
                 book.setIsbn(isbn);
                 bookRepository.save(book);
@@ -31,8 +30,8 @@ public class BookService {
         return false;
     }
 
-    String getCleanJustNumericalISBN(String isbn) {
-        return isbn.replaceAll("[^0-9]", "");
+    String getCleanISBN(String isbn) {
+        return isbn.replaceAll("[-\\s]", "");
     }
 
     boolean isISBNValid(String isbn) {
@@ -40,7 +39,7 @@ public class BookService {
     }
 
     boolean isISBN10(String isbn) {
-        return isbn.length() == 10;
+        return isbn.length() == 13;
     }
 
     boolean isBookNotRegisted(String isbn) {
@@ -49,6 +48,13 @@ public class BookService {
 
     String getDashedISBN(String isbn) {
         return isbn.replaceAll(".{3}", "$0-");
+    }
+
+    String convertISBN10ToISBN13(String isbn) {
+        isbn = getCleanISBN(isbn);
+        isbn = isbnValidator.convertToISBN13(isbn);
+        isbn = getDashedISBN(isbn);
+        return isbn;
     }
 
 }
