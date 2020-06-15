@@ -5,6 +5,7 @@ import com.reka.lakatos.searchbyisbn.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -20,10 +21,12 @@ public class BookRegistry {
             return RegistryResult.SUCCESSFUL;
         }
 
-        if (book.equals(optionalBook.get())) {
+        if (Objects.equals(optionalBook.get(), book)) {
             return RegistryResult.ERROR;
         }
 
+        updateEmptyFields(optionalBook.get(), book);
+        bookRepository.save(optionalBook.get());
         return RegistryResult.UPDATE;
 
     }
