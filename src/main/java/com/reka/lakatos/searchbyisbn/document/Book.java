@@ -20,47 +20,18 @@ import java.util.Set;
 @AllArgsConstructor
 public class Book {
     @Id
-    private String id;
+    private String isbn;
     private String author;
     private String title;
     private String subtitle;
     private String authorNotice;
     private String publisher;
     private String yearOfRelease;
-    @Indexed
-    private String isbn;
     private Set<String> contributors;
-    private PhysicalCharacteristics physicalCharacteristics;
-    private Set<String> booksIdsWhatContainThisBook;
-    private Set<String> booksIdsWhatPartThisBook;
+    private float thickness;
+    private CoverType coverType;
 
     public Book() {
         this.contributors = new HashSet<>();
-        this.booksIdsWhatContainThisBook = new HashSet<>();
-        this.booksIdsWhatPartThisBook = new HashSet<>();
-    }
-
-    public Book(String author,
-                String title,
-                String subtitle,
-                String authorNotice,
-                String publisher,
-                String yearOfRelease,
-                String isbn,
-                Set<String> contributors,
-                PhysicalCharacteristics physicalCharacteristics,
-                Set<String> booksIdsWhatContainThisBook,
-                Set<String> booksIdsWhatPartThisBook) {
-        this.author = author;
-        this.title = title;
-        this.subtitle = subtitle;
-        this.authorNotice = authorNotice;
-        this.publisher = publisher;
-        this.yearOfRelease = yearOfRelease;
-        this.isbn = isbn;
-        this.contributors = contributors;
-        this.physicalCharacteristics = physicalCharacteristics;
-        this.booksIdsWhatContainThisBook = booksIdsWhatContainThisBook;
-        this.booksIdsWhatPartThisBook = booksIdsWhatPartThisBook;
     }
 }
