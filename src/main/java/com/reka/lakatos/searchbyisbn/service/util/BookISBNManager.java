@@ -11,6 +11,8 @@ public class BookISBNManager {
     @Autowired
     private ISBNValidator isbnValidator;
 
+    private static final int ISBN10_LENGTH = 10;
+
     public boolean isISBNValid(String isbn) {
         return isbnValidator.isValid(isbn);
     }
@@ -38,7 +40,7 @@ public class BookISBNManager {
     }
 
     boolean isISBN10(String isbn) {
-        return isbn.length() == 13;
+        return isbn.length() == ISBN10_LENGTH;
     }
 
     String getDashedISBN(String isbn) {
