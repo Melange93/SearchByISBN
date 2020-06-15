@@ -3,7 +3,9 @@ package com.reka.lakatos.searchbyisbn.service.util;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import org.apache.commons.validator.routines.ISBNValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class BookISBNManager {
 
     @Autowired
