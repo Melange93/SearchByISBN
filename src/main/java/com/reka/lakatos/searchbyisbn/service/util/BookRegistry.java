@@ -28,4 +28,31 @@ public class BookRegistry {
 
     }
 
+    private void updateEmptyFields(Book fromDb, Book newOne) {
+        if (fromDb.getAuthor() == null && newOne.getAuthor() != null) {
+            fromDb.setAuthor(newOne.getAuthor());
+        }
+        if (fromDb.getTitle() == null && newOne.getTitle() != null) {
+            fromDb.setTitle(newOne.getTitle());
+        }
+        if (fromDb.getSubtitle() == null && newOne.getSubtitle() != null) {
+            fromDb.setSubtitle(newOne.getSubtitle());
+        }
+        if (fromDb.getAuthorNotice() == null && newOne.getAuthorNotice() != null) {
+            fromDb.setAuthorNotice(newOne.getAuthorNotice());
+        }
+        if (fromDb.getYearOfRelease() == null && newOne.getYearOfRelease() != null) {
+            fromDb.setYearOfRelease(newOne.getYearOfRelease());
+        }
+        if (fromDb.getContributors().isEmpty() && !newOne.getContributors().isEmpty()) {
+            fromDb.setContributors(newOne.getContributors());
+        }
+        if (fromDb.getThickness() == 0.0 && newOne.getThickness() != 0.0) {
+            fromDb.setThickness(newOne.getThickness());
+        }
+        if (fromDb.getCoverType() == null && newOne.getCoverType() != null) {
+            fromDb.setCoverType(newOne.getCoverType());
+        }
+    }
+
 }
