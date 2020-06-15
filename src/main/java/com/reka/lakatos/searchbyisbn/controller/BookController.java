@@ -15,6 +15,7 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
+    /*
     @PostMapping("/save")
     public ResponseEntity<String> saveABook(@RequestBody Book book) {
         boolean result = bookService.saveBook(book);
@@ -23,5 +24,7 @@ public class BookController {
         }
         return new ResponseEntity<>("The book is already registered with this ISBN code", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+     */
 
 }
