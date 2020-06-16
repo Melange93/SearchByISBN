@@ -22,18 +22,6 @@ public class Initializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Book book = Book.builder()
-                .author("Robin Hobb")
-                .title("Az arany Bolond")
-                .subtitle("a borostyánférfi-ciklus második része")
-                .authorNotice("Robin Hobb ; [ford. Gubó Luca]")
-                .publisher("Delta Vision")
-                .yearOfRelease("2019")
-                .isbn("978-963-395-297-9")
-                .build();
-
-        bookRepository.save(book);
-
     }
 
     @Bean
