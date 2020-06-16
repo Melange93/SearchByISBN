@@ -22,7 +22,7 @@ public class BookRegistry {
         }
 
         if (Objects.equals(optionalBook.get(), book)) {
-            return RegistryResult.ERROR;
+            return RegistryResult.FAILED;
         }
 
         updateEmptyFields(optionalBook.get(), book);

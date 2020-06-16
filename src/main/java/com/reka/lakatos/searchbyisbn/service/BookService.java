@@ -21,7 +21,7 @@ public class BookService {
             Book toISBN13 = bookISBNManager.convertBookISBNToISBN13(book);
             return bookRegistry.registBook(toISBN13);
         }
-        return  RegistryResult.ERROR;
+        return  RegistryResult.FAILED;
     }
 
 
