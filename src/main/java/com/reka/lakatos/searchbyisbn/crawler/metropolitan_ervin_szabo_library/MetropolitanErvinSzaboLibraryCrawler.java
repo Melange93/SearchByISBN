@@ -6,7 +6,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -34,15 +33,7 @@ public class MetropolitanErvinSzaboLibraryCrawler implements BookCrawler {
 
     @Override
     public List<Book> getNextBooks() throws IOException {
-        List<Book> books = new ArrayList<>();
-        Map<String, String> pageBooksInformation = getPageBooksInformation(createBookListUrl(page, searchingISBNMainGroup + isbnSeventhNumber));
-        for (String bookLineNumber : pageBooksInformation.keySet()) {
-            String bookDetailsUrl = getBookDetailsUrl(bookLineNumber, pageBooksInformation.get(bookLineNumber));
-            Book book = getBook(bookDetailsUrl);
-            if (book != null) {
-                books.add(book);
-            }
-        }
+        List<Book> books = getCrawledBooks();
         page++;
 
         if (books.size() == 0 && isbnSeventhNumber <= 9) {
@@ -54,6 +45,19 @@ public class MetropolitanErvinSzaboLibraryCrawler implements BookCrawler {
             page = 0;
             isbnSeventhNumber = 0;
             searchingISBNMainGroup = ISBN615;
+        }
+        return books;
+    }
+
+    private List<Book> getCrawledBooks() throws IOException {
+        List<Book> books = new ArrayList<>();
+        Map<String, String> pageBooksInformation = getPageBooksInformation(createBookListUrl(page, searchingISBNMainGroup + isbnSeventhNumber));
+        for (String bookLineNumber : pageBooksInformation.keySet()) {
+            String bookDetailsUrl = getBookDetailsUrl(bookLineNumber, pageBooksInformation.get(bookLineNumber));
+            Book book = getBook(bookDetailsUrl);
+            if (book != null) {
+                books.add(book);
+            }
         }
         return books;
     }
