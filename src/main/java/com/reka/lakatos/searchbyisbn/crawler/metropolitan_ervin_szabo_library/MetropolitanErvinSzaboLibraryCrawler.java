@@ -6,9 +6,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,43 +19,60 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @ConditionalOnProperty(name = "ervinszabo")
+@Component
 public class MetropolitanErvinSzaboLibraryCrawler implements BookCrawler {
     private static final String ISBN963 = "978963";
     private static final String ISBN615 = "978615";
-    private static final String SEARCHING_URL_START = "http://saman.fszek.hu/WebPac/CorvinaWeb?pagesize=&view=short&sort=0&page=";
-    private static final String SEARCHING_URL_AFTER_PAGE = "&perpage=";
-    private static final String SEARCHING_URL_AFTER_PAGE_SIZE ="&action=page&actualsearchset=FIND+ISBN+%22";
-    private static final String SEARCHING_URL_AFTER_ISBN = "%25%22&actualsort=0&currentpage=result&whichform=simplesearchpage";
-    private static final String PAGE_SIZE = "50";
-
 
     private BookCreator bookCreator = new BookCreator();
 
+    private final String pageSize = "50";
     private int page = 0;
     private int isbnSeventhNumber = 0;
+    private String searchingISBNMainGroup = ISBN963;
+
 
     @Override
     public List<Book> getNextBooks() throws IOException {
+        List<Book> books = new ArrayList<>();
+        Map<String, String> pageBooksInformation = getPageBooksInformation(createBookListUrl(page, searchingISBNMainGroup + isbnSeventhNumber));
+        for (String bookLineNumber : pageBooksInformation.keySet()) {
+            String bookDetailsUrl = getBookDetailsUrl(bookLineNumber, pageBooksInformation.get(bookLineNumber));
+            Book book = getBook(bookDetailsUrl);
+            if (book != null) {
+                books.add(book);
+            }
+        }
+        page++;
 
-        getPage();
-        //page++;
-        //getBook();
-        return null;
+        if (books.size() == 0 && isbnSeventhNumber <= 9) {
+            page = 0;
+            isbnSeventhNumber++;
+        }
+
+        if (books.size() == 0 && isbnSeventhNumber > 9 && searchingISBNMainGroup.equals(ISBN963)) {
+            page = 0;
+            isbnSeventhNumber = 0;
+            searchingISBNMainGroup = ISBN615;
+        }
+        return books;
     }
 
-    private void getPage() throws IOException {
-        String url = SEARCHING_URL_START
-                + page
-                + SEARCHING_URL_AFTER_PAGE
-                + PAGE_SIZE
-                + SEARCHING_URL_AFTER_PAGE_SIZE
-                + ISBN963
-                + isbnSeventhNumber
-                + SEARCHING_URL_AFTER_ISBN;
+    private String createBookListUrl(int pageNumber, String isbn) {
+        return "http://saman.fszek.hu/WebPac/CorvinaWeb?pagesize="
+                + pageSize
+                + "&view=short&sort=0&page="
+                + pageNumber
+                + "&perpage="
+                + pageSize
+                + "&action=perpage&actualsearchset=FIND+ISBN+%22"
+                + isbn
+                + "%25%22&actualsort=0&language=&currentpage=result&text0=&index0=&whichform=simplesearchpage&showmenu=&resultview=short&recnum=&marcposition=&text0=&index0=&ccltext=&resultsize=";
+    }
+
+    private Map<String, String> getPageBooksInformation(String url) throws IOException {
         Document document = Jsoup.connect(url).get();
-        System.out.println(document);
-        System.out.println(getBookDetailsLinkInformation(document));
-        System.out.println(url);
+        return getBookDetailsLinkInformation(document);
     }
 
     private Map<String, String> getBookDetailsLinkInformation(Document document) {
@@ -72,22 +92,23 @@ public class MetropolitanErvinSzaboLibraryCrawler implements BookCrawler {
         return booksInformation;
     }
 
+    private String getBookDetailsUrl(String bookLineNumber, String bookId) {
+        return "http://saman.fszek.hu/WebPac/CorvinaWeb?action=onelong&showtype=longlong&recnum="
+                + bookId
+                + "&pos="
+                + bookLineNumber;
+    }
 
-    private void getBook() throws IOException {
-
-        Document document1 = Jsoup.connect("http://saman.fszek.hu/WebPac/CorvinaWeb?action=onelong&showtype=longlong&recnum=744130&pos=7494").get();
+    private Book getBook(String bookDetailsUrl) throws IOException {
+        Document document1 = Jsoup.connect(bookDetailsUrl).get();
         Elements bookProperties = document1.select(".long_key");
         Elements bookPropertiesValues = document1.select(".long_value");
 
         Map<String, String> prepareBook = new HashMap<>();
         for (int i = 0; i < bookProperties.size() - 1; i++) {
-            prepareBook.put(bookProperties.get(i).text().trim(),bookPropertiesValues.get(i).text().trim());
+            prepareBook.put(bookProperties.get(i).text().trim(), bookPropertiesValues.get(i).text().trim());
         }
-        System.out.println(prepareBook);
-        bookCreator.createBook(prepareBook);
 
+        return bookCreator.createBook(prepareBook);
     }
-
-
-
 }

@@ -40,8 +40,6 @@ public class BookCreator {
 
             }
         }
-        System.out.println(book);
-
         return book;
     }
 
