@@ -41,8 +41,13 @@ public class BookCreator {
                 case "Dátum:":
                     book.setYearOfRelease(prepareBook.get(key).trim());
                     break;
-                case  "Terjedelem:":
+                case "Terjedelem:":
                     getThickness(prepareBook.get(key), book);
+                    break;
+                case "Egyéb nevek:":
+                    getContributors(prepareBook.get(key), book);
+                    break;
+
             }
         }
         return book;
@@ -63,13 +68,17 @@ public class BookCreator {
         }
     }
 
-    private void getThickness(String preISBN, Book book) {
-        Pattern thickness = Pattern.compile("([0-9]*[\\s]*cm)");
-        Matcher matcher = thickness.matcher(preISBN);
+    private void getThickness(String value, Book book) {
+        Pattern thickness = Pattern.compile("([0-9,]*[\\s]*cm)");
+        Matcher matcher = thickness.matcher(value);
         if (matcher.find()) {
             String result = matcher.group().replaceAll("[^0-9]*", "");
             book.setThickness(Float.parseFloat(result));
         }
+    }
+
+    private void getContributors(String value, Book book) {
+        System.out.println(value);
     }
 
 }
