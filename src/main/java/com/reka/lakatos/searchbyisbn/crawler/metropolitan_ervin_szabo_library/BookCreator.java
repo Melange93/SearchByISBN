@@ -39,7 +39,7 @@ public class BookCreator {
                     book.setPublisher(prepareBook.get(key).trim());
                     break;
                 case "Dátum:":
-                    book.setPublisher(prepareBook.get(key).trim());
+                    book.setYearOfRelease(prepareBook.get(key).trim());
                     break;
                 case  "Terjedelem:":
                     getThickness(prepareBook.get(key), book);
