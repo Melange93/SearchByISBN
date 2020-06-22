@@ -27,15 +27,22 @@ public class BookCreator {
         for (String key : prepareBook.keySet()) {
             switch (key) {
                 case "Cím:":
-                    book.setTitle(prepareBook.get("Cím:").trim());
+                    book.setTitle(prepareBook.get(key).trim());
                     break;
                 case "Szerző:":
-                    book.setAuthor(prepareBook.get("Szerző:").trim());
+                    book.setAuthor(prepareBook.get(key).trim());
                     break;
                 case "ISBN:":
-                    getISBN(prepareBook.get("ISBN:"), book);
+                    getISBN(prepareBook.get(key), book);
                     break;
-
+                case "Megjelenés:":
+                    book.setPublisher(prepareBook.get(key).trim());
+                    break;
+                case "Dátum:":
+                    book.setPublisher(prepareBook.get(key).trim());
+                    break;
+                case  "Terjedelem:":
+                    getThickness(prepareBook.get(key), book);
             }
         }
         return book;
@@ -54,7 +61,15 @@ public class BookCreator {
         if (isbn10Matcher.find()) {
             book.setIsbn(isbn10Matcher.group());
         }
+    }
 
+    private void getThickness(String preISBN, Book book) {
+        Pattern thickness = Pattern.compile("([0-9]*[\\s]*cm)");
+        Matcher matcher = thickness.matcher(preISBN);
+        if (matcher.find()) {
+            String result = matcher.group().replaceAll("[^0-9]*", "");
+            book.setThickness(Float.parseFloat(result));
+        }
     }
 
 }
