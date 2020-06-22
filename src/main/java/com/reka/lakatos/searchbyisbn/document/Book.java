@@ -27,6 +27,7 @@ public class Book {
     private String yearOfRelease;
     private Set<String> contributors;
     private float thickness;
+    private int pageNumber;
     private CoverType coverType;
 
     public Book() {
