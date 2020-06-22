@@ -27,9 +27,7 @@ public class BookCreator {
         for (String key : prepareBook.keySet()) {
             switch (key) {
                 case "Cím:":
-                    getTitle(prepareBook.get("Cím:"), book);
-                    getSubTitle(prepareBook.get("Cím:"), book);
-                    getAuthorNotice(prepareBook.get("Cím:"), book);
+                    book.setTitle(prepareBook.get("Cím:").trim());
                     break;
                 case "Szerző:":
                     book.setAuthor(prepareBook.get("Szerző:").trim());
@@ -41,48 +39,6 @@ public class BookCreator {
             }
         }
         return book;
-    }
-
-    private void getTitle(String preTitle, Book book) {
-        Pattern haveSubTitle = Pattern.compile("(.*?[:])");
-        Matcher titleMatcher = haveSubTitle.matcher(preTitle);
-        if (titleMatcher.find()) {
-            book.setTitle(titleMatcher.group(1).replace(":", "").trim());
-            return;
-        }
-
-        Pattern noSubTitle = Pattern.compile("(.*?[/])");
-        Matcher titleMatcher2 = noSubTitle.matcher(preTitle);
-        if (titleMatcher2.find()) {
-            book.setTitle(titleMatcher2.group(1).replace("/", "").trim());
-            return;
-        }
-
-        book.setTitle(preTitle);
-    }
-
-    private void getSubTitle(String preTitle, Book book) {
-        Pattern subTitlePattern = Pattern.compile("([:].*?[/])");
-        Matcher subTitleMatcher = subTitlePattern.matcher(preTitle);
-        if (subTitleMatcher.find()) {
-            String subTitle = subTitleMatcher
-                    .group()
-                    .replaceFirst(":", "")
-                    .replace("/", "")
-                    .trim();
-            book.setSubtitle(subTitle);
-        }
-    }
-
-    private void getAuthorNotice(String preTitle, Book book) {
-        Pattern authorNoticePattern = Pattern.compile("([/].*)");
-        Matcher authorNoticeMatcher = authorNoticePattern.matcher(preTitle);
-        if (authorNoticeMatcher.find()) {
-            String authorNotice = authorNoticeMatcher.group().replaceFirst("/", "").trim();
-            if (!authorNotice.isBlank()) {
-                book.setAuthorNotice(authorNotice);
-            }
-        }
     }
 
     private void getISBN(String preISBN, Book book) {

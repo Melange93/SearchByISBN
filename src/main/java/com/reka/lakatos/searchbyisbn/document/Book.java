@@ -23,8 +23,6 @@ public class Book {
     private String isbn;
     private String author;
     private String title;
-    private String subtitle;
-    private String authorNotice;
     private String publisher;
     private String yearOfRelease;
     private Set<String> contributors;

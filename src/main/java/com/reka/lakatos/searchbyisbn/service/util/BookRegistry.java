@@ -42,12 +42,6 @@ public class BookRegistry {
         if (fromDb.getTitle() == null && newOne.getTitle() != null) {
             fromDb.setTitle(newOne.getTitle());
         }
-        if (fromDb.getSubtitle() == null && newOne.getSubtitle() != null) {
-            fromDb.setSubtitle(newOne.getSubtitle());
-        }
-        if (fromDb.getAuthorNotice() == null && newOne.getAuthorNotice() != null) {
-            fromDb.setAuthorNotice(newOne.getAuthorNotice());
-        }
         if (fromDb.getYearOfRelease() == null && newOne.getYearOfRelease() != null) {
             fromDb.setYearOfRelease(newOne.getYearOfRelease());
         }
