@@ -1,6 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.metropolitan_ervin_szabo_library;
 
 import com.reka.lakatos.searchbyisbn.document.Book;
+import com.reka.lakatos.searchbyisbn.document.CoverType;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -34,6 +35,7 @@ public class BookCreator {
                     break;
                 case "ISBN:":
                     getISBN(prepareBook.get(key), book);
+                    getBasicCoverType(prepareBook.get(key), book);
                     break;
                 case "Megjelenés:":
                     book.setPublisher(prepareBook.get(key).trim());
@@ -45,7 +47,6 @@ public class BookCreator {
                     getThickness(prepareBook.get(key), book);
                     break;
                 case "Egyéb nevek:":
-                    getContributors(prepareBook.get(key), book);
                     break;
 
             }
@@ -77,8 +78,15 @@ public class BookCreator {
         }
     }
 
-    private void getContributors(String value, Book book) {
-        System.out.println(value);
+    private void getBasicCoverType(String value, Book book) {
+        Pattern coverTypePattern = Pattern.compile("([^0-9\\s\\(\\)\\:\\-]*)");
+        Matcher matcher = coverTypePattern.matcher(value);
+        while (matcher.find()) {
+            if (!matcher.group().trim().isBlank()) {
+                String result = matcher.group().trim();
+                book.setCoverType(CoverType.findTypeByName(result));
+            }
+        }
     }
 
 }
