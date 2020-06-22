@@ -8,11 +8,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-@NoArgsConstructor
 public class BookISBNManager {
 
     private static final int ISBN10_LENGTH = 10;
-    private final ISBNValidator isbnValidator = ISBNValidator.getInstance();
+    private ISBNValidator isbnValidator = ISBNValidator.getInstance();
 
     public boolean isISBNValid(String isbn) {
         return isbnValidator.isValid(isbn);
