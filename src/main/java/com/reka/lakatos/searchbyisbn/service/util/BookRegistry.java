@@ -51,6 +51,9 @@ public class BookRegistry {
         if (fromDb.getThickness() == 0.0 && newOne.getThickness() != 0.0) {
             fromDb.setThickness(newOne.getThickness());
         }
+        if (fromDb.getPageNumber() == 0 && newOne.getPageNumber() != 0) {
+            fromDb.setPageNumber(newOne.getPageNumber());
+        }
         if (fromDb.getCoverType() == null && newOne.getCoverType() != null) {
             fromDb.setCoverType(newOne.getCoverType());
         }
