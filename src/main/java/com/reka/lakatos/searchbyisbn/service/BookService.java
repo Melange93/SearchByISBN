@@ -4,10 +4,14 @@ import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.service.util.BookISBNManager;
 import com.reka.lakatos.searchbyisbn.service.util.BookRegistry;
 import com.reka.lakatos.searchbyisbn.service.util.RegistryResult;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@NoArgsConstructor
+@AllArgsConstructor
 public class BookService {
 
     @Autowired

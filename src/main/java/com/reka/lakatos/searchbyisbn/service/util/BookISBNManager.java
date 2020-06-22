@@ -1,17 +1,18 @@
 package com.reka.lakatos.searchbyisbn.service.util;
 
 import com.reka.lakatos.searchbyisbn.document.Book;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.apache.commons.validator.routines.ISBNValidator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookISBNManager {
 
-    @Autowired
-    private ISBNValidator isbnValidator;
-
     private static final int ISBN10_LENGTH = 10;
+    private ISBNValidator isbnValidator = ISBNValidator.getInstance();
 
     public boolean isISBNValid(String isbn) {
         return isbnValidator.isValid(isbn);

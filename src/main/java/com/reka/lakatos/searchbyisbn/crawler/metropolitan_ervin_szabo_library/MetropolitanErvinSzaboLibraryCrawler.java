@@ -2,11 +2,12 @@ package com.reka.lakatos.searchbyisbn.crawler.metropolitan_ervin_szabo_library;
 
 import com.reka.lakatos.searchbyisbn.crawler.BookCrawler;
 import com.reka.lakatos.searchbyisbn.document.Book;
+import lombok.NoArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -17,22 +18,32 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@ConditionalOnProperty(name = "ervinszabo")
 @Component
+@NoArgsConstructor
 public class MetropolitanErvinSzaboLibraryCrawler implements BookCrawler {
+
+    @Autowired
+    private BookCreator bookCreator;
+
     private static final String ISBN963 = "978963";
     private static final String ISBN615 = "978615";
-
-    private BookCreator bookCreator = new BookCreator();
-
-    private final String pageSize = "50";
+    private final String pageSize = "10";
     private int page = 0;
     private int isbnSeventhNumber = 0;
     private String searchingISBNMainGroup = ISBN963;
 
+    public MetropolitanErvinSzaboLibraryCrawler(BookCreator bookCreator) {
+        this.bookCreator = bookCreator;
+    }
+
+    public MetropolitanErvinSzaboLibraryCrawler(BookCreator bookCreator, int page) {
+        this.bookCreator = bookCreator;
+        this.page = page;
+    }
 
     @Override
     public List<Book> getNextBooks() throws IOException {
+        System.out.println("here");
         List<Book> books = getCrawledBooks();
         page++;
 

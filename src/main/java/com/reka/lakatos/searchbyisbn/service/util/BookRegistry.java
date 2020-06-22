@@ -2,6 +2,8 @@ package com.reka.lakatos.searchbyisbn.service.util;
 
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.repository.BookRepository;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +11,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Component
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookRegistry {
 
     @Autowired
