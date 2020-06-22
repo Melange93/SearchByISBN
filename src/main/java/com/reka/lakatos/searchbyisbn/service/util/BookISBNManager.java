@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class BookISBNManager {
 
     private static final int ISBN10_LENGTH = 10;
-    private ISBNValidator isbnValidator = ISBNValidator.getInstance();
+    private final ISBNValidator isbnValidator = ISBNValidator.getInstance();
 
     public boolean isISBNValid(String isbn) {
         return isbnValidator.isValid(isbn);
