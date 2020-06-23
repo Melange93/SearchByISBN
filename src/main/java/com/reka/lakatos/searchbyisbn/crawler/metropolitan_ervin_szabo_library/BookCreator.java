@@ -4,10 +4,7 @@ import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.CoverType;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,15 +14,15 @@ public class BookCreator {
     private static final String ISBN13_REGEX = "((?:[\\dX]{13})|(?:[\\d\\-X]{17}))";
     private static final String ISBN10_REGEX = "((?:[\\dX]{10})|(?:[\\d\\-X]{13}))";
 
-    public Book createBook(Map<String, String> prepareBook, String specialSeparationCharacter) {
+    public Optional<Book> createBook(Map<String, String> prepareBook, String specialSeparationCharacter) {
         Book book = new Book();
 
         if (prepareBook.get("Megjegyzések:") != null && prepareBook.get("Megjegyzések:").matches(".*?" + ISBN13_REGEX + ".*" + "|" + ".*?" + ISBN10_REGEX + ".*")) {
-            return null;
+            return Optional.empty();
         }
 
         if (prepareBook.get("ISBN:") == null) {
-            return null;
+            return Optional.empty();
         }
 
         for (String key : prepareBook.keySet()) {
@@ -53,10 +50,10 @@ public class BookCreator {
                 case "Egyéb nevek:":
                     setContributors(prepareBook.get(key), book, specialSeparationCharacter);
                     break;
-
             }
         }
-        return book;
+
+        return Optional.of(book);
     }
 
     private void setISBN(String preISBN, Book book) {
@@ -119,5 +116,4 @@ public class BookCreator {
         }
         book.setPageNumber(pageCounter);
     }
-
 }

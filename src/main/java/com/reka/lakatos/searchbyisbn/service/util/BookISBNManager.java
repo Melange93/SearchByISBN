@@ -1,49 +1,36 @@
 package com.reka.lakatos.searchbyisbn.service.util;
 
-import com.reka.lakatos.searchbyisbn.document.Book;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.routines.ISBNValidator;
 import org.springframework.stereotype.Component;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BookISBNManager {
 
     private static final int ISBN10_LENGTH = 10;
-    private ISBNValidator isbnValidator = ISBNValidator.getInstance();
 
-    public boolean isISBNValid(String isbn) {
+    private final ISBNValidator isbnValidator;
+
+    public boolean isValidISBN(final String isbn) {
+        if (isbn == null || isbn.isBlank()) {
+            return false;
+        }
+
         return isbnValidator.isValid(isbn);
     }
 
-    public Book convertBookISBNToISBN13(Book book) {
-        String isbn = book.getIsbn();
+    public String convertISBNToISBN13(final String isbn) {
+        final String cleanISBN = cleanISBN(isbn);
 
-        if (isbn.isBlank()) {
-            throw new NullPointerException("ISBN conversation failed because ISBN is blank in" + getClass().getSimpleName() + "class.");
-        }
-
-        isbn = getCleanISBN(isbn);
-
-        if (isISBN10(isbn)) {
-            isbn = isbnValidator.convertToISBN13(isbn);
-        }
-
-        book.setIsbn(isbn);
-        return book;
+        return isISBN10(cleanISBN) ? isbnValidator.convertToISBN13(isbn) : cleanISBN;
     }
 
-    String getCleanISBN(String isbn) {
+    private String cleanISBN(String isbn) {
         return isbn.replaceAll("[-\\s]", "");
     }
 
-    boolean isISBN10(String isbn) {
+    private boolean isISBN10(String isbn) {
         return isbn.length() == ISBN10_LENGTH;
     }
-
-    String getDashedISBN(String isbn) {
-        return isbn.replaceAll(".{3}", "$0-");
-    }
-
 }

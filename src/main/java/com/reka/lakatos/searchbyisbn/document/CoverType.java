@@ -8,7 +8,7 @@ public enum CoverType {
     MAP("kartográfiai dokumentum"),
     SHEET_MUSIC("nyomtatott kotta");
 
-    private String hunName;
+    private final String hunName;
 
     CoverType(String hunName) {
         this.hunName = hunName;
