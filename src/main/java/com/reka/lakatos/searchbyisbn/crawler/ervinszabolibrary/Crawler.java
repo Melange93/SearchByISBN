@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ErvinSzaboLibraryCrawler implements BookCrawler {
+public class Crawler implements BookCrawler {
 
-    private final ErvinSzaboLibraryBookCreator bookCreator;
+    private final BookCreator bookCreator;
 
     private static final String ISBN963 = "978963";
     private static final String ISBN615 = "978615";
