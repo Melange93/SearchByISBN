@@ -37,8 +37,8 @@ public class BookCreator {
                     book.setAuthor(prepareBook.get(key).trim());
                     break;
                 case "ISBN:":
-                    getISBN(prepareBook.get(key), book);
-                    getBasicCoverType(prepareBook.get(key), book);
+                    setISBN(prepareBook.get(key), book);
+                    setBasicCoverType(prepareBook.get(key), book);
                     break;
                 case "Megjelenés:":
                     book.setPublisher(prepareBook.get(key).trim());
@@ -47,10 +47,10 @@ public class BookCreator {
                     book.setYearOfRelease(prepareBook.get(key).trim());
                     break;
                 case "Terjedelem:":
-                    getThickness(prepareBook.get(key), book);
+                    setThickness(prepareBook.get(key), book);
                     break;
                 case "Egyéb nevek:":
-                    getContributors(prepareBook.get(key), book, specialSeparationCharacter);
+                    setContributors(prepareBook.get(key), book, specialSeparationCharacter);
                     break;
 
             }
@@ -58,7 +58,7 @@ public class BookCreator {
         return book;
     }
 
-    private void getISBN(String preISBN, Book book) {
+    private void setISBN(String preISBN, Book book) {
         Pattern isbn13Pattern = Pattern.compile(ISBN13_REGEX);
         Matcher isbn13Matcher = isbn13Pattern.matcher(preISBN);
         if (isbn13Matcher.find()) {
@@ -73,7 +73,7 @@ public class BookCreator {
         }
     }
 
-    private void getThickness(String value, Book book) {
+    private void setThickness(String value, Book book) {
         Pattern thickness = Pattern.compile("([0-9,]*[\\s]*cm)");
         Matcher matcher = thickness.matcher(value);
         if (matcher.find()) {
@@ -82,7 +82,7 @@ public class BookCreator {
         }
     }
 
-    private void getBasicCoverType(String value, Book book) {
+    private void setBasicCoverType(String value, Book book) {
         Pattern coverTypePattern = Pattern.compile("([^0-9\\s\\(\\)\\:\\-]*)");
         Matcher matcher = coverTypePattern.matcher(value);
         while (matcher.find()) {
@@ -93,7 +93,7 @@ public class BookCreator {
         }
     }
 
-    private void getContributors(String value, Book book, String specialSeparationCharacter) {
+    private void setContributors(String value, Book book, String specialSeparationCharacter) {
         String[] names = value.split(specialSeparationCharacter);
         Set<String> contributors = new HashSet<>(Arrays.asList(names));
         book.setContributors(contributors);
