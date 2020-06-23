@@ -41,7 +41,7 @@ public class BookCreator {
                     setBasicCoverType(prepareBook.get(key), book);
                     break;
                 case "Megjelenés:":
-                    book.setPublisher(prepareBook.get(key).trim());
+                    setPublisher(prepareBook.get(key), book);
                     break;
                 case "Dátum:":
                     book.setYearOfRelease(prepareBook.get(key).trim());
@@ -97,6 +97,15 @@ public class BookCreator {
         String[] names = value.split(specialSeparationCharacter);
         Set<String> contributors = new HashSet<>(Arrays.asList(names));
         book.setContributors(contributors);
+    }
+
+    private void setPublisher(String value, Book book) {
+        Pattern publisherPatter = Pattern.compile("(?<=[:])[^:]*?(?=[,])");
+        Matcher matcher = publisherPatter.matcher(value);
+        if (matcher.find()) {
+            book.setPublisher(matcher.group().trim());
+        }
+
     }
 
 }
