@@ -24,7 +24,9 @@ public class MetropolitanErvinSzaboLibraryCrawler implements BookCrawler {
 
     private static final String ISBN963 = "978963";
     private static final String ISBN615 = "978615";
-    private final String pageSize = "10";
+    private static final String SPECIAL_CASE_OTHER_NAMES = "Egyéb nevek:";
+    private String specialSeparationCharacter = "$";
+    private String pageSize = "10";
     private int page = 0;
     private int isbnSeventhNumber = 0;
     private String searchingISBNMainGroup = ISBN963;
@@ -109,9 +111,17 @@ public class MetropolitanErvinSzaboLibraryCrawler implements BookCrawler {
 
         Map<String, String> prepareBook = new HashMap<>();
         for (int i = 0; i < bookProperties.size() - 1; i++) {
+            if (bookProperties.get(i).text().equals(SPECIAL_CASE_OTHER_NAMES) && !bookPropertiesValues.get(i).select("a").isEmpty()) {
+                Elements names = bookPropertiesValues.get(i).select("a");
+                Optional<String> otherNames = names.stream().map(Element::text).reduce((s, s2) -> s + specialSeparationCharacter + s2);
+                String otherNamesArraysToString = Arrays.toString(otherNames.stream().toArray());
+                String otherNamesWithoutBrackets = otherNamesArraysToString.substring(1, otherNamesArraysToString.length() - 1);
+                prepareBook.put(bookProperties.get(i).text().trim(), otherNamesWithoutBrackets);
+                break;
+            }
             prepareBook.put(bookProperties.get(i).text().trim(), bookPropertiesValues.get(i).text().trim());
         }
 
-        return bookCreator.createBook(prepareBook);
+        return bookCreator.createBook(prepareBook, specialSeparationCharacter);
     }
 }
