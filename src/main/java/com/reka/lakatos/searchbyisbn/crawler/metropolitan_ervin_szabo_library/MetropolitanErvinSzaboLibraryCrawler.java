@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,15 +28,6 @@ public class MetropolitanErvinSzaboLibraryCrawler implements BookCrawler {
     private int page = 0;
     private int isbnSeventhNumber = 0;
     private String searchingISBNMainGroup = ISBN963;
-
-    public MetropolitanErvinSzaboLibraryCrawler(BookCreator bookCreator) {
-        this.bookCreator = bookCreator;
-    }
-
-    public MetropolitanErvinSzaboLibraryCrawler(BookCreator bookCreator, int page) {
-        this.bookCreator = bookCreator;
-        this.page = page;
-    }
 
     @Override
     public List<Book> getNextBooks() throws IOException {
