@@ -3,6 +3,7 @@ package com.reka.lakatos.searchbyisbn.crawler.metropolitan_ervin_szabo_library;
 import com.reka.lakatos.searchbyisbn.crawler.BookCrawler;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -17,6 +18,7 @@ import java.util.regex.Pattern;
 
 @Component
 @NoArgsConstructor
+@Slf4j
 public class MetropolitanErvinSzaboLibraryCrawler implements BookCrawler {
 
     @Autowired
@@ -33,7 +35,7 @@ public class MetropolitanErvinSzaboLibraryCrawler implements BookCrawler {
 
     @Override
     public List<Book> getNextBooks() throws IOException {
-        System.out.println("here");
+        log.info("Start crawling: " + getClass().getSimpleName());
         List<Book> books = getCrawledBooks();
         page++;
 
@@ -52,7 +54,7 @@ public class MetropolitanErvinSzaboLibraryCrawler implements BookCrawler {
 
     private List<Book> getCrawledBooks() throws IOException {
         List<Book> books = new ArrayList<>();
-        Map<String, String> pageBooksInformation = getPageBooksInformation(createBookListUrl(page, searchingISBNMainGroup + isbnSeventhNumber));
+        Map<String, String> pageBooksInformation = getSearchingBookListPageBooksInformation(createBookListUrl(page, searchingISBNMainGroup + isbnSeventhNumber));
         for (String bookLineNumber : pageBooksInformation.keySet()) {
             String bookDetailsUrl = getBookDetailsUrl(bookLineNumber, pageBooksInformation.get(bookLineNumber));
             Book book = getBook(bookDetailsUrl);
@@ -75,9 +77,9 @@ public class MetropolitanErvinSzaboLibraryCrawler implements BookCrawler {
                 + "%25%22&actualsort=0&language=&currentpage=result&text0=&index0=&whichform=simplesearchpage&showmenu=&resultview=short&recnum=&marcposition=&text0=&index0=&ccltext=&resultsize=";
     }
 
-    private Map<String, String> getPageBooksInformation(String url) throws IOException {
-        Document document = Jsoup.connect(url).get();
-        return getBookDetailsLinkInformation(document);
+    private Map<String, String> getSearchingBookListPageBooksInformation(String url) throws IOException {
+        Document bookListPage = Jsoup.connect(url).get();
+        return getBookDetailsLinkInformation(bookListPage);
     }
 
     private Map<String, String> getBookDetailsLinkInformation(Document document) {
@@ -105,23 +107,27 @@ public class MetropolitanErvinSzaboLibraryCrawler implements BookCrawler {
     }
 
     private Book getBook(String bookDetailsUrl) throws IOException {
-        Document document1 = Jsoup.connect(bookDetailsUrl).get();
-        Elements bookProperties = document1.select(".long_key");
-        Elements bookPropertiesValues = document1.select(".long_value");
+        Document bookPage = Jsoup.connect(bookDetailsUrl).get();
+        Elements bookProperties = bookPage.select(".long_key");
+        Elements bookPropertiesValues = bookPage.select(".long_value");
 
         Map<String, String> prepareBook = new HashMap<>();
         for (int i = 0; i < bookProperties.size() - 1; i++) {
             if (bookProperties.get(i).text().equals(SPECIAL_CASE_OTHER_NAMES) && !bookPropertiesValues.get(i).select("a").isEmpty()) {
                 Elements names = bookPropertiesValues.get(i).select("a");
-                Optional<String> otherNames = names.stream().map(Element::text).reduce((s, s2) -> s + specialSeparationCharacter + s2);
-                String otherNamesArraysToString = Arrays.toString(otherNames.stream().toArray());
-                String otherNamesWithoutBrackets = otherNamesArraysToString.substring(1, otherNamesArraysToString.length() - 1);
-                prepareBook.put(bookProperties.get(i).text().trim(), otherNamesWithoutBrackets);
+                String contributorsName = getContributorsStringWithSpecialSeparationCharacter(names);
+                prepareBook.put(bookProperties.get(i).text().trim(), contributorsName);
                 break;
             }
             prepareBook.put(bookProperties.get(i).text().trim(), bookPropertiesValues.get(i).text().trim());
         }
 
         return bookCreator.createBook(prepareBook, specialSeparationCharacter);
+    }
+
+    private String getContributorsStringWithSpecialSeparationCharacter(Elements names) {
+        Optional<String> otherNames = names.stream().map(Element::text).reduce((s, s2) -> s + specialSeparationCharacter + s2);
+        String otherNamesArraysToString = Arrays.toString(otherNames.stream().toArray());
+        return otherNamesArraysToString.substring(1, otherNamesArraysToString.length() - 1);
     }
 }
