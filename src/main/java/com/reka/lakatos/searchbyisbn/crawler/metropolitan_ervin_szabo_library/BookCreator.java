@@ -100,12 +100,11 @@ public class BookCreator {
     }
 
     private void setPublisher(String value, Book book) {
-        Pattern publisherPatter = Pattern.compile("(?<=[:])[^:]*?(?=[,])");
-        Matcher matcher = publisherPatter.matcher(value);
+        Pattern publisherPattern = Pattern.compile("(?<=[:])[^:]*?(?=[,])");
+        Matcher matcher = publisherPattern.matcher(value);
         if (matcher.find()) {
             book.setPublisher(matcher.group().trim());
         }
-
     }
 
 }
