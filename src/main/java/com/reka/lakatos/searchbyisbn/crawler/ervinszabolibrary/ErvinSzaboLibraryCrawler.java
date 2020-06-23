@@ -1,4 +1,4 @@
-package com.reka.lakatos.searchbyisbn.crawler.metropolitan_ervin_szabo_library;
+package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary;
 
 import com.reka.lakatos.searchbyisbn.crawler.BookCrawler;
 import com.reka.lakatos.searchbyisbn.document.Book;
@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class MetropolitanErvinSzaboLibraryCrawler implements BookCrawler {
+public class ErvinSzaboLibraryCrawler implements BookCrawler {
 
-    private final BookCreator bookCreator;
+    private final ErvinSzaboLibraryBookCreator bookCreator;
 
     private static final String ISBN963 = "978963";
     private static final String ISBN615 = "978615";
