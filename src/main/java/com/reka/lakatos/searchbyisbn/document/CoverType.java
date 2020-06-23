@@ -1,7 +1,12 @@
 package com.reka.lakatos.searchbyisbn.document;
 
 public enum CoverType {
-    HARDCORE("kötött"), PAPERBACK("fűzött"), DIGITAL("");
+    HARDCORE("kötött"),
+    PAPERBACK("fűzött"),
+    DIGITAL("elektronikus dokumentum"),
+    SOUND_RECORD("hangfelvétel"),
+    MAP("kartográfiai dokumentum"),
+    SHEET_MUSIC("nyomtatott kotta");
 
     private String hunName;
 
