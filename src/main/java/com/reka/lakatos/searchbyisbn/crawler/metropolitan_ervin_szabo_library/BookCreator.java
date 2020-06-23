@@ -48,6 +48,7 @@ public class BookCreator {
                     break;
                 case "Terjedelem:":
                     setThickness(prepareBook.get(key), book);
+                    setPageNumber(prepareBook.get(key), book);
                     break;
                 case "Egyéb nevek:":
                     setContributors(prepareBook.get(key), book, specialSeparationCharacter);
@@ -105,6 +106,18 @@ public class BookCreator {
         if (matcher.find()) {
             book.setPublisher(matcher.group().trim());
         }
+    }
+
+    private void setPageNumber(String value, Book book) {
+        Pattern pageNumberPattern = Pattern.compile("([0-9]*?(?=\\s*?p\\.))|([0-9]*?(?=[\\[\\s,]*?[0-9][\\]\\s]*?\\s*?p\\.))");
+        Matcher matcher = pageNumberPattern.matcher(value);
+        int pageCounter = 0;
+        while (matcher.find()) {
+            if (!matcher.group().isBlank()) {
+                pageCounter += Integer.parseInt(matcher.group());
+            }
+        }
+        book.setPageNumber(pageCounter);
     }
 
 }
