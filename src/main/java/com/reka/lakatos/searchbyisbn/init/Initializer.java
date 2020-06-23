@@ -28,11 +28,13 @@ public class Initializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         log.info("Start");
-        List<Book> nextBooks = bookCrawler.getNextBooks();
-        log.info(String.valueOf(nextBooks));
-        for (Book book : nextBooks) {
-            RegistryResult registryResult = bookService.saveBook(book);
-            log.info(String.valueOf(registryResult));
+        for (int i = 0; i < 2; i++) {
+            List<Book> nextBooks = bookCrawler.getNextBooks();
+            log.info(String.valueOf(nextBooks));
+            for (Book book : nextBooks) {
+                RegistryResult registryResult = bookService.saveBook(book);
+                log.info(String.valueOf(registryResult));
+            }
         }
         log.info("Finished");
     }

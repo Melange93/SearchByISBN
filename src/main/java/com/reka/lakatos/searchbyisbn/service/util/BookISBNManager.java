@@ -30,7 +30,6 @@ public class BookISBNManager {
             isbn = isbnValidator.convertToISBN13(isbn);
         }
 
-        isbn = getDashedISBN(isbn);
         book.setIsbn(isbn);
         return book;
     }
