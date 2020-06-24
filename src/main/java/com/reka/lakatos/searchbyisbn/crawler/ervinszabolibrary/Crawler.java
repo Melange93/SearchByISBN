@@ -53,8 +53,8 @@ public class Crawler implements BookCrawler {
     }
 
     private List<Book> getCrawledBooks() {
-        final Map<String, String> pageBooksInformation = getSearchingBookListPageBooksInformation(
-                urlFactory.createUrlForBookList(page, searchingISBNMainGroup + isbnSeventhNumber, PAGE_SIZE));
+        final Map<String, String> pageBooksInformation = getBooksDetailsInformation(
+                urlFactory.createISBNSearchingUrl(page, searchingISBNMainGroup + isbnSeventhNumber, PAGE_SIZE));
 
         return pageBooksInformation.entrySet().stream()
                 .map(bookInformationEntry -> urlFactory.createBookDetailsUrl(bookInformationEntry.getKey(),
@@ -74,13 +74,13 @@ public class Crawler implements BookCrawler {
         }
     }
 
-    private Map<String, String> getSearchingBookListPageBooksInformation(String url) {
+    private Map<String, String> getBooksDetailsInformation(String ISBNSearchingUrl) {
         try {
-            final Document bookListPage = Jsoup.connect(url).get();
+            final Document bookListPage = Jsoup.connect(ISBNSearchingUrl).get();
 
             return pageReader.getBookDetailsLinkInformation(bookListPage);
         } catch (IOException e) {
-            throw new BookListDownloadException("Unable to download the list book page! Url: " + url, e);
+            throw new BookListDownloadException("Unable to download the list book page! Url: " + ISBNSearchingUrl, e);
         }
     }
 

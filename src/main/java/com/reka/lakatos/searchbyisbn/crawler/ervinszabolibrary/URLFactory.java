@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class URLFactory {
 
-    public String createUrlForBookList(int pageNumber, String isbn, String pageSize) {
+    public String createISBNSearchingUrl(int pageNumber, String isbn, String pageSize) {
         return "http://saman.fszek.hu/WebPac/CorvinaWeb?pagesize="
                 + pageSize
                 + "&view=short&sort=0&page="
