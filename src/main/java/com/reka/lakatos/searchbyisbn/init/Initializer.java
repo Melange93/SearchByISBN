@@ -20,7 +20,7 @@ public class Initializer implements CommandLineRunner {
     private final BookService bookService;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         log.info("Start");
 
         for (int i = 0; i < 2; i++) {
