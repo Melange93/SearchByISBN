@@ -2,6 +2,8 @@ package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary;
 
 import com.reka.lakatos.searchbyisbn.crawler.BookCrawler;
 import com.reka.lakatos.searchbyisbn.document.Book;
+import com.reka.lakatos.searchbyisbn.exception.BookDownloadException;
+import com.reka.lakatos.searchbyisbn.exception.BookListDownloadException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -81,8 +83,7 @@ public class Crawler implements BookCrawler {
 
             return getBookDetailsLinkInformation(bookListPage);
         } catch (IOException e) {
-            //TODO: Use a named exception instead of a naked runtime one
-            throw new RuntimeException("Unable to download the list book page! Url: " + url, e);
+            throw new BookListDownloadException("Unable to download the list book page! Url: " + url, e);
         }
     }
 
@@ -122,8 +123,7 @@ public class Crawler implements BookCrawler {
 
             return bookCreator.createBook(prepareBook, SPECIAL_SEPARATION_CHARACTER);
         } catch (IOException e) {
-            //TODO: Use a named exception instead of a naked runtime one
-            throw new RuntimeException("Unable to download book page! Url: " + bookDetailsUrl, e);
+            throw new BookDownloadException("Unable to download book page! Url: " + bookDetailsUrl, e);
         }
     }
 
