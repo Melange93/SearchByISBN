@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.util.Map;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "crawler.book-crawler", havingValue = "ervin")
 public class Crawler implements BookCrawler {
 
     private final URLFactory urlFactory;
@@ -34,6 +36,7 @@ public class Crawler implements BookCrawler {
     @Override
     public List<Book> getNextBooks() {
         try {
+            log.info("Ervin");
             log.info("Start crawling: " + getClass().getSimpleName());
             List<Book> books = getCrawledBooks();
             page++;
