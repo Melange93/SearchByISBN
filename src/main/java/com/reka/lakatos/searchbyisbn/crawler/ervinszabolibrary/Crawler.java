@@ -32,21 +32,28 @@ public class Crawler implements BookCrawler {
 
     @Override
     public List<Book> getNextBooks() {
-        log.info("Start crawling: " + getClass().getSimpleName());
-        List<Book> books = getCrawledBooks();
-        page++;
+        try {
+            log.info("Start crawling: " + getClass().getSimpleName());
+            List<Book> books = getCrawledBooks();
+            page++;
 
-        if (books.size() == 0 && isbnSeventhNumber <= 9) {
-            page = 0;
-            isbnSeventhNumber++;
-        }
+            if (books.size() == 0 && isbnSeventhNumber <= 9) {
+                page = 0;
+                isbnSeventhNumber++;
+            }
 
-        if (books.size() == 0 && isbnSeventhNumber > 9 && searchingISBNMainGroup.equals(ISBN963)) {
-            page = 0;
-            isbnSeventhNumber = 0;
-            searchingISBNMainGroup = ISBN615;
+            if (books.size() == 0 && isbnSeventhNumber > 9 && searchingISBNMainGroup.equals(ISBN963)) {
+                page = 0;
+                isbnSeventhNumber = 0;
+                searchingISBNMainGroup = ISBN615;
+            }
+            return books;
+        } catch (Exception e) {
+            log.error("Exception happened while crawling list book location! Page " + page
+                    + "Searching ISBN: " + searchingISBNMainGroup + isbnSeventhNumber, e);
+            page++;
+            return getNextBooks();
         }
-        return books;
     }
 
     private List<Book> getCrawledBooks() {
