@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 public class Crawler implements BookCrawler {
 
     private final BookCreator bookCreator;
+    private final URLFactory urlFactory;
 
     private static final String ISBN963 = "978963";
     private static final String ISBN615 = "978615";
@@ -54,10 +55,10 @@ public class Crawler implements BookCrawler {
 
     private List<Book> getCrawledBooks() {
         final Map<String, String> pageBooksInformation = getSearchingBookListPageBooksInformation(
-                createBookListUrl(page, searchingISBNMainGroup + isbnSeventhNumber));
+                urlFactory.createUrlForBookList(page, searchingISBNMainGroup + isbnSeventhNumber, PAGE_SIZE));
 
         return pageBooksInformation.entrySet().stream()
-                .map(bookInformationEntry -> createBookDetailsUrl(bookInformationEntry.getKey(),
+                .map(bookInformationEntry -> urlFactory.createBookDetailsUrl(bookInformationEntry.getKey(),
                         bookInformationEntry.getValue()))
                 .map(this::visitBookDetailsUrl)
                 .flatMap(Optional::stream)
@@ -72,18 +73,6 @@ public class Crawler implements BookCrawler {
 
             return Optional.empty();
         }
-    }
-
-    private String createBookListUrl(int pageNumber, String isbn) {
-        return "http://saman.fszek.hu/WebPac/CorvinaWeb?pagesize="
-                + PAGE_SIZE
-                + "&view=short&sort=0&page="
-                + pageNumber
-                + "&perpage="
-                + PAGE_SIZE
-                + "&action=perpage&actualsearchset=FIND+ISBN+%22"
-                + isbn
-                + "%25%22&actualsort=0&language=&currentpage=result&text0=&index0=&whichform=simplesearchpage&showmenu=&resultview=short&recnum=&marcposition=&text0=&index0=&ccltext=&resultsize=";
     }
 
     private Map<String, String> getSearchingBookListPageBooksInformation(String url) {
@@ -112,14 +101,6 @@ public class Crawler implements BookCrawler {
             }
         }
         return booksInformation;
-    }
-
-    // TODO: Move to factory
-    private String createBookDetailsUrl(String bookLineNumber, String bookId) {
-        return "http://saman.fszek.hu/WebPac/CorvinaWeb?action=onelong&showtype=longlong&recnum="
-                + bookId
-                + "&pos="
-                + bookLineNumber;
     }
 
     private Optional<Book> getBook(String bookDetailsUrl) {
