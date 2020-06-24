@@ -50,7 +50,7 @@ public class Crawler implements BookCrawler {
             return books;
         } catch (Exception e) {
             log.error("Exception happened while crawling list book location! Page " + page
-                    + "Searching ISBN: " + searchingISBNMainGroup + isbnSeventhNumber, e);
+                    + " Searching ISBN: " + searchingISBNMainGroup + isbnSeventhNumber, e);
             page++;
             return getNextBooks();
         }
