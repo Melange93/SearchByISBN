@@ -25,6 +25,7 @@ public class Crawler implements BookCrawler {
     private static final String ISBN963 = "978963";
     private static final String ISBN615 = "978615";
     private static final String PAGE_SIZE = "10";
+    private static final int ISBN_MAX_SEVENTH_NUMBER = 9;
 
     private int page = 0;
     private int isbnSeventhNumber = 0;
@@ -37,12 +38,17 @@ public class Crawler implements BookCrawler {
             List<Book> books = getCrawledBooks();
             page++;
 
-            if (books.size() == 0 && isbnSeventhNumber <= 9) {
+            if (books != null
+                    && books.size() == 0
+                    && isbnSeventhNumber <= ISBN_MAX_SEVENTH_NUMBER) {
                 page = 0;
                 isbnSeventhNumber++;
             }
 
-            if (books.size() == 0 && isbnSeventhNumber > 9 && searchingISBNMainGroup.equals(ISBN963)) {
+            if (books != null
+                    && books.size() == 0
+                    && isbnSeventhNumber > ISBN_MAX_SEVENTH_NUMBER
+                    && searchingISBNMainGroup.equals(ISBN963)) {
                 page = 0;
                 isbnSeventhNumber = 0;
                 searchingISBNMainGroup = ISBN615;
