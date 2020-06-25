@@ -6,7 +6,8 @@ public enum CoverType {
     DIGITAL("elektronikus dokumentum"),
     SOUND_RECORD("hangfelvétel"),
     MAP("kartográfiai dokumentum"),
-    SHEET_MUSIC("nyomtatott kotta");
+    SHEET_MUSIC("nyomtatott kotta"),
+    DVD("dvd-felvétel");
 
     private final String hunName;
 
