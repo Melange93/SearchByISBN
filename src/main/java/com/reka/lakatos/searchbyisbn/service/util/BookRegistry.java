@@ -12,7 +12,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BookRegistry {
 
-    private BookRepository bookRepository;
+    private final BookRepository bookRepository;
 
     public RegistryResult registBook(Book book) {
         Optional<Book> optionalBook = bookRepository.findById(book.getIsbn());
