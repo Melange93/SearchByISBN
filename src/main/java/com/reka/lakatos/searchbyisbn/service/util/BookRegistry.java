@@ -3,11 +3,13 @@ package com.reka.lakatos.searchbyisbn.service.util;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 import java.util.Optional;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class BookRegistry {
@@ -22,6 +24,7 @@ public class BookRegistry {
         }
 
         if (Objects.equals(optionalBook.get(), book)) {
+            log.info("The book is already registered. ISBN: {}", book.getIsbn());
             return RegistryResult.FAILED;
         }
 

@@ -21,7 +21,7 @@ public class Initializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        log.info("Start");
+        log.info("Start crawling");
 
         for (int i = 0; i < 2; i++) {
             List<Book> nextBooks = bookCrawler.getNextBooks();

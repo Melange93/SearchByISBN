@@ -24,6 +24,7 @@ public class Crawler implements BookCrawler {
     private final PageReader pageReader;
     private final BookListCreator bookListCreator;
 
+    private static final String NAME ="Ervin Szabo Library";
     private static final String ISBN963 = "978963";
     private static final String ISBN615 = "978615";
     private static final String PAGE_SIZE = "10";
@@ -36,8 +37,9 @@ public class Crawler implements BookCrawler {
     @Override
     public List<Book> getNextBooks() {
         try {
-            log.info("Ervin");
-            log.info("Start crawling: " + getClass().getSimpleName());
+            log.info("Start crawling: {}, Page number: {}, Searching ISBN: {}",
+                    NAME, page, searchingISBNMainGroup + isbnSeventhNumber);
+
             List<Book> books = getCrawledBooks();
             page++;
 

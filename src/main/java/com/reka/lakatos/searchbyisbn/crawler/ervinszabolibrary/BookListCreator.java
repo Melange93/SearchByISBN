@@ -34,6 +34,7 @@ public class BookListCreator {
 
     private Optional<Book> visitBookDetailsUrl(final String bookDetailsUrl) {
         try {
+            log.info("Visit this book: {}", bookDetailsUrl);
             return getBook(bookDetailsUrl);
         } catch (Exception e) {
             log.error("Exception happened while crawling book location: " + bookDetailsUrl, e);
