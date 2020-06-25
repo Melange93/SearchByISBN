@@ -30,6 +30,7 @@ public class BookCreator {
             switch (key) {
                 case "Cím:":
                     book.setTitle(prepareBook.get(key).trim());
+                    setSpecialCoverType(prepareBook.get(key), book);
                     break;
                 case "Szerző:":
                     book.setAuthor(prepareBook.get(key).trim());
@@ -81,7 +82,25 @@ public class BookCreator {
         }
     }
 
+    private void setSpecialCoverType(String value, Book book) {
+        Pattern specialCoverTypePattern = Pattern.compile("(?![\\[])[^\\[\\.]*?(?=[\\]])");
+        Matcher matcher = specialCoverTypePattern.matcher(value);
+        if (matcher.find()) {
+            String result = matcher.group();
+            if (!result.isBlank()) {
+                CoverType coverType = CoverType.findTypeByName(result.toLowerCase());
+                if (coverType != null) {
+                    book.setCoverType(coverType);
+                }
+            }
+        }
+    }
+
     private void setBasicCoverType(String value, Book book) {
+        if (book.getCoverType() != null) {
+            return;
+        }
+
         Pattern coverTypePattern = Pattern.compile("([^0-9\\s\\(\\)\\:\\-]*)");
         Matcher matcher = coverTypePattern.matcher(value);
         while (matcher.find()) {
