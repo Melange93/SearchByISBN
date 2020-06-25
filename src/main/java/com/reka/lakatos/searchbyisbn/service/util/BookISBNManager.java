@@ -26,11 +26,11 @@ public class BookISBNManager {
         return isISBN10(cleanISBN) ? isbnValidator.convertToISBN13(isbn) : cleanISBN;
     }
 
-    private String cleanISBN(String isbn) {
+    public String cleanISBN(String isbn) {
         return isbn.replaceAll("[-\\s]", "");
     }
 
-    private boolean isISBN10(String isbn) {
+    public boolean isISBN10(String isbn) {
         return isbn.length() == ISBN10_LENGTH;
     }
 }
