@@ -58,6 +58,13 @@ public class Crawler implements BookCrawler {
                 isbnSeventhNumber = 0;
                 searchingISBNMainGroup = ISBN615;
             }
+
+            if (books != null
+                    && books.size() == 0
+                    && isbnSeventhNumber > ISBN_MAX_SEVENTH_NUMBER
+                    && searchingISBNMainGroup.equals(ISBN615)) {
+                return null;
+            }
             return books;
         } catch (Exception e) {
             log.error("Exception happened while crawling list book location! Page " + page
