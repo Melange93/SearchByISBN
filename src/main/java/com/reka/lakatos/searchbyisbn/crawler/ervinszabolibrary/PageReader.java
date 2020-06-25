@@ -5,10 +5,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,7 +15,6 @@ public class PageReader {
 
     private static final String SPECIAL_CASE_OTHER_NAMES = "Egyéb nevek:";
     private static final String SPECIAL_SEPARATION_CHARACTER = "$";
-
 
     public Map<String, String> getBookDetailsLinkInformation(Document bookListPage) {
         Map<String, String> booksInformation = new HashMap<>();
