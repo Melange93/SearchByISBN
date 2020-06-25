@@ -23,6 +23,22 @@ public class Initializer implements CommandLineRunner {
     public void run(String... args) {
         log.info("Start crawling");
 
+        while (true) {
+            List<Book> nextBooks = bookCrawler.getNextBooks();
+
+            if (nextBooks == null) {
+                break;
+            }
+
+            for (Book book : nextBooks) {
+                RegistryResult registryResult = bookService.saveBook(book);
+
+                log.info("Save result: {} isbn: {}", registryResult, book.getIsbn());
+            }
+        }
+
+
+        /*
         for (int i = 0; i < 2; i++) {
             List<Book> nextBooks = bookCrawler.getNextBooks();
 
@@ -32,6 +48,8 @@ public class Initializer implements CommandLineRunner {
                 log.info("Save result: {} isbn: {}", registryResult, book.getIsbn());
             }
         }
+
+         */
 
         log.info("Finished");
     }
