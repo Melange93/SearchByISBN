@@ -60,8 +60,4 @@ public class PageReader {
                 .reduce((s, s2) -> s + SPECIAL_SEPARATION_CHARACTER + s2)
                 .get();
     }
-
-    public static String getSpecialSeparationCharacter() {
-        return SPECIAL_SEPARATION_CHARACTER;
-    }
 }

@@ -13,8 +13,9 @@ public class BookCreator {
 
     private static final String ISBN13_REGEX = "((?:[\\dX]{13})|(?:[\\d\\-X]{17}))";
     private static final String ISBN10_REGEX = "((?:[\\dX]{10})|(?:[\\d\\-X]{13}))";
+    private static final String SPECIAL_CHARACTER_REGEX = "\\$";
 
-    public Optional<Book> createBook(Map<String, String> prepareBook, String specialSeparationCharacter) {
+    public Optional<Book> createBook(Map<String, String> prepareBook) {
         Book book = new Book();
 
         if (prepareBook.get("Megjegyzések:") != null && prepareBook.get("Megjegyzések:").matches(".*?" + ISBN13_REGEX + ".*" + "|" + ".*?" + ISBN10_REGEX + ".*")) {
@@ -48,7 +49,7 @@ public class BookCreator {
                     setPageNumber(prepareBook.get(key), book);
                     break;
                 case "Egyéb nevek:":
-                    setContributors(prepareBook.get(key), book, specialSeparationCharacter);
+                    setContributors(prepareBook.get(key), book);
                     break;
             }
         }
@@ -91,8 +92,8 @@ public class BookCreator {
         }
     }
 
-    private void setContributors(String value, Book book, String specialSeparationCharacter) {
-        String[] names = value.split(specialSeparationCharacter);
+    private void setContributors(String value, Book book) {
+        String[] names = value.split(SPECIAL_CHARACTER_REGEX);
         Set<String> contributors = new HashSet<>(Arrays.asList(names));
         book.setContributors(contributors);
     }

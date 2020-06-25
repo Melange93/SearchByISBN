@@ -46,8 +46,7 @@ public class BookListCreator {
         try {
             Document bookPage = Jsoup.connect(bookDetailsUrl).get();
             return bookCreator.createBook(
-                    pageReader.getBookInformation(bookPage),
-                    PageReader.getSpecialSeparationCharacter());
+                    pageReader.getBookInformation(bookPage));
         } catch (IOException e) {
             throw new BookDownloadException("Unable to download book page! Url: " + bookDetailsUrl, e);
         }
