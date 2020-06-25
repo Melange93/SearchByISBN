@@ -55,9 +55,10 @@ public class PageReader {
     }
 
     private String getContributorsStringWithSpecialSeparationCharacter(Elements names) {
-        Optional<String> otherNames = names.stream().map(Element::text).reduce((s, s2) -> s + SPECIAL_SEPARATION_CHARACTER + s2);
-        String otherNamesArraysToString = Arrays.toString(otherNames.stream().toArray());
-        return otherNamesArraysToString.substring(1, otherNamesArraysToString.length() - 1);
+        return names.stream()
+                .map(Element::text)
+                .reduce((s, s2) -> s + SPECIAL_SEPARATION_CHARACTER + s2)
+                .get();
     }
 
     public static String getSpecialSeparationCharacter() {
