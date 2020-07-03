@@ -26,17 +26,110 @@ class BookPropertiesValidatorTest {
         String ISBNField = "978-963-02-4653-8";
         String seeAlso = null;
 
-        assertThat(bookPropertiesValidator.isValidBookProperties(notesField, ISBNField, seeAlso)).isFalse();
+        assertThat(bookPropertiesValidator
+                .isValidBookProperties(notesField, ISBNField, seeAlso))
+                .isFalse();
+    }
+
+    @Test
+    void isValidBookPropertiesTestHavePartDocumentary() {
+        assertThat(bookPropertiesValidator
+                .isValidBookProperties(null, "978-963-02-4653-8", "Részdokumentum (1)"))
+                .isFalse();
+    }
+
+    @Test
+    void isValidBookPropertiesTestHaveFieldButNotHavePartDocumentary() {
+        assertThat(bookPropertiesValidator
+                .isValidBookProperties(null, "978-963-02-4653-8", "Keresés..."))
+                .isTrue();
     }
 
     @Test
     void isValidBookPropertiesTestISBNisNull() {
-        assertThat(bookPropertiesValidator.isValidBookProperties(null, null, null)).isFalse();
+        assertThat(bookPropertiesValidator
+                .isValidBookProperties(null, null, null))
+                .isFalse();
     }
 
     @Test
-    void isValidBookPropertiesTestISBNFieldContainsISBNMoreThanOneBookISBNOneValidISBN13() {
-        assertThat(bookPropertiesValidator.isValidBookProperties(null, "978-963-05-1810-9", null)).isTrue();
+    void isValidBookPropertiesTestISBNFieldContainsISBNMoreThanOneBookISBNOneISBN13() {
+        String isbnField = "978-963-05-1810-9 (kötött)";
+        assertThat(bookPropertiesValidator
+                .isValidBookProperties(null, isbnField, null))
+                .isTrue();
+    }
+
+    @Test
+    void isValidBookPropertiesTestISBNFieldContainsISBNMoreThanOneBookISBNTwoISBN13() {
+        String isbnField = "978-963-05-1810-9 978-963-05-6467-0";
+        assertThat(bookPropertiesValidator
+                .isValidBookProperties(null, isbnField, null))
+                .isFalse();
+    }
+
+    @Test
+    void isValidBookPropertiesTestISBNFieldContainsISBNMoreThanOneBookISBNThreeISBN13() {
+        String isbnField = "978-963-05-1810-9 978-963-05-6467-0 978-963-05-6467-0";
+        assertThat(bookPropertiesValidator
+                .isValidBookProperties(null, isbnField, null))
+                .isFalse();
+    }
+
+    @Test
+    void isValidBookPropertiesTestISBNFieldContainsISBNMoreThanOneBookISBNOneISBN10() {
+        String isbnFiled = "963-05-6467-X";
+        assertThat(bookPropertiesValidator
+                .isValidBookProperties(null, isbnFiled, null))
+                .isTrue();
+    }
+
+    @Test
+    void isValidBookPropertiesTestISBNFieldContainsISBNMoreThanOneBookISBNTwoISBN10() {
+        String isbnField = "963-05-6467-X 963-05-6468-X";
+        assertThat(bookPropertiesValidator
+                .isValidBookProperties(null, isbnField, null))
+                .isFalse();
+    }
+
+    @Test
+    void isValidBookPropertiesTestISBNFieldContainsISBNMoreThanOneBookISBNThreeISBN10() {
+        String isbnField = "963-05-6467-X 963-05-6468-X 963-05-6469-X";
+        assertThat(bookPropertiesValidator
+                .isValidBookProperties(null, isbnField, null))
+                .isFalse();
+    }
+
+    @Test
+    void isValidBookPropertiesTestISBNFieldContainsISBNMoreThanOneBookISBNOneISBN13AndOneISBN10SameBook() {
+        String isbnField = "963-05-6467-X 978-963-05-6467-0";
+        assertThat(bookPropertiesValidator
+                .isValidBookProperties(null, isbnField, null))
+                .isTrue();
+    }
+
+    @Test
+    void isValidBookPropertiesTestISBNFieldContainsISBNMoreThanOneBookISBNOneISBN13AndOneISBN10SameBook2() {
+        String isbnField = "978-963-05-6467-0 963-05-6467-X";
+        assertThat(bookPropertiesValidator
+                .isValidBookProperties(null, isbnField, null))
+                .isTrue();
+    }
+
+    @Test
+    void isValidBookPropertiesTestISBNFieldContainsISBNMoreThanOneBookISBNOneISBN13AndOneISBN10DifferentBook() {
+        String isbnField = "963-05-4922-0 978-963-05-6467-0";
+        assertThat(bookPropertiesValidator
+                .isValidBookProperties(null, isbnField, null))
+                .isFalse();
+    }
+
+    @Test
+    void isValidBookPropertiesTestISBNFieldContainsISBNMoreThanOneBookISBNOneISBN13AndOneISBN10DifferentBook2() {
+        String isbnField = "978-963-05-6467-0 963-05-4922-0";
+        assertThat(bookPropertiesValidator
+                .isValidBookProperties(null, isbnField, null))
+                .isFalse();
     }
 
 }
