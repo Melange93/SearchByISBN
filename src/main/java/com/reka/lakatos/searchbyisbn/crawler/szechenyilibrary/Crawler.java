@@ -25,23 +25,7 @@ public class Crawler implements BookCrawler {
 
             Elements elementsByAttributeValueStarting = document.getElementsByAttributeValueStarting("name", "SESSION_ID");
             System.out.println(elementsByAttributeValueStarting);
-/*
-            Connection.Response execute = Jsoup.connect("http://nektar2.oszk.hu/LVbin/LibriVision/lv_scan.html").data(
-                    "SESSION_ID", "1593591729_1072190528",
-                    "lv_action", "LV_Scan",
-                    "new_scan", "-1",
-                    "SCAN_TERM", "9789630039208",
-                    "SCAN_USE_ATTRIBUTE", "7",
-                    "SCAN_USE", "BN",
-                    "SCAN_PREFERRED_POSITION_IN_RESPONSE", "10",
-                    "SCAN_NUMBER_OF_TERMS_REQUESTED", "10",
-                    "SCAN_STEP_SIZE", "0")
-                    .method(Connection.Method.POST)
-                    .execute();
-            System.out.println(execute.body());
-
-
- */
+            System.out.println(elementsByAttributeValueStarting.get(0).attr("value"));
 
             return null;
         } catch (IOException e) {
