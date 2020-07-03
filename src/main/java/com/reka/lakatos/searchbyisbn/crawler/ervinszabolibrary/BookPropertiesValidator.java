@@ -22,8 +22,12 @@ public class BookPropertiesValidator {
     private static final int ISBN13_CLEAN_LENGTH = 13;
     private static final int ISBN10_CLEAN_LENGTH = 10;
 
-    public boolean isValidBookProperties(String notesField, String ISBNField, String seeAlsoField) {
+    public boolean isValidBookProperties(String notesField, String ISBNField, String seeAlso) {
         if (notesField != null && containsBookAnotherBookCheckInNotes(notesField)) {
+            return false;
+        }
+
+        if (seeAlso != null && seeAlso.matches("Részdokumentum")){
             return false;
         }
 
@@ -31,27 +35,26 @@ public class BookPropertiesValidator {
             return false;
         }
 
-        if (containsISBNMoreThanOneBookISBN(ISBNField)) {
-            return false;
-        }
-
-        return seeAlsoField == null;
+        return !containsISBNMoreThanOneBookISBN(ISBNField);
     }
 
     private boolean containsBookAnotherBookCheckInNotes(String notesField) {
-        return notesField.matches(".*?" + ISBN13_REGEX + ".*" + "|" + ".*?" + ISBN10_REGEX + ".*");
+        Pattern isbnPattern = Pattern.compile(".*?" + ISBN13_REGEX + ".*" + "|" + ".*?" + ISBN10_REGEX + ".*");
+        Matcher isbnMatcher = isbnPattern.matcher(notesField);
+        return isbnMatcher.find();
     }
 
     private boolean containsISBNMoreThanOneBookISBN(String ISBNFieldValue) {
         List<String> isbNsFromISBNField = getISBNsFromISBNField(ISBNFieldValue);
 
-        if (isbNsFromISBNField.size() > 2) {
+        if (isbNsFromISBNField.size() == 1) {
+            return false;
+        }
+
+        if (isbNsFromISBNField.size() > 2 || isbNsFromISBNField.size() == 0) {
             return true;
         }
 
-        if (isbNsFromISBNField.size() == 0) {
-            return true;
-        }
 
         if (isSameISBNLength(isbNsFromISBNField, ISBN13_CLEAN_LENGTH)
                 || isSameISBNLength(isbNsFromISBNField, ISBN10_CLEAN_LENGTH)) {
@@ -82,7 +85,11 @@ public class BookPropertiesValidator {
     }
 
     private List<String> getISBNsFromISBNField(String ISBNFieldValue) {
-        return Stream.concat(getISBNs(ISBNFieldValue, ISBN13_REGEX).stream(), getISBNs(ISBNFieldValue, ISBN10_REGEX).stream())
+        List<String> isbn13s = getISBNs(ISBNFieldValue, ISBN13_REGEX);
+        String newISBNFieldValue = isbn13s.stream()
+                .map(isbn13 -> ISBNFieldValue.replaceAll(isbn13, ""))
+                .collect(Collectors.joining());
+        return Stream.concat(isbn13s.stream(), getISBNs(newISBNFieldValue, ISBN10_REGEX).stream())
                 .collect(Collectors.toList());
     }
 
