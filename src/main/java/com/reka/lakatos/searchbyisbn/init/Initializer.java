@@ -37,20 +37,6 @@ public class Initializer implements CommandLineRunner {
             }
         }
 
-
-        /*
-        for (int i = 0; i < 2; i++) {
-            List<Book> nextBooks = bookCrawler.getNextBooks();
-
-            for (Book book : nextBooks) {
-                RegistryResult registryResult = bookService.saveBook(book);
-
-                log.info("Save result: {} isbn: {}", registryResult, book.getIsbn());
-            }
-        }
-
-         */
-
         log.info("Finished");
     }
 }
