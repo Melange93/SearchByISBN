@@ -2,17 +2,19 @@ package com.reka.lakatos.searchbyisbn.service.util;
 
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.repository.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 import java.util.Optional;
 
+@Slf4j
 @Component
+@RequiredArgsConstructor
 public class BookRegistry {
 
-    @Autowired
-    private BookRepository bookRepository;
+    private final BookRepository bookRepository;
 
     public RegistryResult registBook(Book book) {
         Optional<Book> optionalBook = bookRepository.findById(book.getIsbn());
@@ -22,7 +24,8 @@ public class BookRegistry {
         }
 
         if (Objects.equals(optionalBook.get(), book)) {
-            return RegistryResult.ERROR;
+            log.info("The book is already registered. ISBN: {}", book.getIsbn());
+            return RegistryResult.FAILED;
         }
 
         updateEmptyFields(optionalBook.get(), book);
@@ -38,12 +41,6 @@ public class BookRegistry {
         if (fromDb.getTitle() == null && newOne.getTitle() != null) {
             fromDb.setTitle(newOne.getTitle());
         }
-        if (fromDb.getSubtitle() == null && newOne.getSubtitle() != null) {
-            fromDb.setSubtitle(newOne.getSubtitle());
-        }
-        if (fromDb.getAuthorNotice() == null && newOne.getAuthorNotice() != null) {
-            fromDb.setAuthorNotice(newOne.getAuthorNotice());
-        }
         if (fromDb.getYearOfRelease() == null && newOne.getYearOfRelease() != null) {
             fromDb.setYearOfRelease(newOne.getYearOfRelease());
         }
@@ -52,6 +49,9 @@ public class BookRegistry {
         }
         if (fromDb.getThickness() == 0.0 && newOne.getThickness() != 0.0) {
             fromDb.setThickness(newOne.getThickness());
+        }
+        if (fromDb.getPageNumber() == 0 && newOne.getPageNumber() != 0) {
+            fromDb.setPageNumber(newOne.getPageNumber());
         }
         if (fromDb.getCoverType() == null && newOne.getCoverType() != null) {
             fromDb.setCoverType(newOne.getCoverType());

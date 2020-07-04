@@ -4,27 +4,31 @@ import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.service.util.BookISBNManager;
 import com.reka.lakatos.searchbyisbn.service.util.BookRegistry;
 import com.reka.lakatos.searchbyisbn.service.util.RegistryResult;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class BookService {
 
-    @Autowired
-    private BookRegistry bookRegistry;
-
-    @Autowired
-    private BookISBNManager bookISBNManager;
+    private final BookRegistry bookRegistry;
+    private final BookISBNManager bookISBNManager;
 
     public RegistryResult saveBook(Book book) {
-        if (bookISBNManager.isISBNValid(book.getIsbn())) {
-            Book toISBN13 = bookISBNManager.convertBookISBNToISBN13(book);
-            return bookRegistry.registBook(toISBN13);
+        log.info("Start saving procedure. ISBN: {}", book.getIsbn());
+        boolean validationResult = bookISBNManager.isValidISBN(book.getIsbn());
+        if (validationResult) {
+            String ISBN13 = bookISBNManager.convertISBNToISBN13(book.getIsbn());
+
+            book.setIsbn(ISBN13);
+
+            return bookRegistry.registBook(book);
         }
-        return  RegistryResult.ERROR;
+
+        log.info("Failed in ISBN validation. ISBN: {}", book.getIsbn());
+
+        return RegistryResult.FAILED;
     }
-
-
-
-
 }

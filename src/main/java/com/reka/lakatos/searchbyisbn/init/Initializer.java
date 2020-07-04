@@ -1,40 +1,56 @@
 package com.reka.lakatos.searchbyisbn.init;
 
+import com.reka.lakatos.searchbyisbn.crawler.BookCrawler;
 import com.reka.lakatos.searchbyisbn.document.Book;
-import com.reka.lakatos.searchbyisbn.repository.BookRepository;
-import org.apache.commons.validator.routines.ISBNValidator;
+import com.reka.lakatos.searchbyisbn.service.BookService;
+import com.reka.lakatos.searchbyisbn.service.util.RegistryResult;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
+@Slf4j
 @Component
+@RequiredArgsConstructor
 public class Initializer implements CommandLineRunner {
 
-    private BookRepository bookRepository;
-
-    public Initializer(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
+    private final BookCrawler bookCrawler;
+    private final BookService bookService;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
+        log.info("Start crawling");
 
-        Book book = Book.builder()
-                .author("Robin Hobb")
-                .title("Az arany Bolond")
-                .subtitle("a borostyánférfi-ciklus második része")
-                .authorNotice("Robin Hobb ; [ford. Gubó Luca]")
-                .publisher("Delta Vision")
-                .yearOfRelease("2019")
-                .isbn("978-963-395-297-9")
-                .build();
+        while (true) {
+            List<Book> nextBooks = bookCrawler.getNextBooks();
 
-        bookRepository.save(book);
+            if (nextBooks == null) {
+                break;
+            }
 
-    }
+            for (Book book : nextBooks) {
+                RegistryResult registryResult = bookService.saveBook(book);
 
-    @Bean
-    public ISBNValidator getISBNValidator() {
-        return new ISBNValidator();
+                log.info("Save result: {} isbn: {}", registryResult, book.getIsbn());
+            }
+        }
+
+
+        /*
+        for (int i = 0; i < 2; i++) {
+            List<Book> nextBooks = bookCrawler.getNextBooks();
+
+            for (Book book : nextBooks) {
+                RegistryResult registryResult = bookService.saveBook(book);
+
+                log.info("Save result: {} isbn: {}", registryResult, book.getIsbn());
+            }
+        }
+
+         */
+
+        log.info("Finished");
     }
 }
