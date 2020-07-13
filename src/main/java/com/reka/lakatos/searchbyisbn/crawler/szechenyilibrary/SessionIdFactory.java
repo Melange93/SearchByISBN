@@ -16,25 +16,47 @@ import java.util.Optional;
 public class SessionIdFactory {
 
     private static final String SESSION_ID_URL = "http://nektar1.oszk.hu/LVbin/LibriVision/lv_libri_url_db_v2.html?USER_LOGIN=Nektar_LV_user&USER_PASSWORD=Nektar&LanguageCode=hu&CountryCode=hu&HtmlSetCode=default&lv_action=LV_Login&HTML_SEARCH_TYPE=SIMPLE&DIRECT_SEARCH_TYPE=BK&DIRECT_SEARCH_TERM=978-963-0&DB_ID=2";
+    private static final String SERVER_1_NAME = "nektar1";
+    private static final String SERVER_2_NAME = "nektar2";
 
     public Optional<Map<String, String>> getServerAndSessionId() {
         try {
             Document document = Jsoup.connect(SESSION_ID_URL).get();
-            Elements getSessionIdElement =
-                    document.getElementsByAttributeValueStarting("name", "SESSION_ID");
 
-            if (document.getElementsByAttributeValueMatching("action", "nektar1") == null) {
-                return Optional.of(
-                        Collections.singletonMap(
-                                "nektar1", getSessionIdElement.get(0).attr("value")));
+            Optional<String> server = getServer(document);
+            Optional<String> sessionId = getSessionId(document);
+
+            if (server.isPresent() && sessionId.isPresent()) {
+                return Optional.of(Collections.singletonMap(
+                        server.get(), sessionId.get()));
             }
+            return Optional.empty();
 
-            return Optional.of(Collections.singletonMap(
-                    "nektar2", getSessionIdElement.get(0).attr("value")));
         } catch (IOException e) {
             // ToDo create unique exception
             log.error(String.valueOf(e));
             return Optional.empty();
         }
+    }
+
+    private Optional<String> getServer(final Document document) {
+        if (document.getElementsByAttributeValueMatching("action", SERVER_1_NAME) == null) {
+            return Optional.of(SERVER_1_NAME);
+        }
+        if (document.getElementsByAttributeValueMatching("action", SERVER_2_NAME) == null) {
+            return Optional.of(SERVER_2_NAME);
+        }
+        return Optional.empty();
+    }
+
+    private Optional<String> getSessionId(final Document document) {
+        Elements getSessionIdElement =
+                document.getElementsByAttributeValueStarting("name", "SESSION_ID");
+
+        if (getSessionIdElement.size() == 1) {
+            return Optional.of(getSessionIdElement.get(0).attr("value"));
+        }
+
+        return Optional.empty();
     }
 }
