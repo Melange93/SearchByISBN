@@ -40,10 +40,10 @@ public class SessionIdManager {
     }
 
     private Optional<String> getServer(final Document document) {
-        if (document.getElementsByAttributeValueMatching("action", SERVER_1_NAME) == null) {
+        if (document.getElementsByAttributeValueMatching("action", SERVER_1_NAME).size() == 1) {
             return Optional.of(SERVER_1_NAME);
         }
-        if (document.getElementsByAttributeValueMatching("action", SERVER_2_NAME) == null) {
+        if (document.getElementsByAttributeValueMatching("action", SERVER_2_NAME).size() == 1) {
             return Optional.of(SERVER_2_NAME);
         }
         return Optional.empty();
