@@ -22,33 +22,21 @@ public class Crawler implements BookCrawler {
 
     private final SessionIdManager sessionIdFactory;
 
-    private static final String SERVER_1_URL = "http://nektar1.oszk.hu/LVbin/LibriVision/lv_scan.html";
-    private static final String SERVER_2_URL = "http://nektar2.oszk.hu/LVbin/LibriVision/lv_scan.html";
-    private static final String SERVER_1_NAME = "nektar1";
-    private static final String SERVER_2_NAME = "nektar2";
+    private static final String SERVER_1_URL = "http://nektar1.oszk.hu/LVbin/LibriVision/";
+    private static final String SERVER_2_URL = "http://nektar2.oszk.hu/LVbin/LibriVision/";
 
     private String currentServerUrl;
     private String currentServerSessionId;
 
     @Override
     public List<Book> getNextBooks() {
-        System.out.println(sessionIdFactory.getServerAndSessionId());
+        System.out.println(sessionIdFactory.getActivatedServerAndSessionId());
         System.out.println(getBookListLinks());
         return null;
     }
 
     private List<String> getBookListLinks() {
-
-        Optional<Map<String, String>> sessionId = sessionIdFactory.getServerAndSessionId();
-        if (sessionId.isPresent()) {
-            Map<String, String> serverSessionId = sessionId.get();
-            if (serverSessionId.containsKey(SERVER_1_NAME)) {
-                currentServerUrl = SERVER_1_URL;
-                currentServerSessionId = serverSessionId.get(SERVER_1_NAME);
-            }
-            currentServerUrl = SERVER_2_URL;
-            currentServerSessionId = serverSessionId.get(SERVER_2_NAME);
-        }
+        setCurrentServerUrlAndCurrentServerSessionId();
 
         System.out.println(currentServerSessionId);
         System.out.println(currentServerUrl);
@@ -65,5 +53,23 @@ public class Crawler implements BookCrawler {
             log.error(String.valueOf(e));
         }
         return null;
+    }
+
+    private void setCurrentServerUrlAndCurrentServerSessionId() {
+        Optional<Map<String, String>> sessionId = sessionIdFactory.getActivatedServerAndSessionId();
+        if (sessionId.isPresent()) {
+            Map<String, String> serverSessionId = sessionId.get();
+            if (serverSessionId.containsKey(SERVER_1_URL)) {
+                currentServerUrl = SERVER_1_URL + "lv_scan.html";
+                currentServerSessionId = serverSessionId.get(SERVER_1_URL);
+                return;
+            }
+            if (serverSessionId.containsKey(SERVER_2_URL)) {
+                currentServerUrl = SERVER_2_URL + "lv_scan.html";
+                currentServerSessionId = serverSessionId.get(SERVER_2_URL);
+                return;
+            }
+        }
+        throw new RuntimeException("Server and SessionId not set");
     }
 }
