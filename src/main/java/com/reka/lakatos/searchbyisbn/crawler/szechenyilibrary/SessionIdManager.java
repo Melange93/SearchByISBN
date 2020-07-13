@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class SessionIdFactory {
+public class SessionIdManager {
 
     private static final String SESSION_ID_URL = "http://nektar1.oszk.hu/LVbin/LibriVision/lv_libri_url_db_v2.html?USER_LOGIN=Nektar_LV_user&USER_PASSWORD=Nektar&LanguageCode=hu&CountryCode=hu&HtmlSetCode=default&lv_action=LV_Login&HTML_SEARCH_TYPE=SIMPLE&DIRECT_SEARCH_TYPE=BK&DIRECT_SEARCH_TERM=978-963-0&DB_ID=2";
     private static final String SERVER_1_NAME = "nektar1";

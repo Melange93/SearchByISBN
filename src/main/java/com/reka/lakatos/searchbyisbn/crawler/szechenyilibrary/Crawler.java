@@ -20,7 +20,7 @@ import java.util.Optional;
 @ConditionalOnProperty(name = "crawler.book-crawler", havingValue = "szechenyi")
 public class Crawler implements BookCrawler {
 
-    private final SessionIdFactory sessionIdFactory;
+    private final SessionIdManager sessionIdFactory;
 
     private static final String SERVER_1_URL = "http://nektar1.oszk.hu/LVbin/LibriVision/lv_scan.html";
     private static final String SERVER_2_URL = "http://nektar2.oszk.hu/LVbin/LibriVision/lv_scan.html";
