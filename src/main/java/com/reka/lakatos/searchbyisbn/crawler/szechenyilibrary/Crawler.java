@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -22,25 +21,17 @@ public class Crawler implements BookCrawler {
 
     private final SessionIdManager sessionIdFactory;
 
-    private static final String SERVER_1_URL = "http://nektar1.oszk.hu/LVbin/LibriVision/";
-    private static final String SERVER_2_URL = "http://nektar2.oszk.hu/LVbin/LibriVision/";
-
     private String currentServerUrl;
     private String currentServerSessionId;
 
     @Override
     public List<Book> getNextBooks() {
-        System.out.println(sessionIdFactory.getActivatedServerAndSessionId());
         System.out.println(getBookListLinks());
         return null;
     }
 
     private List<String> getBookListLinks() {
         setCurrentServerUrlAndCurrentServerSessionId();
-
-        System.out.println(currentServerSessionId);
-        System.out.println(currentServerUrl);
-
 
         try {
             Document document = Jsoup.connect(currentServerUrl)
@@ -56,20 +47,8 @@ public class Crawler implements BookCrawler {
     }
 
     private void setCurrentServerUrlAndCurrentServerSessionId() {
-        Optional<Map<String, String>> sessionId = sessionIdFactory.getActivatedServerAndSessionId();
-        if (sessionId.isPresent()) {
-            Map<String, String> serverSessionId = sessionId.get();
-            if (serverSessionId.containsKey(SERVER_1_URL)) {
-                currentServerUrl = SERVER_1_URL + "lv_scan.html";
-                currentServerSessionId = serverSessionId.get(SERVER_1_URL);
-                return;
-            }
-            if (serverSessionId.containsKey(SERVER_2_URL)) {
-                currentServerUrl = SERVER_2_URL + "lv_scan.html";
-                currentServerSessionId = serverSessionId.get(SERVER_2_URL);
-                return;
-            }
-        }
-        throw new RuntimeException("Server and SessionId not set");
+        Map.Entry<String, String> serverUrlAndSessionId = sessionIdFactory.getActivatedServerAndSessionId();
+        currentServerUrl = serverUrlAndSessionId.getKey() + "lv_scan.html";
+        currentServerSessionId = serverUrlAndSessionId.getValue();
     }
 }
