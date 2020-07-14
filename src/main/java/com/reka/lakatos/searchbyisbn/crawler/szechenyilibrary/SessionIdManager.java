@@ -7,6 +7,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
@@ -25,24 +26,30 @@ public class SessionIdManager {
             "HTML_SEARCH_TYPE=SIMPLE&DIRECT_SEARCH_TYPE=BK&" +
             "DIRECT_SEARCH_TERM=978-963-0&" +
             "DB_ID=2";
-    private static final String SERVER_1_NAME = "nektar1";
-    private static final String SERVER_2_NAME = "nektar2";
-    private static final String SERVER_1_URL = "http://nektar1.oszk.hu/LVbin/LibriVision/";
-    private static final String SERVER_2_URL = "http://nektar2.oszk.hu/LVbin/LibriVision/";
+    private static final String[] SERVERS_URL = {
+            "http://nektar1.oszk.hu/LVbin/LibriVision/",
+            "http://nektar2.oszk.hu/LVbin/LibriVision/"};
+
+    public Optional<Map<String, String>> getActivatedServerAndSessionId() {
+        Optional<Map<String, String>> serverAndSessionId = getServerAndSessionId();
+
+        if (serverAndSessionId.isPresent()) {
+            String serverUrl = serverAndSessionId.get().keySet().stream().findFirst().get();
+            String sessionId = serverAndSessionId.get().values().stream().findFirst().get();
+            activateSessionId(serverUrl, sessionId);
+        }
+        return serverAndSessionId;
+    }
 
     private Optional<Map<String, String>> getServerAndSessionId() {
         try {
-            Document document = Jsoup.connect(SESSION_ID_URL).get();
+            final Document document = Jsoup.connect(SESSION_ID_URL).get();
+            final Optional<String> server = getServer(document);
+            final Optional<String> sessionId = getSessionId(document);
 
-            Optional<String> server = getServer(document);
-            Optional<String> sessionId = getSessionId(document);
-
-            if (server.isPresent() && sessionId.isPresent()) {
-                return Optional.of(Collections.singletonMap(
-                        server.get(), sessionId.get()));
-            }
-            return Optional.empty();
-
+            return server.isPresent() && sessionId.isPresent() ?
+                    Optional.of(Collections.singletonMap(server.get(), sessionId.get())) :
+                    Optional.empty();
         } catch (IOException e) {
             // ToDo create unique exception
             throw new RuntimeException("Failed to get session ID");
@@ -50,54 +57,41 @@ public class SessionIdManager {
     }
 
     private Optional<String> getServer(final Document document) {
-        if (document.getElementsByAttributeValueMatching("action", SERVER_1_NAME).size() == 1) {
-            return Optional.of(SERVER_1_URL);
-        }
-        if (document.getElementsByAttributeValueMatching("action", SERVER_2_NAME).size() == 1) {
-            return Optional.of(SERVER_2_URL);
-        }
-        return Optional.empty();
+        return Arrays.stream(SERVERS_URL)
+                .filter(serverUrl -> document
+                        .getElementsByAttributeValueMatching("action", serverUrl)
+                        .size() == 1)
+                .findFirst();
     }
 
     private Optional<String> getSessionId(final Document document) {
         Elements getSessionIdElement =
                 document.getElementsByAttributeValueStarting("name", "SESSION_ID");
 
-        if (getSessionIdElement.size() == 1) {
-            return Optional.of(getSessionIdElement.get(0).attr("value"));
-        }
-
-        return Optional.empty();
+        return getSessionIdElement.size() == 1 ?
+                Optional.of(getSessionIdElement.first().attr("value")) :
+                Optional.empty();
     }
 
-    public Optional<Map<String, String>> getActivatedServerAndSessionId() {
-        Optional<Map<String, String>> serverAndSessionId = getServerAndSessionId();
-
-        if (serverAndSessionId.isPresent()) {
-            String serverUrl = serverAndSessionId.get().keySet().toArray()[0].toString();
-            String sessionId = serverAndSessionId.get().values().toArray()[0].toString();
-            try {
-
-                Jsoup.connect(serverUrl + "lv_libri_url_auto_login_v2.html")
-                        .requestBody("USER_LOGIN=demo&" +
-                        "USER_PASSWORD=demo98&" +
-                        "LanguageCode=hu&" +
-                        "CountryCode=hu&" +
-                        "HtmlSetCode=default&" +
-                        "lv_action=LV_Search_Form&" +
-                        "SESSION_ID=" + sessionId + "&" +
-                        "HTML_SEARCH_TYPE=SIMPLE&" +
-                        "DB_ID=2&" +
-                        "DIRECT_SEARCH_TYPE=BK&" +
-                        "DIRECT_SEARCH_TERM=978-963-0")
-                        .header("Content-Type", "application/x-www-form-urlencoded")
-                        .post();
-            } catch (IOException e) {
-                // ToDo create unique exception
-                log.error(String.valueOf(e));
-            }
-            return serverAndSessionId;
+    private void activateSessionId(String serverUrl, String sessionId) {
+        try {
+            Jsoup.connect(serverUrl + "lv_libri_url_auto_login_v2.html")
+                    .requestBody("USER_LOGIN=demo&" +
+                            "USER_PASSWORD=demo98&" +
+                            "LanguageCode=hu&" +
+                            "CountryCode=hu&" +
+                            "HtmlSetCode=default&" +
+                            "lv_action=LV_Search_Form&" +
+                            "SESSION_ID=" + sessionId + "&" +
+                            "HTML_SEARCH_TYPE=SIMPLE&" +
+                            "DB_ID=2&" +
+                            "DIRECT_SEARCH_TYPE=BK&" +
+                            "DIRECT_SEARCH_TERM=978-963-0")
+                    .header("Content-Type", "application/x-www-form-urlencoded")
+                    .post();
+        } catch (IOException e) {
+            // ToDo create unique exception
+            throw new RuntimeException("Session ID activation failed");
         }
-        return Optional.empty();
     }
 }
