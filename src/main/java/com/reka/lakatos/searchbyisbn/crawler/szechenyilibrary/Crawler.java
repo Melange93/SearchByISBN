@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -40,6 +41,15 @@ public class Crawler implements BookCrawler {
                     .post();
 
             System.out.println(document);
+            List<String> elements = document.getElementsByTag("a")
+                    .stream()
+                    .filter(element -> element.hasAttr("href")
+                            && !element.hasAttr("target")
+                            && element.hasText())
+                    .map(element -> element.attr("href"))
+                    .collect(Collectors.toList());
+            elements.forEach(System.out::println);
+
         } catch (IOException e) {
             log.error(String.valueOf(e));
         }
