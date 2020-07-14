@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,25 +29,37 @@ public class SessionIdManager {
             "http://nektar1.oszk.hu/LVbin/LibriVision/",
             "http://nektar2.oszk.hu/LVbin/LibriVision/"};
 
-    public Optional<Map<String, String>> getActivatedServerAndSessionId() {
-        Optional<Map<String, String>> serverAndSessionId = getServerAndSessionId();
+    public Map.Entry<String, String> getActivatedServerAndSessionId() {
+        try {
+            Optional<Map.Entry<String, String>> serverAndSessionId = getServerAndSessionId();
 
-        if (serverAndSessionId.isPresent()) {
-            String serverUrl = serverAndSessionId.get().keySet().stream().findFirst().get();
-            String sessionId = serverAndSessionId.get().values().stream().findFirst().get();
-            activateSessionId(serverUrl, sessionId);
+            if (serverAndSessionId.isPresent()) {
+                String serverUrl = serverAndSessionId.get().getKey();
+                String sessionId = serverAndSessionId.get().getValue();
+                activateSessionId(serverUrl, sessionId);
+                return serverAndSessionId.get();
+            }
+            // ToDo create unique exception
+            throw new RuntimeException(
+                    getClass().getSimpleName() +
+                            " can't provide an active Session ID");
+        } catch (Exception e) {
+            // ToDo create unique exception
+            throw new RuntimeException(
+                    getClass().getSimpleName() +
+                            " can't provide an active Session ID because of "
+                            + e);
         }
-        return serverAndSessionId;
     }
 
-    private Optional<Map<String, String>> getServerAndSessionId() {
+    private Optional<Map.Entry<String, String>> getServerAndSessionId() {
         try {
             final Document document = Jsoup.connect(SESSION_ID_URL).get();
             final Optional<String> server = getServer(document);
             final Optional<String> sessionId = getSessionId(document);
 
             return server.isPresent() && sessionId.isPresent() ?
-                    Optional.of(Collections.singletonMap(server.get(), sessionId.get())) :
+                    Optional.of(Map.entry(server.get(), sessionId.get())) :
                     Optional.empty();
         } catch (IOException e) {
             // ToDo create unique exception
@@ -73,7 +84,7 @@ public class SessionIdManager {
                 Optional.empty();
     }
 
-    private void activateSessionId(String serverUrl, String sessionId) {
+    private void activateSessionId(final String serverUrl, final String sessionId) {
         try {
             Jsoup.connect(serverUrl + "lv_libri_url_auto_login_v2.html")
                     .requestBody("USER_LOGIN=demo&" +
