@@ -1,4 +1,4 @@
-package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.sessionidcreator.service;
+package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.documentreader;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
