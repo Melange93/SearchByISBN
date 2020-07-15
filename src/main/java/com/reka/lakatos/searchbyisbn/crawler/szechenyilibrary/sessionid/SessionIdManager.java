@@ -1,30 +1,22 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid;
 
+import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.webclient.WebClient;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class SessionIdManager {
+    private final WebClient webClient;
 
-    private static final String SESSION_ID_URL = "http://nektar1.oszk.hu/LVbin/LibriVision/lv_libri_url_db_v2.html?" +
-            "USER_LOGIN=Nektar_LV_user&" +
-            "USER_PASSWORD=Nektar&" +
-            "LanguageCode=hu&" +
-            "CountryCode=hu&" +
-            "HtmlSetCode=default&" +
-            "lv_action=LV_Login&" +
-            "HTML_SEARCH_TYPE=SIMPLE&DIRECT_SEARCH_TYPE=BK&" +
-            "DIRECT_SEARCH_TERM=978-963-0&" +
-            "DB_ID=2";
     private static final String[] SERVERS_URL = {
             "http://nektar1.oszk.hu/LVbin/LibriVision/",
             "http://nektar2.oszk.hu/LVbin/LibriVision/"};
@@ -36,7 +28,7 @@ public class SessionIdManager {
             if (serverAndSessionId.isPresent()) {
                 String serverUrl = serverAndSessionId.get().getKey();
                 String sessionId = serverAndSessionId.get().getValue();
-                activateSessionId(serverUrl, sessionId);
+                webClient.activateSessionId(serverUrl, sessionId);
                 return serverAndSessionId.get();
             }
             // ToDo create unique exception
@@ -53,18 +45,13 @@ public class SessionIdManager {
     }
 
     private Optional<Map.Entry<String, String>> getServerAndSessionId() {
-        try {
-            final Document document = Jsoup.connect(SESSION_ID_URL).get();
-            final Optional<String> server = getServer(document);
-            final Optional<String> sessionId = getSessionId(document);
+        final Document document = webClient.getServerAndSessionIdDocument();
+        final Optional<String> server = getServer(document);
+        final Optional<String> sessionId = getSessionId(document);
 
-            return server.isPresent() && sessionId.isPresent() ?
-                    Optional.of(Map.entry(server.get(), sessionId.get())) :
-                    Optional.empty();
-        } catch (IOException e) {
-            // ToDo create unique exception
-            throw new RuntimeException("Failed to get session ID");
-        }
+        return server.isPresent() && sessionId.isPresent() ?
+                Optional.of(Map.entry(server.get(), sessionId.get())) :
+                Optional.empty();
     }
 
     private Optional<String> getServer(final Document document) {
@@ -82,27 +69,5 @@ public class SessionIdManager {
         return getSessionIdElement.size() == 1 ?
                 Optional.of(getSessionIdElement.first().attr("value")) :
                 Optional.empty();
-    }
-
-    private void activateSessionId(final String serverUrl, final String sessionId) {
-        try {
-            Jsoup.connect(serverUrl + "lv_libri_url_auto_login_v2.html")
-                    .requestBody("USER_LOGIN=demo&" +
-                            "USER_PASSWORD=demo98&" +
-                            "LanguageCode=hu&" +
-                            "CountryCode=hu&" +
-                            "HtmlSetCode=default&" +
-                            "lv_action=LV_Search_Form&" +
-                            "SESSION_ID=" + sessionId + "&" +
-                            "HTML_SEARCH_TYPE=SIMPLE&" +
-                            "DB_ID=2&" +
-                            "DIRECT_SEARCH_TYPE=BK&" +
-                            "DIRECT_SEARCH_TERM=978-963-0")
-                    .header("Content-Type", "application/x-www-form-urlencoded")
-                    .post();
-        } catch (IOException e) {
-            // ToDo create unique exception
-            throw new RuntimeException("Session ID activation failed");
-        }
     }
 }
