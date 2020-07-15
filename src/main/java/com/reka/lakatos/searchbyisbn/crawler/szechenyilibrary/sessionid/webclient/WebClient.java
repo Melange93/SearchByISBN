@@ -1,7 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.webclient;
 
-import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.webclient.exception.SessionIdActivationFailedException;
-import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.webclient.exception.SessionIdDocumentFailureException;
+import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.webclient.exception.SessionActivationFailedException;
+import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.webclient.exception.SessionDocumentFailureException;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.webclient.service.RequestBodyCreator;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.webclient.service.SessionIdUrlHandler;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class WebClient {
                     .header("Content-Type", "application/x-www-form-urlencoded")
                     .post();
         } catch (IOException e) {
-            throw new SessionIdActivationFailedException("Session ID activation failed. Server URL: " + serverUrl, e);
+            throw new SessionActivationFailedException("Session activation failed. Server URL: " + serverUrl, e);
         }
     }
 
@@ -36,7 +36,7 @@ public class WebClient {
             final String url = sessionIdUrlHandler.getSessionIdProviderUrl();
             return Jsoup.connect(url).get();
         } catch (IOException e) {
-            throw new SessionIdDocumentFailureException("Failed to get session ID document.", e);
+            throw new SessionDocumentFailureException("Failed to get session document.", e);
         }
     }
 }
