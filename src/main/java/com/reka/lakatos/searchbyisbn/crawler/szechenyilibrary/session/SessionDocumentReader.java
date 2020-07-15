@@ -1,7 +1,7 @@
-package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.documentreader;
+package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session;
 
-import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.documentreader.exception.ServerUrlReadingException;
-import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.documentreader.exception.SessionIdReadingException;
+import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.exception.ServerUrlReadingException;
+import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.exception.SessionIdReadingException;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 @Service
-public class DocumentReader {
+public class SessionDocumentReader {
     private static final String[] SERVERS_URL = {
             "http://nektar1.oszk.hu/LVbin/LibriVision/",
             "http://nektar2.oszk.hu/LVbin/LibriVision/"
