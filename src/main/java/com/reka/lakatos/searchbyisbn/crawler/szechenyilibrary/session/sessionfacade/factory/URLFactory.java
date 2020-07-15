@@ -1,4 +1,4 @@
-package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.requesthandler.factory;
+package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.sessionfacade.factory;
 
 import org.springframework.stereotype.Service;
 
