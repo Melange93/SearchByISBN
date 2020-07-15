@@ -1,6 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid;
 
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.documentreader.DocumentReader;
+import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.exception.ActiveSessionException;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.model.Session;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.webclient.WebClient;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +26,8 @@ public class SessionIdManager {
             webClient.activateSessionId(session.getServerUrl(), session.getId());
             return session;
         } catch (Exception e) {
-            // ToDo create unique exception
-            throw new RuntimeException(
-                    getClass().getSimpleName() +
-                            " can't provide an active Session ID because of "
-                            + e);
+            throw new ActiveSessionException(
+                    getClass().getSimpleName() + " can't provide an active Session ID because of: ", e);
         }
     }
 }
