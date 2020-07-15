@@ -11,22 +11,24 @@ import java.io.IOException;
 @Service
 public class WebClient {
 
-    public Document sendGetRequest(final String url, final String exceptionMessage) {
+    public Document sendGetRequest(final String url) {
         try {
             return Jsoup.connect(url).get();
         } catch (IOException e) {
-            throw new GetRequestException(exceptionMessage, e);
+            throw new GetRequestException("The Get request failed because, failed to reach the url: " + url, e);
         }
     }
 
-    public Document sendPostRequest(final String url, final String requestBody, final String exceptionMessage) {
+    public Document sendPostRequest(final String url, final String requestBody) {
         try {
             return Jsoup.connect(url)
                     .requestBody(requestBody)
                     .header("Content-Type", "application/x-www-form-urlencoded")
                     .post();
         } catch (IOException e) {
-            throw new PostRequestException(exceptionMessage, e);
+            throw new PostRequestException(
+                    "The Post request failed because, failed to reach the url: " + url +
+                    " with this request body " + requestBody, e);
         }
     }
 }
