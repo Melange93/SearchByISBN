@@ -1,4 +1,4 @@
-package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary;
+package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;

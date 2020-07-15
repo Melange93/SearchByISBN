@@ -1,6 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary;
 
 import com.reka.lakatos.searchbyisbn.crawler.BookCrawler;
+import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.SessionIdManager;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
