@@ -1,5 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.documentreader;
 
+import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.documentreader.exception.ServerUrlReadingException;
+import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.sessionid.documentreader.exception.SessionIdReadingException;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,9 @@ public class DocumentReader {
         if (serverUrl.isPresent()) {
             return serverUrl.get();
         }
-        throw new RuntimeException("Failed to get server url from document");
+        throw new ServerUrlReadingException(
+                "Failed to get server url from document, because the server url is null."
+        );
     }
 
     public String getSessionId(final Document document) {
@@ -34,6 +38,8 @@ public class DocumentReader {
         if (getSessionIdElement.size() == 1) {
             return getSessionIdElement.first().attr("value");
         }
-        throw new RuntimeException("Failed to get server session id from document");
+        throw new SessionIdReadingException(
+                "Failed to get server session id from document, because the session id is null."
+        );
     }
 }
