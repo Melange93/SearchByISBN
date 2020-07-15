@@ -16,7 +16,7 @@ public class SessionIdManager {
     private final WebClient webClient;
     private final DocumentReader documentReader;
 
-    public Session getActivatedServerAndSessionId() {
+    public Session getActiveSession() {
         try {
             final Document document = webClient.getServerAndSessionIdDocument();
             final String serverUrl = documentReader.getServerUrl(document);
