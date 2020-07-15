@@ -3,7 +3,7 @@ package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.sessionfa
 import org.springframework.stereotype.Service;
 
 @Service
-public class RequestBodyFactory {
+public class SessionRequestBodyFactory {
 
     public String getSessionActivationRequestBody(final String sessionId) {
         return "USER_LOGIN=demo&" +

@@ -3,7 +3,7 @@ package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.sessionfa
 import org.springframework.stereotype.Service;
 
 @Service
-public class URLFactory {
+public class SessionURLFactory {
 
     public String getSessionProviderUrl() {
         return "http://nektar1.oszk.hu/LVbin/LibriVision/lv_libri_url_db_v2.html?" +

@@ -3,8 +3,8 @@ package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.sessionfa
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.Session;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.exception.SessionActivationException;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.exception.SessionDocumentException;
-import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.sessionfacade.factory.RequestBodyFactory;
-import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.sessionfacade.factory.URLFactory;
+import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.sessionfacade.factory.SessionRequestBodyFactory;
+import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.sessionfacade.factory.SessionURLFactory;
 import com.reka.lakatos.searchbyisbn.webclient.WebClient;
 import com.reka.lakatos.searchbyisbn.webclient.exception.GetRequestException;
 import com.reka.lakatos.searchbyisbn.webclient.exception.PostRequestException;
@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SessionFacade {
 
-    private final URLFactory urlFactory;
-    private final RequestBodyFactory requestBodyFactory;
+    private final SessionURLFactory urlFactory;
+    private final SessionRequestBodyFactory requestBodyFactory;
     private final WebClient webClient;
 
     public Document getSessionDocument() {
