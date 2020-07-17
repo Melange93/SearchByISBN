@@ -21,7 +21,8 @@ import java.util.stream.Collectors;
 @ConditionalOnProperty(name = "crawler.book-crawler", havingValue = "szechenyi")
 public class Crawler implements BookCrawler {
 
-    private final SessionIdManager sessionIdFactory;
+    private final SessionManager sessionManager;
+    private final SessionActivationChecker sessionActivationChecker;
 
     private String currentServerUrl;
     private String currentServerSessionId;
@@ -42,6 +43,10 @@ public class Crawler implements BookCrawler {
                     .post();
 
             System.out.println(document);
+            System.out.println("=====================");
+
+            System.out.println(sessionActivationChecker.isSessionActive(document));
+
             List<String> elements = document.getElementsByTag("a")
                     .stream()
                     .filter(element -> element.hasAttr("href")
