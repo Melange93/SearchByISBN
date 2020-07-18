@@ -1,13 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary;
 
-import com.reka.lakatos.searchbyisbn.service.util.BookISBNManager;
-import org.apache.commons.validator.routines.ISBNValidator;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 class BookPropertiesValidatorTest {
+    /*
 
     private BookPropertiesValidator bookPropertiesValidator;
 
@@ -131,5 +125,7 @@ class BookPropertiesValidatorTest {
                 .isValidBookProperties(null, isbnField, null))
                 .isFalse();
     }
+
+     */
 
 }

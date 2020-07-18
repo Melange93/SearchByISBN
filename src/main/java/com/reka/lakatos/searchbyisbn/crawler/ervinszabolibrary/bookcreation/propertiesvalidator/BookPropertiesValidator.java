@@ -1,4 +1,4 @@
-package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary;
+package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.propertiesvalidator;
 
 import com.reka.lakatos.searchbyisbn.service.util.BookISBNManager;
 import lombok.RequiredArgsConstructor;
