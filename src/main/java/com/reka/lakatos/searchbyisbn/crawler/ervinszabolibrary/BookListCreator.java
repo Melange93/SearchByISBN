@@ -1,5 +1,6 @@
 package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary;
 
+import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.BookCreator;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.exception.BookDownloadException;
 import lombok.RequiredArgsConstructor;
