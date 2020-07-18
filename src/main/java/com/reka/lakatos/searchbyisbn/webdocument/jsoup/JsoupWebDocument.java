@@ -5,11 +5,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.parser.ParseSettings;
 import org.jsoup.parser.Tag;
 
-public class JsoupDocument extends JsoupElement implements WebDocument {
+class JsoupWebDocument extends JsoupWebElement implements WebDocument {
 
     private final Document document;
 
-    public JsoupDocument(Document document) {
+    JsoupWebDocument(Document document) {
         super(Tag.valueOf("#root", ParseSettings.htmlDefault), document.location());
         this.document = document;
     }

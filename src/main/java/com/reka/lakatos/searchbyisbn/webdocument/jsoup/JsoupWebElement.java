@@ -1,19 +1,21 @@
 package com.reka.lakatos.searchbyisbn.webdocument.jsoup;
 
 import com.reka.lakatos.searchbyisbn.webdocument.WebElement;
-import com.reka.lakatos.searchbyisbn.webdocument.WebElements;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Tag;
 
-public class JsoupElement implements WebElement {
+import java.util.List;
+import java.util.stream.Collectors;
+
+class JsoupWebElement implements WebElement {
 
     private final Element element;
 
-    public JsoupElement(Element element) {
+    JsoupWebElement(Element element) {
         this.element = element;
     }
 
-    public JsoupElement(Tag tag, String baseUri) {
+    JsoupWebElement(Tag tag, String baseUri) {
         this.element = new Element(tag, baseUri);
     }
 
@@ -23,7 +25,9 @@ public class JsoupElement implements WebElement {
     }
 
     @Override
-    public WebElements select(String cssQuery) {
-        return new JsoupElements(element.select(cssQuery));
+    public List<WebElement> select(String cssQuery) {
+        return element.select(cssQuery).stream()
+                .map(JsoupWebElement::new)
+                .collect(Collectors.toList());
     }
 }
