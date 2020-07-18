@@ -3,13 +3,13 @@ package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.CoverType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class BookCreator {
 
