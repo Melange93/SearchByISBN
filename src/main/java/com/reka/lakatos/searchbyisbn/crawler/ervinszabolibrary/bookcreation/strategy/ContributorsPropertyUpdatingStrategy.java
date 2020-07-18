@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ContributorsBookPropertyUpdatingStrategy implements BookPropertyUpdatingStrategy {
+public class ContributorsPropertyUpdatingStrategy implements PropertyUpdatingStrategy {
 
     private static final String SPECIAL_CHARACTER_REGEX = "\\$";
 

@@ -5,7 +5,7 @@ import com.reka.lakatos.searchbyisbn.document.Book;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SizeBookPropertyUpdatingStrategy implements BookPropertyUpdatingStrategy {
+public class SizePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
     @Override
     public void updateProperty(Book book, String property) {
         setThickness(property, book);

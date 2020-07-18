@@ -2,7 +2,7 @@ package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.str
 
 import com.reka.lakatos.searchbyisbn.document.Book;
 
-public class AuthorBookPropertyUpdatingStrategy implements BookPropertyUpdatingStrategy {
+public class AuthorPropertyUpdatingStrategy implements PropertyUpdatingStrategy {
 
     @Override
     public void updateProperty(Book book, String property) {

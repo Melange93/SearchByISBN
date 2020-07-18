@@ -6,7 +6,7 @@ import com.reka.lakatos.searchbyisbn.document.CoverType;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TitleBookPropertyUpdatingStrategy implements BookPropertyUpdatingStrategy {
+public class TitlePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
 
     @Override
     public void updateProperty(Book book, String property) {

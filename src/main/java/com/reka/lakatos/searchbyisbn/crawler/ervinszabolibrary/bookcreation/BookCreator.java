@@ -1,7 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation;
 
-import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.BookPropertiesValidator;
-import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.strategy.BookPropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.propertiesvalidator.BookPropertiesValidator;
+import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.strategy.PropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import java.util.Optional;
 public class BookCreator {
 
     private final BookPropertiesValidator bookPropertiesValidator;
-    private final Map<String, BookPropertyUpdatingStrategy> bookPropertyUpdatingStrategyMap;
+    private final Map<String, PropertyUpdatingStrategy> bookPropertyUpdatingStrategyMap;
 
     public Optional<Book> createBook(Map<String, String> prepareBook) {
         Book book = new Book();

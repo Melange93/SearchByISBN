@@ -6,7 +6,7 @@ import com.reka.lakatos.searchbyisbn.document.CoverType;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ISBNBookPropertyUpdatingStrategy implements BookPropertyUpdatingStrategy {
+public class ISBNPropertyUpdatingStrategy implements PropertyUpdatingStrategy {
 
     private static final String ISBN13_REGEX = "((?:[\\dX]{13})|(?:[\\d\\-X]{17}))";
     private static final String ISBN10_REGEX = "((?:[\\dX]{10})|(?:[\\d\\-X]{13}))";

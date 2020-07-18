@@ -10,15 +10,15 @@ import java.util.Map;
 public class StrategyConfiguration {
 
     @Bean
-    public Map<String, BookPropertyUpdatingStrategy> getBookPropertyUpdatingStrategyMap() {
+    public Map<String, PropertyUpdatingStrategy> getBookPropertyUpdatingStrategyMap() {
         return Map.ofEntries(
-                Map.entry("Cím:", new TitleBookPropertyUpdatingStrategy()),
-                Map.entry("Szerző:", new AuthorBookPropertyUpdatingStrategy()),
-                Map.entry("ISBN:", new ISBNBookPropertyUpdatingStrategy()),
-                Map.entry("Megjelenés:", new PublisherBookPropertyUpdatingStrategy()),
-                Map.entry("Dátum:", new DateBookPropertyUpdatingStrategy()),
-                Map.entry("Terjedelem:", new SizeBookPropertyUpdatingStrategy()),
-                Map.entry("Egyéb nevek:", new ContributorsBookPropertyUpdatingStrategy())
+                Map.entry("Cím:", new TitlePropertyUpdatingStrategy()),
+                Map.entry("Szerző:", new AuthorPropertyUpdatingStrategy()),
+                Map.entry("ISBN:", new ISBNPropertyUpdatingStrategy()),
+                Map.entry("Megjelenés:", new PublisherPropertyUpdatingStrategy()),
+                Map.entry("Dátum:", new DatePropertyUpdatingStrategy()),
+                Map.entry("Terjedelem:", new SizePropertyUpdatingStrategy()),
+                Map.entry("Egyéb nevek:", new ContributorsPropertyUpdatingStrategy())
         );
     }
 }
