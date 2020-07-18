@@ -1,4 +1,5 @@
 package com.reka.lakatos.searchbyisbn.webdocument;
 
-public interface WebDocument extends WebElement {
+public interface WebDocument extends WebElement{
+    String text();
 }

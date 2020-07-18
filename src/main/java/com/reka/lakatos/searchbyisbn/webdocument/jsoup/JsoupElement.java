@@ -26,15 +26,4 @@ public class JsoupElement implements WebElement {
     public WebElements select(String cssQuery) {
         return new JsoupElements(element.select(cssQuery));
     }
-
-    @Override
-    public WebElements getElementsByAttributeValueMatching(String key, String regex) {
-        return new JsoupElements(element.getElementsByAttributeValueMatching(key, regex));
-
-    }
-
-    @Override
-    public WebElements getElementsByAttributeValueStarting(String key, String valuePrefix) {
-        return new JsoupElements(element.getElementsByAttributeValueStarting(key, valuePrefix));
-    }
 }
