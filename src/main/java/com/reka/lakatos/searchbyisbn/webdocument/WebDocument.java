@@ -1,6 +1,10 @@
 package com.reka.lakatos.searchbyisbn.webdocument;
 
-public interface WebDocument extends WebElement {
+import java.util.List;
+
+public interface WebDocument {
 
     String text();
+
+    List<WebElement> select(String cssQuery);
 }

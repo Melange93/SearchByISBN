@@ -2,7 +2,6 @@ package com.reka.lakatos.searchbyisbn.webdocument.jsoup;
 
 import com.reka.lakatos.searchbyisbn.webdocument.WebElement;
 import org.jsoup.nodes.Element;
-import org.jsoup.parser.Tag;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,10 +12,6 @@ class JsoupWebElement implements WebElement {
 
     JsoupWebElement(Element element) {
         this.element = element;
-    }
-
-    JsoupWebElement(Tag tag, String baseUri) {
-        this.element = new Element(tag, baseUri);
     }
 
     @Override
