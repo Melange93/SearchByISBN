@@ -3,14 +3,14 @@ package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary;
 import com.reka.lakatos.searchbyisbn.crawler.BookCrawler;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.exception.BookListDownloadException;
+import com.reka.lakatos.searchbyisbn.webdocument.WebClient;
+import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
+import com.reka.lakatos.searchbyisbn.webdocument.exception.WebClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +23,7 @@ public class Crawler implements BookCrawler {
     private final URLFactory urlFactory;
     private final PageReader pageReader;
     private final BookListCreator bookListCreator;
+    private final WebClient webClient;
 
     private static final String NAME ="Ervin Szabo Library";
     private static final String ISBN963 = "978963";
@@ -38,7 +39,7 @@ public class Crawler implements BookCrawler {
     public List<Book> getNextBooks() {
         try {
             log.info("Start crawling: {}, Page number: {}, Searching ISBN: {}",
-                    NAME, page, searchingISBNMainGroup + isbnSeventhNumber);
+                    NAME, page + 1, searchingISBNMainGroup + isbnSeventhNumber);
 
             List<Book> books = getCrawledBooks();
             page++;
@@ -83,10 +84,10 @@ public class Crawler implements BookCrawler {
 
     private Map<String, String> getBooksDetailsInformation(String ISBNSearchingUrl) {
         try {
-            final Document bookListPage = Jsoup.connect(ISBNSearchingUrl).get();
+            final WebDocument bookListPage = webClient.sendGetRequest(ISBNSearchingUrl);
 
             return pageReader.getBookDetailsLinkInformation(bookListPage);
-        } catch (IOException e) {
+        } catch (WebClientException e) {
             throw new BookListDownloadException("Unable to download the list book page! Url: " + ISBNSearchingUrl, e);
         }
     }

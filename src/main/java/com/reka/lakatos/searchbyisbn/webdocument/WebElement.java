@@ -7,4 +7,6 @@ public interface WebElement {
     String text();
 
     List<WebElement> select(String cssQuery);
+
+    String toString();
 }

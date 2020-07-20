@@ -3,13 +3,13 @@ package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary;
 import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.BookCreator;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.exception.BookDownloadException;
+import com.reka.lakatos.searchbyisbn.webdocument.WebClient;
+import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
+import com.reka.lakatos.searchbyisbn.webdocument.exception.WebClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -23,6 +23,7 @@ public class BookListCreator {
     private final BookCreator bookCreator;
     private final URLFactory urlFactory;
     private final PageReader pageReader;
+    private final WebClient webClient;
 
     public List<Book> getBookListFromBooksDetailsInformation(Map<String, String> booksDetailsInformation) {
         return booksDetailsInformation.entrySet().stream()
@@ -46,10 +47,10 @@ public class BookListCreator {
 
     private Optional<Book> getBook(String bookDetailsUrl) {
         try {
-            Document bookPage = Jsoup.connect(bookDetailsUrl).get();
+            WebDocument bookPage = webClient.sendGetRequest(bookDetailsUrl);
             return bookCreator.createBook(
                     pageReader.getBookInformation(bookPage));
-        } catch (IOException e) {
+        } catch (WebClientException e) {
             throw new BookDownloadException("Unable to download book page! Url: " + bookDetailsUrl, e);
         }
     }

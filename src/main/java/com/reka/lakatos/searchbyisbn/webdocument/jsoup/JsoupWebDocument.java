@@ -26,4 +26,9 @@ class JsoupWebDocument implements WebDocument {
                 .map(JsoupWebElement::new)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public String toString() {
+        return document.toString();
+    }
 }
