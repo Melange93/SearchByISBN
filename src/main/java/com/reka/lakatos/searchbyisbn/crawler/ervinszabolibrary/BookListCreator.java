@@ -49,7 +49,7 @@ public class BookListCreator {
         try {
             WebDocument bookPage = webClient.sendGetRequest(bookDetailsUrl);
             return bookCreator.createBook(
-                    pageReader.getBookInformation(bookPage));
+                    pageReader.getBookProperties(bookPage));
         } catch (WebClientException e) {
             throw new BookDownloadException("Unable to download book page! Url: " + bookDetailsUrl, e);
         }

@@ -9,11 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class PageReader {
 
-    private static final String SPECIAL_CASE_OTHER_NAMES = "Egyéb nevek:";
+    private static final String SPECIAL_CASE_CONTRIBUTORS = "Egyéb nevek:";
     private static final String SPECIAL_SEPARATION_CHARACTER = "$";
 
     public Map<String, String> getBookDetailsLinkInformation(WebDocument bookListPage) {
@@ -33,28 +34,58 @@ public class PageReader {
         return booksInformation;
     }
 
-    public Map<String, String> getBookInformation(WebDocument bookDetailsPage) {
-        List<WebElement> bookProperties = bookDetailsPage.select(".long_key");
-        List<WebElement> bookPropertiesValues = bookDetailsPage.select(".long_value");
+    public Map<String, String> getBookProperties(WebDocument bookDetailsPage) {
+        List<String> bookPropertiesKey = getBookPropertiesKey(bookDetailsPage);
 
-        Map<String, String> bookInformation = new HashMap<>();
-        for (int i = 0; i < bookProperties.size() - 1; i++) {
-            if (bookProperties.get(i).text().equals(SPECIAL_CASE_OTHER_NAMES) && !bookPropertiesValues.get(i).select("a").isEmpty()) {
-                List<WebElement> names = bookPropertiesValues.get(i).select("a");
-                String contributorsName = getContributorsStringWithSpecialSeparationCharacter(names);
-                bookInformation.put(bookProperties.get(i).text().trim(), contributorsName);
-                break;
-            }
-            bookInformation.put(bookProperties.get(i).text().trim(), bookPropertiesValues.get(i).text().trim());
+        List<WebElement> bookPropertiesValuesWebElement = bookDetailsPage.select(".long_value");
+        List<String> bookPropertiesValues = getBookPropertiesValues(bookPropertiesValuesWebElement);
+
+        if (hasContributors(bookPropertiesKey)) {
+            int contributorsIndex = bookPropertiesKey.indexOf(SPECIAL_CASE_CONTRIBUTORS);
+            String contributorsSeparateBySpecialCharacter =
+                    getContributorsSeparateBySpecialCharacter(bookPropertiesValuesWebElement, contributorsIndex);
+            bookPropertiesValues.set(contributorsIndex, contributorsSeparateBySpecialCharacter);
         }
 
-        return bookInformation;
+        return createBookPropertiesMap(bookPropertiesKey, bookPropertiesValues);
     }
 
-    private String getContributorsStringWithSpecialSeparationCharacter(List<WebElement> names) {
-        return names.stream()
+    private Map<String, String> createBookPropertiesMap(List<String> bookPropertiesKey, List<String> bookPropertiesValues) {
+
+        Map<String, String> bookProperties = new HashMap<>();
+        for (int i = 0; i < bookPropertiesKey.size(); i++) {
+            bookProperties.put(bookPropertiesKey.get(i), bookPropertiesValues.get(i));
+        }
+        return bookProperties;
+    }
+
+    private String getContributorsSeparateBySpecialCharacter(List<WebElement> bookPropertiesValuesWebElement, int contributorsIndex) {
+        return bookPropertiesValuesWebElement.get(contributorsIndex)
+                .select("a")
+                .stream()
                 .map(WebElement::text)
-                .reduce((s, s2) -> s + SPECIAL_SEPARATION_CHARACTER + s2)
-                .get();
+                .collect(Collectors.joining(SPECIAL_SEPARATION_CHARACTER));
+    }
+
+    private boolean hasContributors(List<String> bookPropertiesKey) {
+        return bookPropertiesKey.contains(SPECIAL_CASE_CONTRIBUTORS);
+    }
+
+    private List<String> getBookPropertiesValues(List<WebElement> bookPropertiesValuesWebElement) {
+        return bookPropertiesValuesWebElement
+                .stream()
+                .map(WebElement::text)
+                .map(String::trim)
+                .collect(Collectors.toList());
+    }
+
+    private List<String> getBookPropertiesKey(WebDocument bookDetailsPage) {
+        return bookDetailsPage
+                .select(".long_key")
+                .stream()
+                .filter(webElement -> webElement.select("table").isEmpty())
+                .map(WebElement::text)
+                .map(String::trim)
+                .collect(Collectors.toList());
     }
 }
