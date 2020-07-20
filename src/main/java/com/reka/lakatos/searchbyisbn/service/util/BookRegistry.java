@@ -44,7 +44,7 @@ public class BookRegistry {
         if (fromDb.getYearOfRelease() == null && newOne.getYearOfRelease() != null) {
             fromDb.setYearOfRelease(newOne.getYearOfRelease());
         }
-        if (fromDb.getContributors().isEmpty() && !newOne.getContributors().isEmpty()) {
+        if (fromDb.getContributors() == null && newOne.getContributors() != null) {
             fromDb.setContributors(newOne.getContributors());
         }
         if (fromDb.getThickness() == 0.0 && newOne.getThickness() != 0.0) {
