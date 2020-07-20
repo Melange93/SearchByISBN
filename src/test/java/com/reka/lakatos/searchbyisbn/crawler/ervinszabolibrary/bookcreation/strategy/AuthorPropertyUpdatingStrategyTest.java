@@ -11,7 +11,7 @@ class AuthorPropertyUpdatingStrategyTest {
     private PropertyUpdatingStrategy authorPropertyUpdatingStrategy;
 
     @BeforeEach
-    void ini() {
+    void init() {
         authorPropertyUpdatingStrategy = new AuthorPropertyUpdatingStrategy();
     }
 
