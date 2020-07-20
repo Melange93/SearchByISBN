@@ -56,4 +56,11 @@ class JsoupWebDocumentTest {
                 .hasSize(1)
                 .allMatch(webElement -> webElement.text().equals("firstElement"));
     }
+
+    @Test
+    void toStringTest() {
+        when(document.toString()).thenReturn(TEST_DOCUMENT_TEXT);
+        String result = webDocument.toString();
+        assertThat(result).isEqualTo(TEST_DOCUMENT_TEXT);
+    }
 }

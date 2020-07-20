@@ -50,4 +50,14 @@ class JsoupWebElementTest {
         assertThat(webElements)
                 .hasSize(1);
     }
+
+    @Test
+    void toStringTest() {
+        String toString = "<p>test text</p>";
+
+        when(element.toString()).thenReturn(toString);
+        String result = jsoupWebElement.toString();
+
+        assertThat(result).isEqualTo(toString);
+    }
 }
