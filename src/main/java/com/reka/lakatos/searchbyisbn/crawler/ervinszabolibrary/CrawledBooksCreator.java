@@ -2,8 +2,8 @@ package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary;
 
 import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.BookCreator;
 import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.documentreader.DocumentReaderFacade;
+import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.exception.BookDownloadException;
 import com.reka.lakatos.searchbyisbn.document.Book;
-import com.reka.lakatos.searchbyisbn.exception.BookDownloadException;
 import com.reka.lakatos.searchbyisbn.webdocument.WebClient;
 import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
 import com.reka.lakatos.searchbyisbn.webdocument.exception.WebClientException;
