@@ -16,7 +16,7 @@ public class DocumentReaderFacade {
     private final BookPropertiesPageReader bookPropertiesPageReader;
 
     public Map<String, String> getInformationForBookPropertiesPage(WebDocument booksPage) {
-        return booksPageReader.getInformation(booksPage);
+        return booksPageReader.getBookPropertiesUrlInformation(booksPage);
     }
 
     public Map<String, String> getBookProperties(WebDocument bookPropertiesPage) {
