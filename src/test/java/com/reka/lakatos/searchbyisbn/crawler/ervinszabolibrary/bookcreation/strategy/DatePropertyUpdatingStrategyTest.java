@@ -30,8 +30,8 @@ class DatePropertyUpdatingStrategyTest {
         Book book = new Book();
         datePropertyUpdatingStrategy.updateProperty(book, property);
 
-        String yearOfRelease = book.getYearOfRelease();
-        assertThat(yearOfRelease).isEqualTo("2013");
+        int yearOfRelease = book.getYearOfRelease();
+        assertThat(yearOfRelease).isEqualTo(2013);
     }
 
     @ParameterizedTest
@@ -49,8 +49,8 @@ class DatePropertyUpdatingStrategyTest {
         Book book = new Book();
         datePropertyUpdatingStrategy.updateProperty(book, property);
 
-        String yearOfRelease = book.getYearOfRelease();
-        assertThat(yearOfRelease).isNull();
+        int yearOfRelease = book.getYearOfRelease();
+        assertThat(yearOfRelease).isEqualTo(0);
     }
 
 

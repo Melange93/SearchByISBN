@@ -17,7 +17,7 @@ public class DatePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
         Matcher matcher = Pattern.compile(dateRegex).matcher(property);
 
         if (isValidDate(matcher) && matcher.find()) {
-            book.setYearOfRelease(matcher.group());
+            book.setYearOfRelease(Integer.parseInt(matcher.group()));
         }
     }
 
