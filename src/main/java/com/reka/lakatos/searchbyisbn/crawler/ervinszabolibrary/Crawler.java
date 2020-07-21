@@ -1,16 +1,17 @@
 package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary;
 
 import com.reka.lakatos.searchbyisbn.crawler.BookCrawler;
+import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.documentreader.DocumentReaderFacade;
+import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.exception.BookListDownloadException;
 import com.reka.lakatos.searchbyisbn.document.Book;
-import com.reka.lakatos.searchbyisbn.exception.BookListDownloadException;
+import com.reka.lakatos.searchbyisbn.webdocument.WebClient;
+import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
+import com.reka.lakatos.searchbyisbn.webdocument.exception.WebClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -21,10 +22,11 @@ import java.util.Map;
 public class Crawler implements BookCrawler {
 
     private final URLFactory urlFactory;
-    private final PageReader pageReader;
-    private final BookListCreator bookListCreator;
+    private final DocumentReaderFacade documentReaderFacade;
+    private final CrawledBooksCreator crawledBooksCreator;
+    private final WebClient webClient;
 
-    private static final String NAME ="Ervin Szabo Library";
+    private static final String NAME = "Ervin Szabo Library";
     private static final String ISBN963 = "978963";
     private static final String ISBN615 = "978615";
     private static final String PAGE_SIZE = "10";
@@ -38,56 +40,77 @@ public class Crawler implements BookCrawler {
     public List<Book> getNextBooks() {
         try {
             log.info("Start crawling: {}, Page number: {}, Searching ISBN: {}",
-                    NAME, page, searchingISBNMainGroup + isbnSeventhNumber);
+                    NAME, page + 1, searchingISBNMainGroup + isbnSeventhNumber);
 
             List<Book> books = getCrawledBooks();
-            page++;
+            booksPageScrolling(books);
 
-            if (books != null
-                    && books.size() == 0
-                    && isbnSeventhNumber <= ISBN_MAX_SEVENTH_NUMBER) {
-                page = 0;
-                isbnSeventhNumber++;
-            }
-
-            if (books != null
-                    && books.size() == 0
-                    && isbnSeventhNumber > ISBN_MAX_SEVENTH_NUMBER
-                    && searchingISBNMainGroup.equals(ISBN963)) {
-                page = 0;
-                isbnSeventhNumber = 0;
-                searchingISBNMainGroup = ISBN615;
-            }
-
-            if (books != null
-                    && books.size() == 0
-                    && isbnSeventhNumber > ISBN_MAX_SEVENTH_NUMBER
-                    && searchingISBNMainGroup.equals(ISBN615)) {
+            if (isCrawlerFinishedThisISBNGroup(books, ISBN615)) {
                 return null;
             }
+
             return books;
         } catch (Exception e) {
             log.error("Exception happened while crawling list book location! Page " + page
                     + " Searching ISBN: " + searchingISBNMainGroup + isbnSeventhNumber, e);
-            page++;
+
+            booksPageScrollingWhenExceptionHappened();
             return getNextBooks();
         }
     }
 
     private List<Book> getCrawledBooks() {
-        final Map<String, String> booksDetailsInformation = getBooksDetailsInformation(
-                urlFactory.createISBNSearchingUrl(page, searchingISBNMainGroup + isbnSeventhNumber, PAGE_SIZE));
+        final Map<String, String> booksPropertiesPageUrlInformation =
+                getInformationForBookPropertiesUrl(
+                        urlFactory.createISBNSearchingUrl(
+                                page,
+                                searchingISBNMainGroup + isbnSeventhNumber,
+                                PAGE_SIZE
+                        )
+                );
 
-        return bookListCreator.getBookListFromBooksDetailsInformation(booksDetailsInformation);
+        return crawledBooksCreator.getCrawledBooks(booksPropertiesPageUrlInformation);
     }
 
-    private Map<String, String> getBooksDetailsInformation(String ISBNSearchingUrl) {
+    private Map<String, String> getInformationForBookPropertiesUrl(String ISBNSearchingUrl) {
         try {
-            final Document bookListPage = Jsoup.connect(ISBNSearchingUrl).get();
+            final WebDocument booksPage = webClient.sendGetRequest(ISBNSearchingUrl);
 
-            return pageReader.getBookDetailsLinkInformation(bookListPage);
-        } catch (IOException e) {
+            return documentReaderFacade.getInformationForBookPropertiesPage(booksPage);
+        } catch (WebClientException e) {
             throw new BookListDownloadException("Unable to download the list book page! Url: " + ISBNSearchingUrl, e);
         }
+    }
+
+    private void booksPageScrollingWhenExceptionHappened() {
+        page++;
+    }
+
+    private void booksPageScrolling(List<Book> books) {
+        page++;
+
+        if (isCrawlerFinishedThisSeventhISBNNumberCrawling(books)) {
+            page = 0;
+            isbnSeventhNumber++;
+        }
+
+        if (isCrawlerFinishedThisISBNGroup(books, ISBN963)) {
+            page = 0;
+            isbnSeventhNumber = 0;
+            searchingISBNMainGroup = ISBN615;
+        }
+    }
+
+    private boolean isCrawlerFinishedThisSeventhISBNNumberCrawling(List<Book> books) {
+        return books != null
+                && books.size() == 0
+                && isbnSeventhNumber <= ISBN_MAX_SEVENTH_NUMBER;
+    }
+
+    private boolean isCrawlerFinishedThisISBNGroup(List<Book> books, String ISBNGroup) {
+        return books != null
+                && books.size() == 0
+                && isbnSeventhNumber > ISBN_MAX_SEVENTH_NUMBER
+                && searchingISBNMainGroup.equals(ISBNGroup);
     }
 }

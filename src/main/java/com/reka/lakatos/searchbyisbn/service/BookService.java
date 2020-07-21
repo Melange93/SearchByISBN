@@ -24,11 +24,11 @@ public class BookService {
 
             book.setIsbn(ISBN13);
 
-            return bookRegistry.registBook(book);
+            return bookRegistry.registerBook(book);
         }
 
         log.info("Failed in ISBN validation. ISBN: {}", book.getIsbn());
 
-        return RegistryResult.FAILED;
+        return RegistryResult.INVALID;
     }
 }
