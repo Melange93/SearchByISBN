@@ -1,6 +1,5 @@
 package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation;
 
-import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.propertiesvalidator.BookPropertiesValidator;
 import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.propertiesvalidator.startegy.PropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.strategy.PropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
@@ -14,31 +13,20 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BookCreator {
 
-    private final BookPropertiesValidator bookPropertiesValidator;
     private final Map<String, PropertyUpdatingStrategy> bookPropertyUpdatingStrategyMap;
     private final Map<String, PropertyValidatorStrategy> propertyValidatorStrategyMap;
 
     public Optional<Book> createBook(Map<String, String> prepareBook) {
         Book book = new Book();
 
-        /*
-        if (!bookPropertiesValidator.isValidBookProperties(
-                prepareBook.get("Megjegyzések:"),
-                prepareBook.get("ISBN:"),
-                prepareBook.get("Lásd még:"))) {
-            return Optional.empty();
-        }
-
-         */
-
         for (String key : prepareBook.keySet()) {
             if (propertyValidatorStrategyMap.containsKey(key)) {
-                if (!propertyValidatorStrategyMap.get(key).validateProperty(prepareBook.get(key))) {
+                boolean result = propertyValidatorStrategyMap.get(key).validateProperty(prepareBook.get(key));
+                if (!result) {
                     return Optional.empty();
                 }
             }
         }
-
 
         for (String key : prepareBook.keySet()) {
             if (bookPropertyUpdatingStrategyMap.containsKey(key)) {
@@ -48,5 +36,4 @@ public class BookCreator {
 
         return Optional.of(book);
     }
-
 }

@@ -1,10 +1,19 @@
 package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.propertiesvalidator.startegy;
 
+import java.util.regex.Pattern;
+
 public class SeeAlsoPropertyValidatorStrategy implements PropertyValidatorStrategy {
     @Override
     public boolean validateProperty(String property) {
-        return property == null ||
-                !property.trim().contains("Részdokumentum") ||
-                !property.trim().contains("Ezt tartalmazó dokumentum");
+        if (property == null) {
+            return true;
+        }
+
+        return hasNotPattern(property.trim(), "Részdokumentum") &&
+                hasNotPattern(property.trim(), "Ezt tartalmazó dokumentum");
+    }
+
+    private boolean hasNotPattern(String property, String regex) {
+        return !Pattern.compile(regex).matcher(property).find();
     }
 }
