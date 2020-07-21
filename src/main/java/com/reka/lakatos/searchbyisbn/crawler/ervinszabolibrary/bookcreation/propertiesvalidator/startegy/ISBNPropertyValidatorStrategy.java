@@ -1,8 +1,7 @@
-package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary;
+package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.propertiesvalidator.startegy;
 
 import com.reka.lakatos.searchbyisbn.service.util.BookISBNManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +10,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Service
 @RequiredArgsConstructor
-public class BookPropertiesValidator {
+public class ISBNPropertyValidatorStrategy implements PropertyValidatorStrategy {
 
     private final BookISBNManager bookISBNManager;
 
@@ -22,26 +20,12 @@ public class BookPropertiesValidator {
     private static final int ISBN13_CLEAN_LENGTH = 13;
     private static final int ISBN10_CLEAN_LENGTH = 10;
 
-    public boolean isValidBookProperties(String notesField, String ISBNField, String seeAlso) {
-        if (notesField != null && containsBookAnotherBookCheckInNotes(notesField)) {
+    @Override
+    public boolean validateProperty(String property) {
+        if (property == null) {
             return false;
         }
-
-        if (seeAlso != null && seeAlso.contains("Részdokumentum")) {
-            return false;
-        }
-
-        if (ISBNField == null) {
-            return false;
-        }
-
-        return !containsISBNMoreThanOneBookISBN(ISBNField);
-    }
-
-    private boolean containsBookAnotherBookCheckInNotes(String notesField) {
-        Pattern isbnPattern = Pattern.compile(".*?" + ISBN13_REGEX + ".*" + "|" + ".*?" + ISBN10_REGEX + ".*");
-        Matcher isbnMatcher = isbnPattern.matcher(notesField);
-        return isbnMatcher.find();
+        return !containsISBNMoreThanOneBookISBN(property);
     }
 
     private boolean containsISBNMoreThanOneBookISBN(String ISBNFieldValue) {

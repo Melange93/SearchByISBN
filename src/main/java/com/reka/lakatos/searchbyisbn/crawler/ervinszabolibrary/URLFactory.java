@@ -17,7 +17,7 @@ public class URLFactory {
                 + "%25%22&actualsort=0&language=&currentpage=result&text0=&index0=&whichform=simplesearchpage&showmenu=&resultview=short&recnum=&marcposition=&text0=&index0=&ccltext=&resultsize=";
     }
 
-    public String createBookDetailsUrl(String bookLineNumber, String bookId) {
+    public String createBookPropertiesUrl(String bookLineNumber, String bookId) {
         return "http://saman.fszek.hu/WebPac/CorvinaWeb?action=onelong&showtype=longlong&recnum="
                 + bookId
                 + "&pos="
