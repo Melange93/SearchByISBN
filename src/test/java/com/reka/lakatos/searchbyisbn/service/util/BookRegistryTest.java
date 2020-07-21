@@ -89,7 +89,7 @@ class BookRegistryTest {
         Book savedBook = Book.builder().isbn("1").author("Test One").build();
         Book newBook = Book.builder()
                 .isbn("1")
-                .yearOfRelease("[2003]")
+                .yearOfRelease(2003)
                 .build();
 
         when(bookRepository.findById(newBook.getIsbn())).thenReturn(Optional.of(savedBook));
@@ -98,7 +98,7 @@ class BookRegistryTest {
         RegistryResult result = bookRegistry.registerBook(newBook);
 
         assertThat(result).isEqualTo(RegistryResult.UPDATE);
-        assertThat(savedBook.getYearOfRelease()).isEqualTo("[2003]");
+        assertThat(savedBook.getYearOfRelease()).isEqualTo(2003);
         verify(bookRepository).save(savedBook);
         verify(bookRepository, never()).save(newBook);
     }

@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.HashSet;
@@ -24,7 +23,7 @@ public class Book {
     private String author;
     private String title;
     private String publisher;
-    private String yearOfRelease;
+    private int yearOfRelease;
     private Set<String> contributors;
     private float thickness;
     private int pageNumber;
