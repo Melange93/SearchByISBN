@@ -1,4 +1,4 @@
-package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary;
+package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.documentreader.facade;
 
 import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
 import com.reka.lakatos.searchbyisbn.webdocument.WebElement;
@@ -7,35 +7,13 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
-public class PageReader {
+public class BookPropertiesPageReader {
 
     private static final String SPECIAL_CASE_CONTRIBUTORS = "Egyéb nevek:";
     private static final String SPECIAL_SEPARATION_CHARACTER = "$";
-
-    public Map<String, String> getInformationForBookPropertiesPage(WebDocument booksPage) {
-        String searchLineNumberAndBookId = "(\\d+,\\d+)";
-        String linesContainingInformationCssQuery = ".short_item_back script";
-        int lineNumber = 0;
-        int bookId = 1;
-
-        return booksPage
-                .select(linesContainingInformationCssQuery)
-                .stream()
-                .map(webElement ->
-                        Pattern
-                                .compile(searchLineNumberAndBookId)
-                                .matcher(webElement.toString()))
-                .filter(Matcher::find)
-                .map(matcher -> matcher.group().split(","))
-                .collect(Collectors.toMap(
-                        information -> information[lineNumber],
-                        information -> information[bookId]));
-    }
 
     public Map<String, String> getBookProperties(WebDocument bookPropertiesPage) {
         List<String> bookPropertiesKey = getBookPropertiesKey(bookPropertiesPage);

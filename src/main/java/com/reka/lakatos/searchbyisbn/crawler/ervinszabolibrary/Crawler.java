@@ -1,6 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary;
 
 import com.reka.lakatos.searchbyisbn.crawler.BookCrawler;
+import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.documentreader.DocumentReaderFacade;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.exception.BookListDownloadException;
 import com.reka.lakatos.searchbyisbn.webdocument.WebClient;
@@ -21,7 +22,7 @@ import java.util.Map;
 public class Crawler implements BookCrawler {
 
     private final URLFactory urlFactory;
-    private final PageReader pageReader;
+    private final DocumentReaderFacade documentReaderFacade;
     private final CrawledBooksCreator crawledBooksCreator;
     private final WebClient webClient;
 
@@ -75,7 +76,7 @@ public class Crawler implements BookCrawler {
         try {
             final WebDocument booksPage = webClient.sendGetRequest(ISBNSearchingUrl);
 
-            return pageReader.getInformationForBookPropertiesPage(booksPage);
+            return documentReaderFacade.getInformationForBookPropertiesPage(booksPage);
         } catch (WebClientException e) {
             throw new BookListDownloadException("Unable to download the list book page! Url: " + ISBNSearchingUrl, e);
         }
