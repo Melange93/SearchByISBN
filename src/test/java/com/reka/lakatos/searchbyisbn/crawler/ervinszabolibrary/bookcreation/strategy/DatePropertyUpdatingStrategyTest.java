@@ -2,7 +2,8 @@ package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.str
 
 import com.reka.lakatos.searchbyisbn.document.Book;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,22 +16,42 @@ class DatePropertyUpdatingStrategyTest {
         datePropertyUpdatingStrategy = new DatePropertyUpdatingStrategy();
     }
 
-    @Test
-    void updatePropertyCommon() {
-        Book testBook = new Book();
-        String testProperty = "2013";
-        datePropertyUpdatingStrategy.updateProperty(testBook, testProperty);
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "2013",
+            "2013-",
+            "[2013]",
+            "[2013]-",
+            "cop. 2013",
+            "cop. 2013-",
+            "cop. [2013]",
+            "cop. [2013]-"})
+    void updatePropertyValidDates(String property) {
+        Book book = new Book();
+        datePropertyUpdatingStrategy.updateProperty(book, property);
 
-        assertThat(testBook.getYearOfRelease()).isEqualTo("2013");
+        String yearOfRelease = book.getYearOfRelease();
+        assertThat(yearOfRelease).isEqualTo("2013");
     }
 
-    @Test
-    void updatePropertyWithExternalSourceSign() {
-        Book testBook = new Book();
-        String testProperty = "[2013]";
-        datePropertyUpdatingStrategy.updateProperty(testBook, testProperty);
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "2013 2014",
+            "2013-2014",
+            "[2013] [2014]",
+            "[2013]-[2014]",
+            "[2013]-2014",
+            "cop. 2013-2014",
+            "2. kiadás cop. 2013-2014",
+            "cop. [2013]-2014",
+            "cop. [2013]-[2222]"})
+    void updatePropertyInvalidDates(String property) {
+        Book book = new Book();
+        datePropertyUpdatingStrategy.updateProperty(book, property);
 
-        assertThat(testBook.getYearOfRelease()).isEqualTo("[2013]");
+        String yearOfRelease = book.getYearOfRelease();
+        assertThat(yearOfRelease).isNull();
     }
+
 
 }
