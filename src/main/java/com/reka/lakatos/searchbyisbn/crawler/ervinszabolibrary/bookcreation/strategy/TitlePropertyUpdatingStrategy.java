@@ -20,10 +20,8 @@ public class TitlePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
         if (matcher.find()) {
             String result = matcher.group();
             if (!result.isBlank()) {
-                CoverType coverType = CoverType.findTypeByName(result.toLowerCase());
-                if (coverType != null) {
-                    book.setCoverType(coverType);
-                }
+                CoverType.findTypeByName(result.toLowerCase())
+                        .ifPresent(book::setCoverType);
             }
         }
     }

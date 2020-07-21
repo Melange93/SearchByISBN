@@ -1,5 +1,6 @@
 package com.reka.lakatos.searchbyisbn.service.util;
 
 public enum RegistryResult {
-    SUCCESSFUL, UPDATE, FAILED;
+
+    SUCCESSFUL, UPDATE, INVALID, DUPLICATE
 }

@@ -42,7 +42,9 @@ public class ISBNPropertyUpdatingStrategy implements PropertyUpdatingStrategy {
         while (matcher.find()) {
             if (!matcher.group().trim().isBlank()) {
                 String result = matcher.group().trim();
-                book.setCoverType(CoverType.findTypeByName(result));
+
+                CoverType.findTypeByName(result)
+                        .ifPresent(book::setCoverType);
             }
         }
     }

@@ -1,6 +1,9 @@
 package com.reka.lakatos.searchbyisbn.document;
 
+import java.util.Optional;
+
 public enum CoverType {
+
     HARDCORE("kötött"),
     PAPERBACK("fűzött"),
     DIGITAL("elektronikus dokumentum"),
@@ -19,16 +22,13 @@ public enum CoverType {
         return hunName;
     }
 
-    public static CoverType findTypeByName(String hunName){
-        if (hunName.isBlank()) {
-            throw new NullPointerException("Cover type can't be empty!");
-        }
-
-        for(CoverType v : values()){
-            if( v.getHunName().equals(hunName)){
-                return v;
+    public static Optional<CoverType> findTypeByName(String hunName) {
+        for (CoverType coverType : values()) {
+            if (coverType.getHunName().equals(hunName)) {
+                return Optional.of(coverType);
             }
         }
-        return null;
+
+        return Optional.empty();
     }
 }

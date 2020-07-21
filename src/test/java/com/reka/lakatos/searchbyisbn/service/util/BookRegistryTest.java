@@ -26,28 +26,28 @@ class BookRegistryTest {
     private BookRegistry bookRegistry;
 
     @Test
-    void registBookRegistryResultSuccessful() {
+    void registerBookRegistryResultSuccessful() {
         Book saveBook = new Book();
         when(bookRepository.findById(saveBook.getIsbn())).thenReturn(Optional.empty());
         when(bookRepository.save(saveBook)).thenReturn(saveBook);
 
-        RegistryResult result = bookRegistry.registBook(saveBook);
+        RegistryResult result = bookRegistry.registerBook(saveBook);
         assertThat(result).isEqualTo(RegistryResult.SUCCESSFUL);
         verify(bookRepository).save(saveBook);
     }
 
     @Test
-    void registBookRegistryResultFailed() {
+    void registerBookRegistryResultFailed() {
         Book saveBook = Book.builder().isbn("1").build();
         when(bookRepository.findById(saveBook.getIsbn())).thenReturn(Optional.of(saveBook));
 
-        RegistryResult result = bookRegistry.registBook(saveBook);
-        assertThat(result).isEqualTo(RegistryResult.FAILED);
+        RegistryResult result = bookRegistry.registerBook(saveBook);
+        assertThat(result).isEqualTo(RegistryResult.DUPLICATE);
         verify(bookRepository, never()).save(saveBook);
     }
 
     @Test
-    void registBookRegistryResultUpdateAuthor() {
+    void registerBookRegistryResultUpdateAuthor() {
         Book savedBook = Book.builder().isbn("1").title("Test title").build();
         Book newBook = Book.builder()
                 .isbn("1")
@@ -57,7 +57,7 @@ class BookRegistryTest {
         when(bookRepository.findById(newBook.getIsbn())).thenReturn(Optional.of(savedBook));
         when(bookRepository.save(savedBook)).thenReturn(savedBook);
 
-        RegistryResult result = bookRegistry.registBook(newBook);
+        RegistryResult result = bookRegistry.registerBook(newBook);
 
         assertThat(result).isEqualTo(RegistryResult.UPDATE);
         assertThat(savedBook.getAuthor()).isEqualTo("Test Test");
@@ -66,7 +66,7 @@ class BookRegistryTest {
     }
 
     @Test
-    void registBookRegistryResultUpdateTitle() {
+    void registerBookRegistryResultUpdateTitle() {
         Book savedBook = Book.builder().isbn("1").author("Test One").build();
         Book newBook = Book.builder()
                 .isbn("1")
@@ -76,7 +76,7 @@ class BookRegistryTest {
         when(bookRepository.findById(newBook.getIsbn())).thenReturn(Optional.of(savedBook));
         when(bookRepository.save(savedBook)).thenReturn(savedBook);
 
-        RegistryResult result = bookRegistry.registBook(newBook);
+        RegistryResult result = bookRegistry.registerBook(newBook);
 
         assertThat(result).isEqualTo(RegistryResult.UPDATE);
         assertThat(savedBook.getTitle()).isEqualTo("Test title");
@@ -85,7 +85,7 @@ class BookRegistryTest {
     }
 
     @Test
-    void registBookRegistryResultUpdateYearOfRelease() {
+    void registerBookRegistryResultUpdateYearOfRelease() {
         Book savedBook = Book.builder().isbn("1").author("Test One").build();
         Book newBook = Book.builder()
                 .isbn("1")
@@ -95,7 +95,7 @@ class BookRegistryTest {
         when(bookRepository.findById(newBook.getIsbn())).thenReturn(Optional.of(savedBook));
         when(bookRepository.save(savedBook)).thenReturn(savedBook);
 
-        RegistryResult result = bookRegistry.registBook(newBook);
+        RegistryResult result = bookRegistry.registerBook(newBook);
 
         assertThat(result).isEqualTo(RegistryResult.UPDATE);
         assertThat(savedBook.getYearOfRelease()).isEqualTo("[2003]");
@@ -104,7 +104,7 @@ class BookRegistryTest {
     }
 
     @Test
-    void registBookRegistryResultUpdateContributors() {
+    void registerBookRegistryResultUpdateContributors() {
         Book savedBook = Book.builder().isbn("1").author("Test One").build();
         Book newBook = Book.builder()
                 .isbn("1")
@@ -114,7 +114,7 @@ class BookRegistryTest {
         when(bookRepository.findById(newBook.getIsbn())).thenReturn(Optional.of(savedBook));
         when(bookRepository.save(savedBook)).thenReturn(savedBook);
 
-        RegistryResult result = bookRegistry.registBook(newBook);
+        RegistryResult result = bookRegistry.registerBook(newBook);
 
         assertThat(result).isEqualTo(RegistryResult.UPDATE);
         assertThat(savedBook.getContributors()).isEqualTo(Sets.newHashSet(Arrays.asList("Test test1", "Test test2")));
@@ -124,7 +124,7 @@ class BookRegistryTest {
 
 
     @Test
-    void registBookRegistryResultUpdateThickness() {
+    void registerBookRegistryResultUpdateThickness() {
         Book savedBook = Book.builder().isbn("1").author("Test One").build();
         Book newBook = Book.builder()
                 .isbn("1")
@@ -134,7 +134,7 @@ class BookRegistryTest {
         when(bookRepository.findById(newBook.getIsbn())).thenReturn(Optional.of(savedBook));
         when(bookRepository.save(savedBook)).thenReturn(savedBook);
 
-        RegistryResult result = bookRegistry.registBook(newBook);
+        RegistryResult result = bookRegistry.registerBook(newBook);
 
         assertThat(result).isEqualTo(RegistryResult.UPDATE);
         assertThat(savedBook.getThickness()).isEqualTo(20.1f);
@@ -143,7 +143,7 @@ class BookRegistryTest {
     }
 
     @Test
-    void registBookRegistryResultUpdatePageNumber() {
+    void registerBookRegistryResultUpdatePageNumber() {
         Book savedBook = Book.builder().isbn("1").author("Test One").build();
         Book newBook = Book.builder()
                 .isbn("1")
@@ -153,7 +153,7 @@ class BookRegistryTest {
         when(bookRepository.findById(newBook.getIsbn())).thenReturn(Optional.of(savedBook));
         when(bookRepository.save(savedBook)).thenReturn(savedBook);
 
-        RegistryResult result = bookRegistry.registBook(newBook);
+        RegistryResult result = bookRegistry.registerBook(newBook);
 
         assertThat(result).isEqualTo(RegistryResult.UPDATE);
         assertThat(savedBook.getPageNumber()).isEqualTo(516);
@@ -162,7 +162,7 @@ class BookRegistryTest {
     }
 
     @Test
-    void registBookRegistryResultUpdateCoverType() {
+    void registerBookRegistryResultUpdateCoverType() {
         Book savedBook = Book.builder().isbn("1").author("Test One").build();
         Book newBook = Book.builder()
                 .isbn("1")
@@ -172,7 +172,7 @@ class BookRegistryTest {
         when(bookRepository.findById(newBook.getIsbn())).thenReturn(Optional.of(savedBook));
         when(bookRepository.save(savedBook)).thenReturn(savedBook);
 
-        RegistryResult result = bookRegistry.registBook(newBook);
+        RegistryResult result = bookRegistry.registerBook(newBook);
 
         assertThat(result).isEqualTo(RegistryResult.UPDATE);
         assertThat(savedBook.getCoverType()).isEqualTo(CoverType.SOUND_RECORD);

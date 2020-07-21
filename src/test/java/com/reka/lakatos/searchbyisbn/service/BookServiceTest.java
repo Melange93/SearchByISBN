@@ -31,11 +31,11 @@ class BookServiceTest {
 
         when(bookISBNManager.isValidISBN(book.getIsbn())).thenReturn(true);
         when(bookISBNManager.convertISBNToISBN13(book.getIsbn())).thenReturn("1");
-        when(bookRegistry.registBook(book)).thenReturn(RegistryResult.SUCCESSFUL);
+        when(bookRegistry.registerBook(book)).thenReturn(RegistryResult.SUCCESSFUL);
 
         RegistryResult result = bookService.saveBook(book);
 
-        assertThat(result).isNotEqualTo(RegistryResult.FAILED);
+        assertThat(result).isNotEqualTo(RegistryResult.INVALID);
     }
 
     @Test
@@ -46,6 +46,6 @@ class BookServiceTest {
 
         RegistryResult registryResult = bookService.saveBook(book);
 
-        assertThat(registryResult).isEqualTo(RegistryResult.FAILED);
+        assertThat(registryResult).isEqualTo(RegistryResult.INVALID);
     }
 }

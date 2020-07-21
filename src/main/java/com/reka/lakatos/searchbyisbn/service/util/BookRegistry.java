@@ -16,7 +16,7 @@ public class BookRegistry {
 
     private final BookRepository bookRepository;
 
-    public RegistryResult registBook(Book book) {
+    public RegistryResult registerBook(Book book) {
         Optional<Book> optionalBook = bookRepository.findById(book.getIsbn());
         if (optionalBook.isEmpty()) {
             bookRepository.save(book);
@@ -25,7 +25,7 @@ public class BookRegistry {
 
         if (Objects.equals(optionalBook.get(), book)) {
             log.info("The book is already registered. ISBN: {}", book.getIsbn());
-            return RegistryResult.FAILED;
+            return RegistryResult.DUPLICATE;
         }
 
         updateEmptyFields(optionalBook.get(), book);
