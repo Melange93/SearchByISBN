@@ -37,7 +37,7 @@ class URLFactoryTest {
         String bookLineNumber = "1";
         String bookId = "7777";
 
-        String bookDetailsUrl = urlFactory.createBookDetailsUrl(bookLineNumber, bookId);
+        String bookDetailsUrl = urlFactory.createBookPropertiesUrl(bookLineNumber, bookId);
         assertThat(bookDetailsUrl).isEqualTo(
                 "http://saman.fszek.hu/WebPac/CorvinaWeb" +
                         "?action=onelong&showtype=longlong&recnum=7777&pos=1");
