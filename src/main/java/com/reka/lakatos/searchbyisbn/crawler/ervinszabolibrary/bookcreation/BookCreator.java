@@ -16,21 +16,20 @@ public class BookCreator {
     private final Map<String, PropertyUpdatingStrategy> bookPropertyUpdatingStrategyMap;
     private final Map<String, PropertyValidatorStrategy> propertyValidatorStrategyMap;
 
-    public Optional<Book> createBook(Map<String, String> prepareBook) {
+    public Optional<Book> createBook(Map<String, String> bookProperties) {
         Book book = new Book();
 
-        for (String key : prepareBook.keySet()) {
+        for (String key : bookProperties.keySet()) {
             if (propertyValidatorStrategyMap.containsKey(key)) {
-                boolean result = propertyValidatorStrategyMap.get(key).validateProperty(prepareBook.get(key));
-                if (!result) {
+                if (!propertyValidatorStrategyMap.get(key).validateProperty(bookProperties.get(key))) {
                     return Optional.empty();
                 }
             }
         }
 
-        for (String key : prepareBook.keySet()) {
+        for (String key : bookProperties.keySet()) {
             if (bookPropertyUpdatingStrategyMap.containsKey(key)) {
-                bookPropertyUpdatingStrategyMap.get(key).updateProperty(book, prepareBook.get(key));
+                bookPropertyUpdatingStrategyMap.get(key).updateProperty(book, bookProperties.get(key));
             }
         }
 
