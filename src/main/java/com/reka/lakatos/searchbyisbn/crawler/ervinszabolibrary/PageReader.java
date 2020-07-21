@@ -17,27 +17,30 @@ public class PageReader {
     private static final String SPECIAL_CASE_CONTRIBUTORS = "Egyéb nevek:";
     private static final String SPECIAL_SEPARATION_CHARACTER = "$";
 
-    public Map<String, String> getBookDetailsLinkInformation(WebDocument bookListPage) {
-        Map<String, String> booksInformation = new HashMap<>();
+    public Map<String, String> getInformationForBookPropertiesPage(WebDocument booksPage) {
+        String searchLineNumberAndBookId = "(\\d+,\\d+)";
+        String linesContainingInformationCssQuery = ".short_item_back script";
+        int lineNumber = 0;
+        int bookId = 1;
 
-        List<WebElement> informationLines = bookListPage.select(".short_item_back script");
-        for (WebElement line : informationLines) {
-            Pattern lineNumberAndBookId = Pattern.compile("(\\d+,\\d+)");
-            Matcher matcher = lineNumberAndBookId.matcher(line.toString());
-            if (matcher.find()) {
-                String[] information = matcher.group().split(",");
-                int lineNumber = 0;
-                int bookId = 1;
-                booksInformation.put(information[lineNumber], information[bookId]);
-            }
-        }
-        return booksInformation;
+        return booksPage
+                .select(linesContainingInformationCssQuery)
+                .stream()
+                .map(webElement ->
+                        Pattern
+                                .compile(searchLineNumberAndBookId)
+                                .matcher(webElement.toString()))
+                .filter(Matcher::find)
+                .map(matcher -> matcher.group().split(","))
+                .collect(Collectors.toMap(
+                        information -> information[lineNumber],
+                        information -> information[bookId]));
     }
 
-    public Map<String, String> getBookProperties(WebDocument bookDetailsPage) {
-        List<String> bookPropertiesKey = getBookPropertiesKey(bookDetailsPage);
+    public Map<String, String> getBookProperties(WebDocument bookPropertiesPage) {
+        List<String> bookPropertiesKey = getBookPropertiesKey(bookPropertiesPage);
 
-        List<WebElement> bookPropertiesValuesWebElement = bookDetailsPage.select(".long_value");
+        List<WebElement> bookPropertiesValuesWebElement = bookPropertiesPage.select(".long_value");
         List<String> bookPropertiesValues = getBookPropertiesValues(bookPropertiesValuesWebElement);
 
         if (hasContributors(bookPropertiesKey)) {
@@ -79,8 +82,8 @@ public class PageReader {
                 .collect(Collectors.toList());
     }
 
-    private List<String> getBookPropertiesKey(WebDocument bookDetailsPage) {
-        return bookDetailsPage
+    private List<String> getBookPropertiesKey(WebDocument bookPropertiesPage) {
+        return bookPropertiesPage
                 .select(".long_key")
                 .stream()
                 .filter(webElement -> webElement.select("table").isEmpty())

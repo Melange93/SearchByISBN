@@ -86,7 +86,7 @@ public class Crawler implements BookCrawler {
         try {
             final WebDocument bookListPage = webClient.sendGetRequest(ISBNSearchingUrl);
 
-            return pageReader.getBookDetailsLinkInformation(bookListPage);
+            return pageReader.getInformationForBookPropertiesPage(bookListPage);
         } catch (WebClientException e) {
             throw new BookListDownloadException("Unable to download the list book page! Url: " + ISBNSearchingUrl, e);
         }
