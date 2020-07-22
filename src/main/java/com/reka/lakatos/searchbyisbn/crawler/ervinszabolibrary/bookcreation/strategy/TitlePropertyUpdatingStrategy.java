@@ -10,8 +10,15 @@ public class TitlePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
 
     @Override
     public void updateProperty(Book book, String property) {
-        book.setTitle(property.trim());
+        setTitle(book, property.trim());
         setSpecialCoverType(property, book);
+    }
+
+    private void setTitle(Book book, String property) {
+        Matcher matcher = Pattern.compile("(.*?)\\/").matcher(property);
+        if (matcher.find()) {
+            book.setTitle(matcher.group().trim());
+        }
     }
 
     private void setSpecialCoverType(String value, Book book) {
