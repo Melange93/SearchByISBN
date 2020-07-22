@@ -84,7 +84,7 @@ public class BookRegistry {
             }
         }
 
-        if (yearsOfRelease == 0) {
+        if (editionNumber != 0) {
             Optional<Edition> found = fromDbEditions.stream()
                     .filter(edition -> edition.getEditionNumber() == editionNumber)
                     .findFirst();
@@ -93,11 +93,16 @@ public class BookRegistry {
             }
         }
 
-        return fromDbEditions.stream()
-                .filter(edition -> edition.getYearOfRelease() == yearsOfRelease)
-                .findFirst()
-                .map(fromDbEditions::indexOf)
-                .orElse(-1);
+        if (yearsOfRelease != 0) {
+            Optional<Edition> found = fromDbEditions.stream()
+                    .filter(edition -> edition.getYearOfRelease() == yearsOfRelease)
+                    .findFirst();
+            if (found.isPresent()) {
+                return fromDbEditions.indexOf(found.get());
+            }
+        }
+
+        return -1;
     }
 
     private Edition updateEditionEmptyField(Edition fromDb, Edition newOne) {

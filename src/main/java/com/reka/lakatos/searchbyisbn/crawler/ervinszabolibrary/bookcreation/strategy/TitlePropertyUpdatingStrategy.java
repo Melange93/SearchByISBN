@@ -15,9 +15,13 @@ public class TitlePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
     }
 
     private void setTitle(Book book, String property) {
-        Matcher matcher = Pattern.compile("(.*?)\\/").matcher(property);
+        Matcher matcher = Pattern.compile("(.*?)(?=[\\/])").matcher(property);
         if (matcher.find()) {
-            book.setTitle(matcher.group().trim());
+            String title = matcher.group()
+                    .replaceAll("\\[(.*?)\\]", "")
+                    .replaceAll("\\s+", " ")
+                    .trim();
+            book.setTitle(title);
         }
     }
 
