@@ -8,8 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Document("Book")
 @Data
@@ -23,13 +23,10 @@ public class Book {
     private String author;
     private String title;
     private String publisher;
-    private int yearOfRelease;
-    private Set<String> contributors;
-    private float thickness;
-    private int pageNumber;
+    private List<Edition> editions;
     private CoverType coverType;
 
     public Book() {
-        this.contributors = new HashSet<>();
+        this.editions = new ArrayList<>();
     }
 }
