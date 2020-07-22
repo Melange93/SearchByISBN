@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 
 public class DatePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
 
+    private static final int INDEX_OF_BASIC_EDITION = 0;
+
     @Override
     public void updateProperty(Book book, String property) {
         setDate(book, property);
@@ -17,7 +19,7 @@ public class DatePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
         Matcher matcher = Pattern.compile(dateRegex).matcher(property);
 
         if (isValidDate(matcher) && matcher.find()) {
-            book.setYearOfRelease(Integer.parseInt(matcher.group()));
+            book.getEditions().get(INDEX_OF_BASIC_EDITION).setYearOfRelease(Integer.parseInt(matcher.group()));
         }
     }
 

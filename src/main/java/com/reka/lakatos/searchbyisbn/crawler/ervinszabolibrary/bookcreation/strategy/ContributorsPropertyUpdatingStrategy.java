@@ -8,6 +8,7 @@ import java.util.Set;
 
 public class ContributorsPropertyUpdatingStrategy implements PropertyUpdatingStrategy {
 
+    private static final int INDEX_OF_BASIC_EDITION = 0;
     private static final String SPECIAL_CHARACTER_REGEX = "\\$";
 
     @Override
@@ -18,6 +19,6 @@ public class ContributorsPropertyUpdatingStrategy implements PropertyUpdatingStr
     private void setContributors(String value, Book book) {
         String[] names = value.split(SPECIAL_CHARACTER_REGEX);
         Set<String> contributors = new HashSet<>(Arrays.asList(names));
-        book.setContributors(contributors);
+        book.getEditions().get(INDEX_OF_BASIC_EDITION).setContributors(contributors);
     }
 }
