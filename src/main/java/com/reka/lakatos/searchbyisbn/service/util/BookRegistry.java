@@ -88,11 +88,20 @@ public class BookRegistry {
                     update = true;
                 }
             }
+
+            if (editionIndex == -2) {
+                fromDb.getEditions().add(newOneEdition);
+                update = true;
+            }
         }
         return update;
     }
 
     private int findEdition(List<Edition> fromDbEditions, int editionNumber, int yearsOfRelease) {
+        if (editionNumber == 0 && yearsOfRelease == 0) {
+            return -1;
+        }
+
         if (editionNumber != 0 && yearsOfRelease != 0) {
             Optional<Edition> found = fromDbEditions.stream()
                     .filter(edition -> edition.getEditionNumber() == editionNumber
@@ -121,7 +130,7 @@ public class BookRegistry {
             }
         }
 
-        return -1;
+        return -2;
     }
 
     private Optional<Edition> updateEditionEmptyField(Edition fromDb, Edition newOne) {
