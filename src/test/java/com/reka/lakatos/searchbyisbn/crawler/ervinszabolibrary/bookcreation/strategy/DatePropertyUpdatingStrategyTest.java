@@ -4,6 +4,7 @@ import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.Edition;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -17,6 +18,26 @@ class DatePropertyUpdatingStrategyTest {
     @BeforeEach
     void ini() {
         datePropertyUpdatingStrategy = new DatePropertyUpdatingStrategy();
+    }
+
+    @Test
+    void setEditionNumberHaveEditionNumber() {
+        String property = "2. kiad. Budapest : Delta Vision,";
+        Book book = Book.builder().editions(Lists.newArrayList(new Edition())).build();
+        datePropertyUpdatingStrategy.updateProperty(book, property);
+
+        int editionNumber = book.getEditions().get(TEST_EDITION_INDEX).getEditionNumber();
+        assertThat(editionNumber).isEqualTo(2);
+    }
+
+    @Test
+    void setEditionNumberNoEditionNumber() {
+        String property = "Budapest : Delta Vision,";
+        Book book = Book.builder().editions(Lists.newArrayList(new Edition())).build();
+        datePropertyUpdatingStrategy.updateProperty(book, property);
+
+        int editionNumber = book.getEditions().get(TEST_EDITION_INDEX).getEditionNumber();
+        assertThat(editionNumber).isEqualTo(0);
     }
 
     @ParameterizedTest

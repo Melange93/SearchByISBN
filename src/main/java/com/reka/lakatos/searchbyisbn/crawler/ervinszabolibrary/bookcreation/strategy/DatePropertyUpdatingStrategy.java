@@ -11,7 +11,17 @@ public class DatePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
 
     @Override
     public void updateProperty(Book book, String property) {
+        setEditionNumber(book, property);
         setDate(book, property);
+    }
+
+    private void setEditionNumber(Book book, String property) {
+        Matcher matcher = Pattern.compile("[\\d]+(?=\\.\\skiad\\.)").matcher(property);
+        if (matcher.find()) {
+            String editionNumber = matcher.group().trim();
+            book.getEditions().get(INDEX_OF_BASIC_EDITION)
+                    .setEditionNumber(Integer.parseInt(editionNumber));
+        }
     }
 
     private void setDate(Book book, String property) {
