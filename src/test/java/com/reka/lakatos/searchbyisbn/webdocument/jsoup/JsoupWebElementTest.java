@@ -60,4 +60,15 @@ class JsoupWebElementTest {
 
         assertThat(result).isEqualTo(toString);
     }
+
+    @Test
+    void attr() {
+        String attributeValue = "value";
+        String attributeKey = "key";
+
+        when(element.attr(attributeKey)).thenReturn(attributeValue);
+
+        String result = jsoupWebElement.attr(attributeKey);
+        assertThat(result).isEqualTo(attributeValue);
+    }
 }
