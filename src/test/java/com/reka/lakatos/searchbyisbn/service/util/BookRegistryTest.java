@@ -2,7 +2,9 @@ package com.reka.lakatos.searchbyisbn.service.util;
 
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.CoverType;
+import com.reka.lakatos.searchbyisbn.document.Edition;
 import com.reka.lakatos.searchbyisbn.repository.BookRepository;
+import org.assertj.core.util.Lists;
 import org.assertj.core.util.Sets;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +21,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class BookRegistryTest {
 
+    private static final int TEST_EDITION_INDEX = 0;
+
     @Mock
     private BookRepository bookRepository;
 
@@ -27,7 +31,16 @@ class BookRegistryTest {
 
     @Test
     void registerBookRegistryResultSuccessful() {
-        Book saveBook = new Book();
+        Book saveBook = Book.builder()
+                .editions(
+                        Lists.newArrayList(
+                                Edition.builder()
+                                        .editionNumber(1)
+                                        .yearOfRelease(2003)
+                                        .build()
+                        )
+                )
+                .build();
         when(bookRepository.findById(saveBook.getIsbn())).thenReturn(Optional.empty());
         when(bookRepository.save(saveBook)).thenReturn(saveBook);
 
@@ -37,13 +50,25 @@ class BookRegistryTest {
     }
 
     @Test
-    void registerBookRegistryResultFailed() {
-        Book saveBook = Book.builder().isbn("1").build();
-        when(bookRepository.findById(saveBook.getIsbn())).thenReturn(Optional.of(saveBook));
+    void registerBookRegistryResultDuplicate() {
+        Book savedBook = Book.builder().isbn("1").build();
+        Book newBook = Book.builder()
+                .isbn("1")
+                .editions(
+                        Lists.newArrayList(
+                                Edition.builder()
+                                        .editionNumber(0)
+                                        .yearOfRelease(0)
+                                        .build()
+                        )
+                )
+                .build();
+        when(bookRepository.findById(newBook.getIsbn())).thenReturn(Optional.of(savedBook));
 
-        RegistryResult result = bookRegistry.registerBook(saveBook);
+        RegistryResult result = bookRegistry.registerBook(newBook);
         assertThat(result).isEqualTo(RegistryResult.DUPLICATE);
-        verify(bookRepository, never()).save(saveBook);
+        verify(bookRepository, never()).save(savedBook);
+        verify(bookRepository, never()).save(newBook);
     }
 
     @Test
@@ -52,6 +77,14 @@ class BookRegistryTest {
         Book newBook = Book.builder()
                 .isbn("1")
                 .author("Test Test")
+                .editions(
+                        Lists.newArrayList(
+                                Edition.builder()
+                                        .editionNumber(0)
+                                        .yearOfRelease(0)
+                                        .build()
+                        )
+                )
                 .build();
 
         when(bookRepository.findById(newBook.getIsbn())).thenReturn(Optional.of(savedBook));
@@ -71,6 +104,14 @@ class BookRegistryTest {
         Book newBook = Book.builder()
                 .isbn("1")
                 .title("Test title")
+                .editions(
+                        Lists.newArrayList(
+                                Edition.builder()
+                                        .editionNumber(0)
+                                        .yearOfRelease(0)
+                                        .build()
+                        )
+                )
                 .build();
 
         when(bookRepository.findById(newBook.getIsbn())).thenReturn(Optional.of(savedBook));
@@ -86,10 +127,24 @@ class BookRegistryTest {
 
     @Test
     void registerBookRegistryResultUpdateYearOfRelease() {
-        Book savedBook = Book.builder().isbn("1").author("Test One").build();
+        Book savedBook = Book.builder()
+                .editions(
+                        Lists.newArrayList(Edition.builder()
+                                .editionNumber(1)
+                                .build()))
+                .isbn("1")
+                .author("Test One")
+                .build();
         Book newBook = Book.builder()
                 .isbn("1")
-                .yearOfRelease(2003)
+                .editions(
+                        Lists.newArrayList(
+                                Edition.builder()
+                                        .editionNumber(1)
+                                        .yearOfRelease(2003)
+                                        .build()
+                        )
+                )
                 .build();
 
         when(bookRepository.findById(newBook.getIsbn())).thenReturn(Optional.of(savedBook));
@@ -98,17 +153,36 @@ class BookRegistryTest {
         RegistryResult result = bookRegistry.registerBook(newBook);
 
         assertThat(result).isEqualTo(RegistryResult.UPDATE);
-        assertThat(savedBook.getYearOfRelease()).isEqualTo(2003);
+        assertThat(savedBook.getEditions().get(TEST_EDITION_INDEX).getYearOfRelease()).isEqualTo(2003);
         verify(bookRepository).save(savedBook);
         verify(bookRepository, never()).save(newBook);
     }
 
     @Test
     void registerBookRegistryResultUpdateContributors() {
-        Book savedBook = Book.builder().isbn("1").author("Test One").build();
+        Book savedBook = Book.builder()
+                .isbn("1")
+                .editions(
+                        Lists.newArrayList(
+                                Edition.builder()
+                                        .yearOfRelease(2003)
+                                        .build()
+                        )
+                )
+                .author("Test One")
+                .build();
+
         Book newBook = Book.builder()
                 .isbn("1")
-                .contributors(Sets.newHashSet(Arrays.asList("Test test1", "Test test2")))
+                .editions(
+                        Lists.newArrayList(
+                                Edition.builder()
+                                        .yearOfRelease(2003)
+                                        .contributors(Sets.newHashSet(
+                                                Arrays.asList("Test test1", "Test test2")))
+                                        .build()
+                        )
+                )
                 .build();
 
         when(bookRepository.findById(newBook.getIsbn())).thenReturn(Optional.of(savedBook));
@@ -117,7 +191,11 @@ class BookRegistryTest {
         RegistryResult result = bookRegistry.registerBook(newBook);
 
         assertThat(result).isEqualTo(RegistryResult.UPDATE);
-        assertThat(savedBook.getContributors()).isEqualTo(Sets.newHashSet(Arrays.asList("Test test1", "Test test2")));
+        assertThat(savedBook
+                .getEditions()
+                .get(TEST_EDITION_INDEX)
+                .getContributors())
+                .isEqualTo(Sets.newHashSet(Arrays.asList("Test test1", "Test test2")));
         verify(bookRepository).save(savedBook);
         verify(bookRepository, never()).save(newBook);
     }
@@ -125,10 +203,28 @@ class BookRegistryTest {
 
     @Test
     void registerBookRegistryResultUpdateThickness() {
-        Book savedBook = Book.builder().isbn("1").author("Test One").build();
+        Book savedBook = Book.builder()
+                .isbn("1")
+                .author("Test One")
+                .editions(
+                        Lists.newArrayList(
+                                Edition.builder()
+                                        .yearOfRelease(2003)
+                                        .build()
+                        )
+                )
+                .build();
+
         Book newBook = Book.builder()
                 .isbn("1")
-                .thickness(20.1f)
+                .editions(
+                        Lists.newArrayList(
+                                Edition.builder()
+                                        .yearOfRelease(2003)
+                                        .thickness(20.1f)
+                                        .build()
+                        )
+                )
                 .build();
 
         when(bookRepository.findById(newBook.getIsbn())).thenReturn(Optional.of(savedBook));
@@ -137,17 +233,35 @@ class BookRegistryTest {
         RegistryResult result = bookRegistry.registerBook(newBook);
 
         assertThat(result).isEqualTo(RegistryResult.UPDATE);
-        assertThat(savedBook.getThickness()).isEqualTo(20.1f);
+        assertThat(savedBook.getEditions().get(TEST_EDITION_INDEX).getThickness()).isEqualTo(20.1f);
         verify(bookRepository).save(savedBook);
         verify(bookRepository, never()).save(newBook);
     }
 
     @Test
     void registerBookRegistryResultUpdatePageNumber() {
-        Book savedBook = Book.builder().isbn("1").author("Test One").build();
+        Book savedBook = Book.builder()
+                .isbn("1")
+                .author("Test One")
+                .editions(
+                        Lists.newArrayList(
+                                Edition.builder()
+                                        .yearOfRelease(2003)
+                                        .build()
+                        )
+                )
+                .build();
+
         Book newBook = Book.builder()
                 .isbn("1")
-                .pageNumber(516)
+                .editions(
+                        Lists.newArrayList(
+                                Edition.builder()
+                                        .yearOfRelease(2003)
+                                        .pageNumber(516)
+                                        .build()
+                        )
+                )
                 .build();
 
         when(bookRepository.findById(newBook.getIsbn())).thenReturn(Optional.of(savedBook));
@@ -156,7 +270,7 @@ class BookRegistryTest {
         RegistryResult result = bookRegistry.registerBook(newBook);
 
         assertThat(result).isEqualTo(RegistryResult.UPDATE);
-        assertThat(savedBook.getPageNumber()).isEqualTo(516);
+        assertThat(savedBook.getEditions().get(TEST_EDITION_INDEX).getPageNumber()).isEqualTo(516);
         verify(bookRepository).save(savedBook);
         verify(bookRepository, never()).save(newBook);
     }
@@ -166,6 +280,14 @@ class BookRegistryTest {
         Book savedBook = Book.builder().isbn("1").author("Test One").build();
         Book newBook = Book.builder()
                 .isbn("1")
+                .editions(
+                        Lists.newArrayList(
+                                Edition.builder()
+                                        .editionNumber(0)
+                                        .yearOfRelease(0)
+                                        .build()
+                        )
+                )
                 .coverType(CoverType.SOUND_RECORD)
                 .build();
 
@@ -179,4 +301,110 @@ class BookRegistryTest {
         verify(bookRepository).save(savedBook);
         verify(bookRepository, never()).save(newBook);
     }
+
+    @Test
+    void registerBookRegistryResultNoUpdate() {
+        Book savedBook = Book.builder()
+                .isbn("1")
+                .author("Test One")
+                .editions(
+                        Lists.newArrayList(
+                                Edition.builder()
+                                        .yearOfRelease(2003)
+                                        .build(),
+                                Edition.builder()
+                                        .yearOfRelease(2016)
+                                        .build()
+                        )
+                )
+                .build();
+
+        Book newBook = Book.builder()
+                .isbn("1")
+                .author("Test One")
+                .editions(
+                        Lists.newArrayList(
+                                Edition.builder()
+                                        .yearOfRelease(2003)
+                                        .build()
+                        )
+                )
+                .build();
+
+        when(bookRepository.findById(newBook.getIsbn())).thenReturn(Optional.of(savedBook));
+
+        RegistryResult result = bookRegistry.registerBook(newBook);
+
+        assertThat(result).isEqualTo(RegistryResult.NO_UPDATE);
+        verify(bookRepository, never()).save(savedBook);
+        verify(bookRepository, never()).save(newBook);
+    }
+
+    @Test
+    void registerBookRegistryResultUpdateSavedBookNullEditions() {
+        Book savedBook = Book.builder()
+                .isbn("1")
+                .author("Test One")
+                .build();
+
+        Book newBook = Book.builder()
+                .isbn("1")
+                .editions(
+                        Lists.newArrayList(
+                                Edition.builder()
+                                        .yearOfRelease(2003)
+                                        .build()
+                        )
+                )
+                .build();
+
+        when(bookRepository.findById(newBook.getIsbn())).thenReturn(Optional.of(savedBook));
+
+        RegistryResult result = bookRegistry.registerBook(newBook);
+
+        assertThat(result).isEqualTo(RegistryResult.UPDATE);
+        verify(bookRepository).save(savedBook);
+        verify(bookRepository, never()).save(newBook);
+    }
+
+    @Test
+    void registerBookRegistryResultUpdateSavedBookEdition() {
+        Book savedBook = Book.builder()
+                .isbn("1")
+                .author("Test One")
+                .editions(
+                        Lists.newArrayList(
+                                Edition.builder()
+                                        .editionNumber(1)
+                                        .yearOfRelease(2003)
+                                        .build()
+                        )
+                )
+                .build();
+
+        Book newBook = Book.builder()
+                .isbn("1")
+                .editions(
+                        Lists.newArrayList(
+                                Edition.builder()
+                                        .editionNumber(1)
+                                        .yearOfRelease(2003)
+                                        .pageNumber(11)
+                                        .build()
+                        )
+                )
+                .build();
+
+        when(bookRepository.findById(newBook.getIsbn())).thenReturn(Optional.of(savedBook));
+
+        RegistryResult result = bookRegistry.registerBook(newBook);
+
+        assertThat(result).isEqualTo(RegistryResult.UPDATE);
+        verify(bookRepository).save(savedBook);
+        verify(bookRepository, never()).save(newBook);
+    }
+
+
+
+
 }

@@ -19,11 +19,11 @@ class TitlePropertyUpdatingStrategyTest {
     @Test
     void updateProperty() {
         Book testBook = new Book();
-        String testProperty = "Oz, a nagy varázsló [Hangfelvétel] / " +
+        String testProperty = "Oz, a nagy varázsló [Hangfelvétel] some plus text / " +
                 "L. Frank Baum ; ford. Szőllősy Klára ; Mácsai Pál előadásában";
 
         titlePropertyUpdatingStrategy.updateProperty(testBook, testProperty);
         assertThat(testBook.getCoverType()).isEqualTo(CoverType.SOUND_RECORD);
-        assertThat(testBook.getTitle()).isEqualTo(testProperty);
+        assertThat(testBook.getTitle()).isEqualTo("Oz, a nagy varázsló some plus text");
     }
 }
