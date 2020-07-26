@@ -9,4 +9,6 @@ public interface WebElement {
     List<WebElement> select(String cssQuery);
 
     String toString();
+
+    String attr(String attributeKey);
 }

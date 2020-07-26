@@ -31,4 +31,20 @@ class JsoupWebDocument implements WebDocument {
     public String toString() {
         return document.toString();
     }
+
+    @Override
+    public List<WebElement> getElementsByAttributeValueStarting(String attributeKey, String startOfAttributeValue) {
+        return document.getElementsByAttributeValueStarting(attributeKey, startOfAttributeValue)
+                .stream()
+                .map(JsoupWebElement::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<WebElement> getElementsByAttributeValueMatching(String attributeName, String regex) {
+        return document.getElementsByAttributeValueMatching(attributeName, regex)
+                .stream()
+                .map(JsoupWebElement::new)
+                .collect(Collectors.toList());
+    }
 }

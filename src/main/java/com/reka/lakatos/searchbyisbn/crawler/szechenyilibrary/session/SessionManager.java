@@ -2,9 +2,9 @@ package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session;
 
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.exception.SessionException;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.sessionfacade.SessionFacade;
+import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -17,7 +17,7 @@ public class SessionManager {
 
     public Session getActiveSession() {
         try {
-            final Document document = sessionFacade.getSessionDocument();
+            final WebDocument document = sessionFacade.getSessionDocument();
             final String serverUrl = documentReader.getServerUrl(document);
             final String sessionId = documentReader.getSessionId(document);
             Session session = new Session(serverUrl, sessionId);

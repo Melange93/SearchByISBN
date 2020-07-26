@@ -30,4 +30,9 @@ class JsoupWebElement implements WebElement {
     public String toString() {
         return element.toString();
     }
+
+    @Override
+    public String attr(String attributeKey) {
+        return element.attr(attributeKey);
+    }
 }
