@@ -6,6 +6,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SizePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
+
+    private static final int INDEX_OF_BASIC_EDITION = 0;
+
     @Override
     public void updateProperty(Book book, String property) {
         setThickness(property, book);
@@ -17,7 +20,7 @@ public class SizePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
         Matcher matcher = thickness.matcher(value);
         if (matcher.find()) {
             String result = matcher.group().replaceAll("[^0-9]*", "");
-            book.setThickness(Float.parseFloat(result));
+            book.getEditions().get(INDEX_OF_BASIC_EDITION).setThickness(Float.parseFloat(result));
         }
     }
 
@@ -30,6 +33,6 @@ public class SizePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
                 pageCounter += Integer.parseInt(matcher.group());
             }
         }
-        book.setPageNumber(pageCounter);
+        book.getEditions().get(INDEX_OF_BASIC_EDITION).setPageNumber(pageCounter);
     }
 }

@@ -32,7 +32,7 @@ public class Crawler implements BookCrawler {
     private static final String PAGE_SIZE = "10";
     private static final int ISBN_MAX_SEVENTH_NUMBER = 9;
 
-    private int page = 0;
+    private int page = 150;
     private int isbnSeventhNumber = 0;
     private String searchingISBNMainGroup = ISBN963;
 

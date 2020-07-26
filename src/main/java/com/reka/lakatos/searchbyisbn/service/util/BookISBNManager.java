@@ -23,7 +23,7 @@ public class BookISBNManager {
     public String convertISBNToISBN13(final String isbn) {
         final String cleanISBN = cleanISBN(isbn);
 
-        return isISBN10(cleanISBN) ? isbnValidator.convertToISBN13(isbn) : cleanISBN;
+        return isISBN10(cleanISBN) ? isbnValidator.convertToISBN13(cleanISBN) : cleanISBN;
     }
 
     public String cleanISBN(String isbn) {
