@@ -26,7 +26,7 @@ public class JsoupWebClient implements WebClient {
             return new JsoupWebDocument(
                     Jsoup.connect(baseUrl)
                             .requestBody(requestBody)
-                            .get()
+                            .post()
             );
         } catch (IOException e) {
             throw new WebClientException("Failed to reach the url: " + baseUrl +
