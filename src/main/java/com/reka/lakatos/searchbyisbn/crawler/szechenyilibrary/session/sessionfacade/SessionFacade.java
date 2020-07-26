@@ -5,11 +5,10 @@ import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.exception.
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.exception.SessionDocumentException;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.sessionfacade.factory.SessionRequestBodyFactory;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.sessionfacade.factory.SessionURLFactory;
-import com.reka.lakatos.searchbyisbn.webclient.WebClient;
-import com.reka.lakatos.searchbyisbn.webclient.exception.GetRequestException;
-import com.reka.lakatos.searchbyisbn.webclient.exception.PostRequestException;
+import com.reka.lakatos.searchbyisbn.webdocument.WebClient;
+import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
+import com.reka.lakatos.searchbyisbn.webdocument.exception.WebClientException;
 import lombok.RequiredArgsConstructor;
-import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,11 +19,11 @@ public class SessionFacade {
     private final SessionRequestBodyFactory requestBodyFactory;
     private final WebClient webClient;
 
-    public Document getSessionDocument() {
+    public WebDocument getSessionDocument() {
         final String url = urlFactory.getSessionProviderUrl();
         try {
             return webClient.sendGetRequest(url);
-        } catch (GetRequestException e) {
+        } catch (WebClientException e) {
             throw new SessionDocumentException("Failed to get session document.", e);
         }
     }
@@ -35,7 +34,7 @@ public class SessionFacade {
 
         try {
             webClient.sendPostRequest(url, requestBody);
-        } catch (PostRequestException e) {
+        } catch (WebClientException e) {
             throw new SessionActivationException("Session activation failed. Server URL: " + session.getServerUrl(), e);
         }
     }
