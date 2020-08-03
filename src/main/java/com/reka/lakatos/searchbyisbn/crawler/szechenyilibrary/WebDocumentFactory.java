@@ -26,6 +26,16 @@ public class WebDocumentFactory {
         return webClient.sendPostRequest(searchingUrl, searchingBody);
     }
 
+    public WebDocument visitBookEditionsLink(final String url) {
+        String extendUrlWithServerUrl = currentServerUrl + url;
+        return webClient.sendGetRequest(extendUrlWithServerUrl);
+    }
+
+    public WebDocument visitBook(final String url) {
+        String extendUrlWithServerUrl = currentServerUrl + url;
+        return webClient.sendGetRequest(extendUrlWithServerUrl);
+    }
+
     private void setCurrentServerUrlAndCurrentServerSessionId() {
         Session session = sessionManager.getActiveSession();
         currentServerUrl = session.getServerUrl();

@@ -9,13 +9,20 @@ import java.util.stream.Collectors;
 @Service
 public class DocumentReader {
 
-    public List<String> getBookPropertiesPageLinks(WebDocument webDocument) {
+    public List<String> getBookEditionsPageLinks(final WebDocument webDocument) {
         return webDocument.getElementsByTag("a")
                 .stream()
                 .filter(element -> element.hasAttr("href")
                         && !element.hasAttr("target")
                         && element.hasText())
                 .map(element -> element.attr("href"))
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getEditionsLink(final WebDocument webDocument) {
+        return webDocument.select(".fullrekview a")
+                .stream()
+                .map(webElement -> webElement.attr("href"))
                 .collect(Collectors.toList());
     }
 }
