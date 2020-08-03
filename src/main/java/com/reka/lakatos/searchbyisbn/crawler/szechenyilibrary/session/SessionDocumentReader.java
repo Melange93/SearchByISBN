@@ -49,4 +49,8 @@ public class SessionDocumentReader {
                 "Failed to get server session id from document, because the session id is null."
         );
     }
+
+    public List<WebElement> getRedErrorMessages(final WebDocument document) {
+        return document.getElementsByAttributeValueMatching("color", "red");
+    }
 }
