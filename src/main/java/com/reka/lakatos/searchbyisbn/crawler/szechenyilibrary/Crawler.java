@@ -12,7 +12,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -22,6 +21,7 @@ public class Crawler implements BookCrawler {
 
     private final SessionManager sessionManager;
     private final SessionActivationChecker sessionActivationChecker;
+    private final DocumentReader reader;
     private final WebClient webClient;
 
     private String currentServerUrl;
@@ -44,13 +44,7 @@ public class Crawler implements BookCrawler {
 
         System.out.println(sessionActivationChecker.isSessionActive(webDocument));
 
-        List<String> elements = webDocument.getElementsByTag("a")
-                .stream()
-                .filter(element -> element.hasAttr("href")
-                        && !element.hasAttr("target")
-                        && element.hasText())
-                .map(element -> element.attr("href"))
-                .collect(Collectors.toList());
+        List<String> elements = reader.getBookPropertiesPageLinks(webDocument);
         elements.forEach(System.out::println);
         return null;
     }
