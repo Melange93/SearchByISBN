@@ -13,4 +13,6 @@ public interface WebDocument {
     List<WebElement> getElementsByAttributeValueStarting(String attributeKey, String startOfAttributeValue);
 
     List<WebElement> getElementsByAttributeValueMatching(String attributeName, String regex);
+
+    List<WebElement> getElementsByTag(String tag);
 }

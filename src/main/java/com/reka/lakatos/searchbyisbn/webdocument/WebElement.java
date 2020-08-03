@@ -11,4 +11,8 @@ public interface WebElement {
     String toString();
 
     String attr(String attributeKey);
+
+    boolean hasAttr(String attr);
+
+    boolean hasText();
 }
