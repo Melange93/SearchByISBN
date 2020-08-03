@@ -1,9 +1,10 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary;
 
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
+import com.reka.lakatos.searchbyisbn.webdocument.WebElement;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -11,8 +12,8 @@ public class SessionActivationChecker {
 
     private static final String SESSION_TIME_OUT_MESSAGE = "Your session has timed out";
 
-    public boolean isSessionActive(final Document document) {
-        Elements elements = document
+    public boolean isSessionActive(final WebDocument document) {
+        List<WebElement> elements = document
                 .getElementsByAttributeValueMatching("color", "red");
 
         return !(elements.size() == 1 &&
