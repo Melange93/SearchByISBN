@@ -1,11 +1,11 @@
-package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session;
+package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public class RequestBodyFactory {
 
-    private static final int SEARCHING_BOOK_NUMBER = 50;
+    private static final int SEARCHING_BOOK_NUMBER = 10;
 
     public String getSearchingBody(final String currentServerSessionId) {
         return "SESSION_ID="
