@@ -26,7 +26,6 @@ public class TitlePropertiesUpdatingStrategy implements PropertiesUpdatingStrate
     }
 
     // TODO: 2020. 08. 04. check the different cover type names
-    //Push problem
     private void setSpecialCoverType(String value, Book book) {
         Pattern specialCoverTypePattern = Pattern.compile("(?![\\[])[^\\[\\.]*?(?=[\\]])");
         Matcher matcher = specialCoverTypePattern.matcher(value);
