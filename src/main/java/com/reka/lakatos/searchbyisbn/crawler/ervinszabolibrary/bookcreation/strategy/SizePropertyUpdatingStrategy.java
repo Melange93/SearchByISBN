@@ -16,10 +16,18 @@ public class SizePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
     }
 
     private void setThickness(String value, Book book) {
-        Pattern thickness = Pattern.compile("([0-9,]*[\\s]*cm)");
+        String thicknessRegex = "([0-9,]*[\\s]*cm)";
+        String cartographyRegex = "([^x][0-9,]*[\\s]*cm)";
+
+        if (Pattern.compile(cartographyRegex).matcher(value).find()) {
+            return;
+        }
+
+        Pattern thickness = Pattern.compile(thicknessRegex);
         Matcher matcher = thickness.matcher(value);
         if (matcher.find()) {
-            String result = matcher.group().replaceAll("[^0-9]*", "");
+            String coma = matcher.group().replaceAll(",", ".");
+            String result = coma.replaceAll("[^0-9.]*", "");
             book.getEditions().get(INDEX_OF_BASIC_EDITION).setThickness(Float.parseFloat(result));
         }
     }
