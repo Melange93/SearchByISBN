@@ -1,6 +1,5 @@
-package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation;
+package com.reka.lakatos.searchbyisbn.crawler.bookcreation;
 
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.Edition;
@@ -13,7 +12,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class BookCreator {
+public class DefaultBookCreator {
 
     private final Map<String, PropertyUpdatingStrategy> bookPropertyUpdatingStrategyMap;
     private final Map<String, PropertyValidatorStrategy> propertyValidatorStrategyMap;
