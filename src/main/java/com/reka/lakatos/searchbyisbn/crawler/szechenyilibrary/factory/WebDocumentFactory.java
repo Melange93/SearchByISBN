@@ -27,13 +27,19 @@ public class WebDocumentFactory {
     }
 
     public WebDocument visitBookEditionsLink(final String url) {
-        String extendUrlWithServerUrl = currentServerUrl + url;
+        final String extendUrlWithServerUrl = currentServerUrl + url;
         return webClient.sendGetRequest(extendUrlWithServerUrl);
     }
 
     public WebDocument visitBook(final String url) {
-        String extendUrlWithServerUrl = currentServerUrl + url;
+        final String extendUrlWithServerUrl = currentServerUrl + url;
         return webClient.sendGetRequest(extendUrlWithServerUrl);
+    }
+
+    public WebDocument getNextSearchingPage(final String scanTerm) {
+        final String url = urlFactory.getSearchingUrl(currentServerUrl);
+        final String requestBody = requestBodyFactory.getNextPageBody(currentServerSessionId, scanTerm);
+        return webClient.sendPostRequest(url, requestBody);
     }
 
     private void setCurrentServerUrlAndCurrentServerSessionId() {
