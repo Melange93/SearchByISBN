@@ -18,17 +18,21 @@ import java.util.List;
 public class Crawler implements BookCrawler {
     private final BookListCreator bookListCreator;
     private final WebDocumentFactory documentFactory;
+    private final DocumentReader documentReader;
+
+    private String scanTermToNextPage;
 
     @Override
     public List<Book> getNextBooks() {
-        System.out.println(getBookListLinks());
-        return null;
-    }
 
-    private List<String> getBookListLinks() {
-        WebDocument webDocument = documentFactory.getSearchingResult();
-        bookListCreator.getCrawledBooks(webDocument);
+        if (scanTermToNextPage == null) {
+            WebDocument webDocument = documentFactory.getSearchingResult();
+            scanTermToNextPage = documentReader.getScanTermToNextPage(webDocument);
+            return bookListCreator.getCrawledBooks(webDocument);
+        }
+        log.info("Here");
 
-        return null;
+        WebDocument nextSearchingPage = documentFactory.getNextSearchingPage(scanTermToNextPage);
+        return bookListCreator.getCrawledBooks(nextSearchingPage);
     }
 }
