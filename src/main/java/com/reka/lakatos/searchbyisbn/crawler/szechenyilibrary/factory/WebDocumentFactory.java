@@ -1,4 +1,4 @@
-package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary;
+package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.factory;
 
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.Session;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.SessionManager;
