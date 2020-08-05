@@ -1,5 +1,6 @@
-package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.propertiesvalidator.startegy;
+package com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy;
 
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.service.util.BookISBNManager;
 import lombok.RequiredArgsConstructor;
 
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
-public class ISBNPropertyValidatorStrategy implements PropertyValidatorStrategy {
+public class DefaultISBNPropertyValidatorStrategy implements PropertyValidatorStrategy {
 
     private final BookISBNManager bookISBNManager;
 

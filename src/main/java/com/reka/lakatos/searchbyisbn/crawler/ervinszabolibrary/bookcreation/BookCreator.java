@@ -1,7 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation;
 
-import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.propertiesvalidator.startegy.PropertyValidatorStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.strategy.PropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.Edition;
 import lombok.RequiredArgsConstructor;

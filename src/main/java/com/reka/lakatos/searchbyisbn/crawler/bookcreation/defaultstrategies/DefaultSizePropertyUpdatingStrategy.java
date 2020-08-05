@@ -1,11 +1,12 @@
-package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.updatingtrategy;
+package com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies;
 
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SizePropertiesUpdatingStrategy implements PropertiesUpdatingStrategy {
+public class DefaultSizePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
 
     private static final int INDEX_OF_BASIC_EDITION = 0;
 
@@ -17,7 +18,7 @@ public class SizePropertiesUpdatingStrategy implements PropertiesUpdatingStrateg
 
     private void setThickness(String value, Book book) {
         String thicknessRegex = "([0-9,]*[\\s]*cm)";
-        String cartographyRegex = "([^x][0-9,]*[\\s]*cm)";
+        String cartographyRegex = "([x][0-9,]*[\\s]*cm)";
 
         if (Pattern.compile(cartographyRegex).matcher(value).find()) {
             return;
