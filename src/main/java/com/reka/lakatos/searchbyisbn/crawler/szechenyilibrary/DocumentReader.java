@@ -27,19 +27,17 @@ public class DocumentReader {
                 .collect(Collectors.toList());
     }
 
-    public List<String> getBookPropertiesName(WebDocument webDocument) {
+    public List<WebElement> getBookPropertiesName(WebDocument webDocument) {
         return webDocument.select(".fieldLabel").stream()
                 .map(webElement -> webElement.select("td"))
                 .flatMap(List::stream)
                 .filter(WebElement::hasText)
-                .map(WebElement::text)
                 .collect(Collectors.toList());
     }
 
-    public List<String> getBookPropertiesValue(WebDocument webDocument) {
+    public List<WebElement> getBookPropertiesValue(WebDocument webDocument) {
         return webDocument.select(".fieldValue").stream()
                 .filter(WebElement::hasText)
-                .map(WebElement::text)
                 .collect(Collectors.toList());
     }
 }

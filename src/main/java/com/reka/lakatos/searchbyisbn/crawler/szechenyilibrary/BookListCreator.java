@@ -3,6 +3,7 @@ package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.SzechenyiBookCreator;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
+import com.reka.lakatos.searchbyisbn.webdocument.WebElement;
 import com.reka.lakatos.searchbyisbn.webdocument.exception.WebClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,9 @@ public class BookListCreator {
     private final DocumentReader documentReader;
     private final WebDocumentFactory documentFactory;
     private final SzechenyiBookCreator bookCreator;
+
+    private static final String SPECIAL_CASE_CONTRIBUTORS = "Név/nevek:";
+    private static final String SPECIAL_SEPARATION_CHARACTER = "$";
 
     public List<Book> getCrawledBooks(final WebDocument webDocument) {
 
@@ -63,16 +67,44 @@ public class BookListCreator {
     }
 
     private Map<String, String> createBookPropertiesMap(final WebDocument webDocument) {
-        final List<String> bookPropertiesName = documentReader.getBookPropertiesName(webDocument);
-        final List<String> bookPropertiesValue = documentReader.getBookPropertiesValue(webDocument);
+        final List<String> bookPropertiesName = documentReader
+                .getBookPropertiesName(webDocument)
+                .stream()
+                .map(WebElement::text)
+                .collect(Collectors.toList());
 
-        return IntStream.range(0, bookPropertiesValue.size())
+        final List<WebElement> bookPropertiesValuesWebElement = documentReader.getBookPropertiesValue(webDocument);
+        List<String> bookPropertiesValues = bookPropertiesValuesWebElement
+                .stream()
+                .map(WebElement::text)
+                .collect(Collectors.toList());
+
+        if (hasContributors(bookPropertiesName)) {
+            int contributorsIndex = bookPropertiesName.indexOf(SPECIAL_CASE_CONTRIBUTORS);
+            String contributorsSeparateBySpecialCharacter =
+                    getContributorsSeparateBySpecialCharacter(bookPropertiesValuesWebElement, contributorsIndex);
+            bookPropertiesValues.set(contributorsIndex, contributorsSeparateBySpecialCharacter);
+        }
+
+        return IntStream.range(0, bookPropertiesValues.size())
                 .boxed()
                 .collect(
                         Collectors.toMap(
                                 bookPropertiesName::get,
-                                bookPropertiesValue::get
+                                bookPropertiesValues::get
                         )
                 );
+    }
+
+    private String getContributorsSeparateBySpecialCharacter(List<WebElement> bookPropertiesValuesWebElement, int contributorsIndex) {
+        return bookPropertiesValuesWebElement.get(contributorsIndex)
+                .select("a")
+                .stream()
+                .map(WebElement::text)
+                .collect(Collectors.joining(SPECIAL_SEPARATION_CHARACTER));
+    }
+
+    private boolean hasContributors(List<String> bookPropertiesKey) {
+        return bookPropertiesKey.contains(SPECIAL_CASE_CONTRIBUTORS);
     }
 }

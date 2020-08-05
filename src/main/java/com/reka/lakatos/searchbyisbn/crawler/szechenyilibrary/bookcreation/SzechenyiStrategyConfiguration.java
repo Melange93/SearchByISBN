@@ -15,7 +15,7 @@ public class SzechenyiStrategyConfiguration {
                 Map.entry("ISBN :", new ISBNPropertiesUpdatingStrategy()),
                 Map.entry("Terj./Fiz. jell.:", new SizePropertiesUpdatingStrategy()),
                 Map.entry("Cím és szerzőségi közlés:", new TitlePropertiesUpdatingStrategy()),
-                //Map.entry("Név/nevek:", ),
+                Map.entry("Név/nevek:", new ContributorsPropertiesUpdatingStrategy()),
                 Map.entry("Szerző:", new AuthorPropertiesUpdatingStrategy()),
                 Map.entry("Megjelenés:", new PublisherPropertiesUpdatingStrategy()),
                 Map.entry("Kiadás:", new EditionNumberPropertiesUpdatingStrategy())
