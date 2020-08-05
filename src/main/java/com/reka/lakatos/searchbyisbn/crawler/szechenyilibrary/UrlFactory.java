@@ -8,8 +8,4 @@ public class UrlFactory {
     public String getSearchingUrl(final String serverUrl) {
         return serverUrl + "lv_scan.html";
     }
-
-    public String getBookPageUrl(final String serverUrl) {
-        return serverUrl + "lv_view_records.html";
-    }
 }
