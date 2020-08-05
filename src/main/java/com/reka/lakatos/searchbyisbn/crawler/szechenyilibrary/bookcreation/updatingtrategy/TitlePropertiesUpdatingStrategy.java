@@ -1,12 +1,18 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.updatingtrategy;
 
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.CoverType;
+import lombok.RequiredArgsConstructor;
 
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TitlePropertiesUpdatingStrategy implements PropertiesUpdatingStrategy {
+@RequiredArgsConstructor
+public class TitlePropertiesUpdatingStrategy implements PropertyUpdatingStrategy {
+
+    private final Map<String, CoverType> coverTypeConverter;
 
     @Override
     public void updateProperty(Book book, String property) {
@@ -25,15 +31,17 @@ public class TitlePropertiesUpdatingStrategy implements PropertiesUpdatingStrate
         }
     }
 
-    // TODO: 2020. 08. 04. check the different cover type names
     private void setSpecialCoverType(String value, Book book) {
+        if (book.getCoverType() != null) {
+            return;
+        }
+
         Pattern specialCoverTypePattern = Pattern.compile("(?![\\[])[^\\[\\.]*?(?=[\\]])");
         Matcher matcher = specialCoverTypePattern.matcher(value);
         if (matcher.find()) {
             String result = matcher.group();
             if (!result.isBlank()) {
-                CoverType.findTypeByName(result.toLowerCase())
-                        .ifPresent(book::setCoverType);
+                book.setCoverType(coverTypeConverter.get(result));
             }
         }
     }

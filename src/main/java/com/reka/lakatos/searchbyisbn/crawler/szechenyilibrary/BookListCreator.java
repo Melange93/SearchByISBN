@@ -1,6 +1,6 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary;
 
-import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.SzechenyiBookCreator;
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.DefaultBookCreator;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
 import com.reka.lakatos.searchbyisbn.webdocument.WebElement;
@@ -23,7 +23,7 @@ public class BookListCreator {
 
     private final DocumentReader documentReader;
     private final WebDocumentFactory documentFactory;
-    private final SzechenyiBookCreator bookCreator;
+    private final DefaultBookCreator bookCreator;
 
     private static final String SPECIAL_CASE_CONTRIBUTORS = "Név/nevek:";
     private static final String SPECIAL_SEPARATION_CHARACTER = "$";
