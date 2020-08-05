@@ -26,11 +26,12 @@ public class Crawler implements BookCrawler {
     public List<Book> getNextBooks() {
 
         if (scanTermToNextPage == null) {
+            log.info("First page crawling.");
             WebDocument webDocument = documentFactory.getSearchingResult();
             scanTermToNextPage = documentReader.getScanTermToNextPage(webDocument);
             return bookListCreator.getCrawledBooks(webDocument);
         }
-        log.info("Here");
+        log.info("Next page crawling. ScanTerm: " + scanTermToNextPage);
 
         WebDocument nextSearchingPage = documentFactory.getNextSearchingPage(scanTermToNextPage);
         return bookListCreator.getCrawledBooks(nextSearchingPage);
