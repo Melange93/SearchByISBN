@@ -1,8 +1,6 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation;
 
-import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.updatingtrategy.ISBNPropertyUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.updatingtrategy.PropertiesUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.updatingtrategy.TitlePropertiesUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.updatingtrategy.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,12 +12,13 @@ public class SzechenyiStrategyConfiguration {
     @Bean
     public Map<String, PropertiesUpdatingStrategy> getSzechenyiBookPropertyUpdatingStrategyMap() {
         return Map.ofEntries(
-                Map.entry("ISBN :", new ISBNPropertyUpdatingStrategy()),
-                //Map.entry("Terj./Fiz. jell.:", ),
-                Map.entry("Cím és szerzőségi közlés:", new TitlePropertiesUpdatingStrategy())
+                Map.entry("ISBN :", new ISBNPropertiesUpdatingStrategy()),
+                Map.entry("Terj./Fiz. jell.:", new SizePropertiesUpdatingStrategy()),
+                Map.entry("Cím és szerzőségi közlés:", new TitlePropertiesUpdatingStrategy()),
                 //Map.entry("Név/nevek:", ),
-                //Map.entry("Szerző:", )
-                //Map.entry("Kiadás:", )
+                Map.entry("Szerző:", new AuthorPropertiesUpdatingStrategy()),
+                Map.entry("Megjelenés:", new PublisherPropertiesUpdatingStrategy()),
+                Map.entry("Kiadás:", new EditionNumberPropertiesUpdatingStrategy())
         );
     }
 
