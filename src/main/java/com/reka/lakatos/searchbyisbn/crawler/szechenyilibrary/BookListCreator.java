@@ -33,15 +33,12 @@ public class BookListCreator {
 
         List<String> bookEditionsPageLinks = documentReader.getBookEditionsPageLinks(webDocument);
 
-        List<String> allBooksEditionsLink = getAllBooksEditionsLink(bookEditionsPageLinks);
-        for (String visitUrl : allBooksEditionsLink) {
-            WebDocument webDocument1 = documentFactory.visitBook(visitUrl);
-            Map<String, String> bookPropertiesMap = createBookPropertiesMap(webDocument1);
-            Optional<Book> book = bookCreator.createBook(bookPropertiesMap);
-            System.out.println(book);
-        }
-
-        return null;
+        return getAllBooksEditionsLink(bookEditionsPageLinks).stream()
+                .map(documentFactory::visitBook)
+                .map(this::createBookPropertiesMap)
+                .map(bookCreator::createBook)
+                .flatMap(Optional::stream)
+                .collect(Collectors.toList());
     }
 
     private List<String> getAllBooksEditionsLink(List<String> bookEditionsPageLinks) {
