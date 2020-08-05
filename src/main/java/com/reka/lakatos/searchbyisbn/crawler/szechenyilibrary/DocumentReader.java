@@ -40,4 +40,12 @@ public class DocumentReader {
                 .filter(WebElement::hasText)
                 .collect(Collectors.toList());
     }
+
+    public String getScanTermToNextPage(WebDocument webDocument) {
+        List<String> scanTerms = webDocument.select("input").stream()
+                .filter(webElement -> webElement.attr("name").equals("SCAN_TERM"))
+                .map(webElement -> webElement.attr("value"))
+                .collect(Collectors.toList());
+        return scanTerms.get(scanTerms.size() - 1);
+    }
 }
