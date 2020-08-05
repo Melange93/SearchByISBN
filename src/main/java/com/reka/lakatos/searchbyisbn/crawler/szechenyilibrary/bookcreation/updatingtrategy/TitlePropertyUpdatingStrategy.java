@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
-public class TitlePropertiesUpdatingStrategy implements PropertyUpdatingStrategy {
+public class TitlePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
 
     private final Map<String, CoverType> coverTypeConverter;
 
@@ -41,7 +41,8 @@ public class TitlePropertiesUpdatingStrategy implements PropertyUpdatingStrategy
         if (matcher.find()) {
             String result = matcher.group();
             if (!result.isBlank()) {
-                book.setCoverType(coverTypeConverter.get(result));
+                CoverType coverType = coverTypeConverter.get(result.trim());
+                book.setCoverType(coverType);
             }
         }
     }

@@ -3,11 +3,16 @@ package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.upda
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.CoverType;
+import lombok.RequiredArgsConstructor;
 
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PublisherPropertiesUpdatingStrategy implements PropertyUpdatingStrategy {
+@RequiredArgsConstructor
+public class PublisherPropertyUpdatingStrategy implements PropertyUpdatingStrategy {
+
+    private final Map<String, CoverType> coverTypeConverter;
 
     private static final int INDEX_OF_BASIC_EDITION = 0;
 
@@ -26,7 +31,8 @@ public class PublisherPropertiesUpdatingStrategy implements PropertyUpdatingStra
         Pattern musicSheet = Pattern.compile("kotta");
         Matcher matcher = musicSheet.matcher(property);
         if (matcher.find()) {
-            book.setCoverType(CoverType.SHEET_MUSIC);
+            CoverType coverType = coverTypeConverter.get("kotta");
+            book.setCoverType(coverType);
         }
     }
 

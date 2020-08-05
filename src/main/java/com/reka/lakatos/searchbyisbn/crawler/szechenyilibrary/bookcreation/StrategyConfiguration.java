@@ -7,9 +7,7 @@ import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.Defa
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.DefaultSizePropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.updatingtrategy.EditionNumberPropertiesUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.updatingtrategy.PublisherPropertiesUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.updatingtrategy.TitlePropertiesUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.updatingtrategy.*;
 import com.reka.lakatos.searchbyisbn.document.CoverType;
 import com.reka.lakatos.searchbyisbn.service.util.BookISBNManager;
 import lombok.RequiredArgsConstructor;
@@ -31,11 +29,14 @@ public class StrategyConfiguration {
         return Map.ofEntries(
                 Map.entry("ISBN :", new DefaultISBNPropertyUpdatingStrategy()),
                 Map.entry("Terj./Fiz. jell.:", new DefaultSizePropertyUpdatingStrategy()),
-                Map.entry("Cím és szerzőségi közlés:", new TitlePropertiesUpdatingStrategy(getCoverTypeConverter())),
+                Map.entry("Cím és szerzőségi közlés:", new TitlePropertyUpdatingStrategy(getCoverTypeConverter())),
                 Map.entry("Név/nevek:", new DefaultContributorsPropertyUpdatingStrategy()),
                 Map.entry("Szerző:", new DefaultAuthorPropertyUpdatingStrategy()),
-                Map.entry("Megjelenés:", new PublisherPropertiesUpdatingStrategy()),
-                Map.entry("Kiadás:", new EditionNumberPropertiesUpdatingStrategy())
+                Map.entry("Megjelenés:", new PublisherPropertyUpdatingStrategy(getCoverTypeConverter())),
+                Map.entry("Kiadás:", new EditionNumberPropertyUpdatingStrategy()),
+                Map.entry("Tárgyszavak:", new SpecialCoverTypeMapAndDigitalCheckPropertyUpdatingStrategy(getCoverTypeConverter())),
+                Map.entry("Egységesített cím - főtétel:", new SpecialCoverTypeMapCheckerPropertyUpdatingStrategy(getCoverTypeConverter())),
+                Map.entry("Elektr. dok. jell.:", new SpecialCoverTypeDigitalCheckerPropertyUpdatingStrategy())
         );
     }
 
@@ -45,7 +46,11 @@ public class StrategyConfiguration {
                 Map.entry("hangfelvétel", CoverType.SOUND_RECORD),
                 Map.entry("elektronikus dok.", CoverType.DIGITAL),
                 Map.entry("elektronikus kartográfiai dok.", CoverType.DIGITAL),
-                Map.entry("nyomtatott kotta", CoverType.SHEET_MUSIC)
+                Map.entry("nyomtatott kotta", CoverType.SHEET_MUSIC),
+                Map.entry("kotta", CoverType.SHEET_MUSIC),
+                Map.entry("kartográfiai dokumentum", CoverType.MAP),
+                Map.entry("elektronikus dokumentum", CoverType.DIGITAL),
+                Map.entry("térkép", CoverType.MAP)
         );
     }
 
