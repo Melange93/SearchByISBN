@@ -60,4 +60,12 @@ public class StrategyConfiguration {
                 Map.entry("ISBN :", new DefaultISBNPropertyValidatorStrategy(bookISBNManager))
         );
     }
+
+    @Bean
+    public Map<String, Boolean> getPropertyValueContainsResult() {
+        return Map.ofEntries(
+                Map.entry("hibás", false),
+                Map.entry("*", false)
+        );
+    }
 }
