@@ -30,18 +30,48 @@ public class BookListCreator {
     private static final String SPECIAL_SEPARATION_CHARACTER = "$";
 
     public List<Book> getCrawledBooks(final WebDocument webDocument) {
+        List<Book> books = new ArrayList<>();
 
         List<String> bookEditionsPageLinks = documentReader.getBookEditionsPageLinks(webDocument);
+        //System.out.println(bookEditionsPageLinks);
+        for (String edition : bookEditionsPageLinks) {
+            List<String> allBooksEditionsLink = getAllBooksEditionsLink(edition);
+            for (String url : allBooksEditionsLink) {
+                WebDocument webDocument1 = documentFactory.visitBook(url);
+                Map<String, String> bookPropertiesMap = createBookPropertiesMap(webDocument1);
+                Optional<Book> book = bookCreator.createBook(bookPropertiesMap);
+                book.ifPresent(books::add);
+            }
+        }
+        return books;
 
+        /*
         return getAllBooksEditionsLink(bookEditionsPageLinks).stream()
                 .map(documentFactory::visitBook)
                 .map(this::createBookPropertiesMap)
                 .map(bookCreator::createBook)
                 .flatMap(Optional::stream)
                 .collect(Collectors.toList());
+
+         */
     }
 
-    private List<String> getAllBooksEditionsLink(List<String> bookEditionsPageLinks) {
+    private List<String> getAllBooksEditionsLink(String bookEditionsPageLink) {
+        List<String> booksEditionsLink = new ArrayList<>();
+        try {
+            Thread.sleep(1000L);
+            List<String> bookEditionsLink = getBookEditionsLink(bookEditionsPageLink);
+            booksEditionsLink.addAll(bookEditionsLink);
+        } catch (InterruptedException e) {
+            log.error("Failed to wait 1000 ms.");
+            return booksEditionsLink;
+        } catch (WebClientException e) {
+            // TODO: 2020. 08. 04. create unique exception
+            throw new RuntimeException("Failed to get editions page link", e);
+        }
+        return booksEditionsLink;
+
+        /*
         List<String> booksEditionsLink = new ArrayList<>();
         try {
             for (String url : bookEditionsPageLinks) {
@@ -57,6 +87,8 @@ public class BookListCreator {
             throw new RuntimeException("Failed to get editions page link", e);
         }
         return booksEditionsLink;
+
+         */
     }
 
     private List<String> getBookEditionsLink(final String allEditionsPageUrl) {
@@ -65,6 +97,8 @@ public class BookListCreator {
     }
 
     private Map<String, String> createBookPropertiesMap(final WebDocument webDocument) {
+        System.out.println(documentReader.getRelatedBooks(webDocument));
+
         final List<String> bookPropertiesName = documentReader
                 .getBookPropertiesName(webDocument)
                 .stream()
