@@ -24,6 +24,6 @@ public class ExtendISBNPropertyValidatorStrategy implements PropertyValidatorStr
             }
         }
 
-        return !defaultISBNValidator.validateProperty(property);
+        return defaultISBNValidator.validateProperty(property);
     }
 }

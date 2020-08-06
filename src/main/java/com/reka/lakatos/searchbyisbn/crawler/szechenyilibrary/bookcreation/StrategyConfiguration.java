@@ -8,6 +8,7 @@ import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.Defa
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.updatingtrategy.*;
+import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.validation.ExtendISBNPropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.document.CoverType;
 import com.reka.lakatos.searchbyisbn.service.util.BookISBNManager;
 import lombok.RequiredArgsConstructor;
@@ -57,7 +58,11 @@ public class StrategyConfiguration {
     @Bean
     public Map<String, PropertyValidatorStrategy> getPropertyValidatorStrategyMap() {
         return Map.ofEntries(
-                Map.entry("ISBN :", new DefaultISBNPropertyValidatorStrategy(bookISBNManager))
+                Map.entry("ISBN :", new ExtendISBNPropertyValidatorStrategy(
+                                new DefaultISBNPropertyValidatorStrategy(bookISBNManager),
+                                getPropertyValueContainsResult()
+                        )
+                )
         );
     }
 

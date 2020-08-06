@@ -37,6 +37,10 @@ public class DefaultBookCreator {
             }
         }
 
+        if (book.getIsbn() == null) {
+            return Optional.empty();
+        }
+
         return Optional.of(book);
     }
 }

@@ -34,6 +34,7 @@ public class Crawler implements BookCrawler {
         log.info("Next page crawling. ScanTerm: " + scanTermToNextPage);
 
         WebDocument nextSearchingPage = documentFactory.getNextSearchingPage(scanTermToNextPage);
+        scanTermToNextPage = documentReader.getScanTermToNextPage(nextSearchingPage);
         return bookListCreator.getCrawledBooks(nextSearchingPage);
     }
 }
