@@ -1,11 +1,11 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary;
 
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.DefaultBookCreator;
+import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.exception.BookIdException;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.factory.WebDocumentFactory;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
 import com.reka.lakatos.searchbyisbn.webdocument.WebElement;
-import com.reka.lakatos.searchbyisbn.webdocument.exception.WebClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -45,16 +45,6 @@ public class BookListCreator {
             }
         }
         return books;
-
-        /*
-        return getAllBooksEditionsLink(bookEditionsPageLinks).stream()
-                .map(documentFactory::visitBook)
-                .map(this::createBookPropertiesMap)
-                .map(bookCreator::createBook)
-                .flatMap(Optional::stream)
-                .collect(Collectors.toList());
-
-         */
     }
 
     private List<String> getAllBooksEditionsLink(String bookEditionsPageLink) {
@@ -66,30 +56,8 @@ public class BookListCreator {
         } catch (InterruptedException e) {
             log.error("Failed to wait 1000 ms.");
             return booksEditionsLink;
-        } catch (WebClientException e) {
-            // TODO: 2020. 08. 04. create unique exception
-            throw new RuntimeException("Failed to get editions page link", e);
         }
         return booksEditionsLink;
-
-        /*
-        List<String> booksEditionsLink = new ArrayList<>();
-        try {
-            for (String url : bookEditionsPageLinks) {
-                Thread.sleep(1000L);
-                List<String> bookEditionsLink = getBookEditionsLink(url);
-                booksEditionsLink.addAll(bookEditionsLink);
-            }
-        } catch (InterruptedException e) {
-            log.error("Failed to wait 1000 ms.");
-            return booksEditionsLink;
-        } catch (WebClientException e) {
-            // TODO: 2020. 08. 04. create unique exception
-            throw new RuntimeException("Failed to get editions page link", e);
-        }
-        return booksEditionsLink;
-
-         */
     }
 
     private List<String> getBookEditionsLink(final String allEditionsPageUrl) {
@@ -127,7 +95,7 @@ public class BookListCreator {
     private boolean hasRelatedBooks(WebDocument webDocument) {
         Optional<String> bookAmicusId = documentReader.getBookAmicusId(webDocument);
         if (bookAmicusId.isEmpty()) {
-            throw new RuntimeException("Failed to get the book id.");
+            throw new BookIdException("Failed to get the book id.");
         }
         WebDocument relatedBooksPage = documentFactory.getRelatedBooksPage(bookAmicusId.get());
         return documentReader.hasRelatedBooks(relatedBooksPage);
