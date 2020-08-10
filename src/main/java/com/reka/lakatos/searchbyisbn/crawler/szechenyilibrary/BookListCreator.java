@@ -33,14 +33,15 @@ public class BookListCreator {
         List<Book> books = new ArrayList<>();
 
         List<String> bookEditionsPageLinks = documentReader.getBookEditionsPageLinks(webDocument);
-        //System.out.println(bookEditionsPageLinks);
         for (String edition : bookEditionsPageLinks) {
             List<String> allBooksEditionsLink = getAllBooksEditionsLink(edition);
             for (String url : allBooksEditionsLink) {
                 WebDocument webDocument1 = documentFactory.visitBook(url);
-                Map<String, String> bookPropertiesMap = createBookPropertiesMap(webDocument1);
-                Optional<Book> book = bookCreator.createBook(bookPropertiesMap);
-                book.ifPresent(books::add);
+                Optional<Map<String, String>> bookPropertiesMap = createBookPropertiesMap(webDocument1);
+                bookPropertiesMap.ifPresent(bookProperties -> {
+                    Optional<Book> book = bookCreator.createBook(bookProperties);
+                    book.ifPresent(books::add);
+                });
             }
         }
         return books;
@@ -96,8 +97,10 @@ public class BookListCreator {
         return documentReader.getEditionsLink(webDocument);
     }
 
-    private Map<String, String> createBookPropertiesMap(final WebDocument webDocument) {
-        System.out.println(documentReader.getRelatedBooks(webDocument));
+    private Optional<Map<String, String>> createBookPropertiesMap(final WebDocument webDocument) {
+        if (hasRelatedBooks(webDocument)) {
+            return Optional.empty();
+        }
 
         final List<String> bookPropertiesName = documentReader
                 .getBookPropertiesName(webDocument)
@@ -118,6 +121,19 @@ public class BookListCreator {
             bookPropertiesValues.set(contributorsIndex, contributorsSeparateBySpecialCharacter);
         }
 
+        return Optional.of(createPropertiesMap(bookPropertiesName, bookPropertiesValues));
+    }
+
+    private boolean hasRelatedBooks(WebDocument webDocument) {
+        Optional<String> bookAmicusId = documentReader.getBookAmicusId(webDocument);
+        if (bookAmicusId.isEmpty()) {
+            throw new RuntimeException("Failed to get the book id.");
+        }
+        WebDocument relatedBooksPage = documentFactory.getRelatedBooksPage(bookAmicusId.get());
+        return documentReader.hasRelatedBooks(relatedBooksPage);
+    }
+
+    private Map<String, String> createPropertiesMap(List<String> bookPropertiesName, List<String> bookPropertiesValues) {
         return IntStream.range(0, bookPropertiesValues.size())
                 .boxed()
                 .collect(

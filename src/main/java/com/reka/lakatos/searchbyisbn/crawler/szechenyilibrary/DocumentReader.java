@@ -5,6 +5,7 @@ import com.reka.lakatos.searchbyisbn.webdocument.WebElement;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -51,22 +52,20 @@ public class DocumentReader {
         return scanTerms.get(scanTerms.size() - 1);
     }
 
-    public String getRelatedBooks(WebDocument webDocument) {
+    public Optional<String> getBookAmicusId(WebDocument webDocument) {
         List<WebElement> scripts = webDocument.select("script").stream()
                 .filter(webElement -> webElement.attr("type").equals("text/javascript"))
                 .collect(Collectors.toList());
         String lastScript = scripts.get(scripts.size() - 1).toString();
-
-        //System.out.println(lastScript);
-
         Matcher matcher = Pattern.compile("amicus_azonosito[\\s\\=\\']*[\\d]*")
                 .matcher(lastScript);
 
-        if (matcher.find()) {
-            String re = matcher.group();
-            //System.out.println(re);
-             return re.replaceAll("[a-z_=\\'\\s\\n  ]*", "");
-        }
-        return "";
+        return matcher.find() ?
+                Optional.of(matcher.group().replaceAll("[a-z_=\\'\\s\\n]*", "")) :
+                Optional.empty();
+    }
+
+    public boolean hasRelatedBooks(final WebDocument webDocument) {
+        return !webDocument.select(".sub_table").isEmpty();
     }
 }

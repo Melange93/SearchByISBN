@@ -48,6 +48,11 @@ public class WebDocumentFactory {
         return webClient.sendPostRequest(url, requestBody);
     }
 
+    public WebDocument getRelatedBooksPage(final String bookAmicusId) {
+        final String url = urlFactory.getRelatedBooksUrl(currentServerUrl, currentServerSessionId, bookAmicusId);
+        return webClient.sendGetRequest(url);
+    }
+
     private void setCurrentServerUrlAndCurrentServerSessionId() {
         Session session = sessionManager.getActiveSession();
         currentServerUrl = session.getServerUrl();
