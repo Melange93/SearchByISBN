@@ -23,7 +23,6 @@ public class WebDocumentFactory {
     private String currentServerUrl;
     private String currentServerSessionId;
 
-    // TODO: 2020. 08. 17. Need to catch this
     public WebDocument getFirstSearchingResult(String scanTerm) {
         try {
             setCurrentServerUrlAndCurrentServerSessionId();
@@ -56,7 +55,6 @@ public class WebDocumentFactory {
         }
     }
 
-    // TODO: 2020. 08. 17. Need to catch this
     public WebDocument getNextSearchingPage(final String scanTerm) {
         try {
             final String url = urlFactory.getSearchingUrl(currentServerUrl);
@@ -77,6 +75,8 @@ public class WebDocumentFactory {
             return webClient.sendGetRequest(url);
         } catch (WebClientException e) {
             throw new RelatedBookException("Failed to get related books. Book id: " + bookAmicusId, e);
+        } catch (ServerUrlCleaningException e) {
+            throw new RelatedBookException("Failed to get related books.",  e);
         }
     }
 

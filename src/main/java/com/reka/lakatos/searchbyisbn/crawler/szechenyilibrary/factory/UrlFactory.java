@@ -1,5 +1,6 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.factory;
 
+import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.exception.ServerUrlCleaningException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,8 +17,7 @@ public class UrlFactory {
     public String getRelatedBooksUrl(final String serverUrl, final String sessionId, final String bookAmicusId) {
         Optional<String> cleanUrl = cleanUrl(serverUrl);
         if (cleanUrl.isEmpty()) {
-            // TODO: 2020. 08. 10. create unique exception
-            throw new RuntimeException("Failed to clean the server url and create related books url");
+            throw new ServerUrlCleaningException("Failed to clean the server url and create related books url.");
         }
         return cleanUrl.get() +
                 "kapcsrek_spring/kapcsrek.htm?" +
