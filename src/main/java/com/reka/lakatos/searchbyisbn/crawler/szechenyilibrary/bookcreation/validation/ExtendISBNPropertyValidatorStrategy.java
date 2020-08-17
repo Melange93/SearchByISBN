@@ -14,7 +14,7 @@ public class ExtendISBNPropertyValidatorStrategy implements PropertyValidatorStr
 
     @Override
     public boolean validateProperty(String property) {
-        if (property == null) {
+        if (property == null || property.isBlank()) {
             return false;
         }
 

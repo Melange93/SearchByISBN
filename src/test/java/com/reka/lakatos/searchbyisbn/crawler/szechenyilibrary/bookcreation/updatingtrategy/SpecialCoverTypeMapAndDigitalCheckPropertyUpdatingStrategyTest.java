@@ -120,4 +120,14 @@ class SpecialCoverTypeMapAndDigitalCheckPropertyUpdatingStrategyTest {
         CoverType coverTypeResult = testBook.getCoverType();
         assertThat(coverTypeResult).isEqualTo(CoverType.HARDCORE);
     }
+
+    @Test
+    void updatePropertyDontSetAnything() {
+        Book testBook = Book.builder().build();
+        String property = "something";
+
+        propertyUpdatingStrategy.updateProperty(testBook, property);
+        CoverType coverTypeResult = testBook.getCoverType();
+        assertThat(coverTypeResult).isNull();
+    }
 }

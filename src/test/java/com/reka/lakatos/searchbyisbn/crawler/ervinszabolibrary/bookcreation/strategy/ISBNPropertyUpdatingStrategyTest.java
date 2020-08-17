@@ -75,4 +75,13 @@ class ISBNPropertyUpdatingStrategyTest {
         assertThat(testBook.getIsbn()).isEqualTo("963-06-5122-X");
         assertThat(testBook.getCoverType()).isEqualTo(CoverType.HARDCORE);
     }
+
+    @Test
+    void updatePropertyHaveCoverType() {
+        Book book = Book.builder().coverType(CoverType.SOUND_RECORD).build();
+        String testProperty = "963-06-5122-X (kötött)";
+        isbnPropertyUpdatingStrategy.updateProperty(book, testProperty);
+        CoverType result = book.getCoverType();
+        assertThat(result).isEqualTo(CoverType.SOUND_RECORD);
+    }
 }
