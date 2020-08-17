@@ -33,7 +33,7 @@ public class StrategyConfiguration {
                 Map.entry("Cím és szerzőségi közlés:", new TitlePropertyUpdatingStrategy(getCoverTypeConverter())),
                 Map.entry("Név/nevek:", new DefaultContributorsPropertyUpdatingStrategy()),
                 Map.entry("Szerző:", new DefaultAuthorPropertyUpdatingStrategy()),
-                Map.entry("Megjelenés:", new PublisherPropertyUpdatingStrategy(getCoverTypeConverter())),
+                Map.entry("Megjelenés:", new PublisherPropertyUpdatingStrategy()),
                 Map.entry("Kiadás:", new EditionNumberPropertyUpdatingStrategy()),
                 Map.entry("Tárgyszavak:", new SpecialCoverTypeMapAndDigitalCheckPropertyUpdatingStrategy(getCoverTypeConverter())),
                 Map.entry("Egységesített cím - főtétel:", new SpecialCoverTypeMapCheckerPropertyUpdatingStrategy()),
