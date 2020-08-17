@@ -23,11 +23,12 @@ public class WebDocumentFactory {
     private String currentServerUrl;
     private String currentServerSessionId;
 
-    public WebDocument getSearchingResult() {
+    // TODO: 2020. 08. 17. Need to catch this
+    public WebDocument getSearchingResult(String scanTerm) {
         try {
             setCurrentServerUrlAndCurrentServerSessionId();
             final String searchingUrl = urlFactory.getSearchingUrl(currentServerUrl);
-            final String searchingBody = requestBodyFactory.getSearchingBody(currentServerSessionId);
+            final String searchingBody = requestBodyFactory.getSearchingBody(currentServerSessionId, scanTerm);
             log.info("Visit the first searching page: " + searchingUrl);
             return webClient.sendPostRequest(searchingUrl, searchingBody);
         } catch (WebClientException e) {
@@ -55,6 +56,7 @@ public class WebDocumentFactory {
         }
     }
 
+    // TODO: 2020. 08. 17. Need to catch this
     public WebDocument getNextSearchingPage(final String scanTerm) {
         try {
             final String url = urlFactory.getSearchingUrl(currentServerUrl);
