@@ -36,7 +36,7 @@ public class StrategyConfiguration {
                 Map.entry("Megjelenés:", new PublisherPropertyUpdatingStrategy(getCoverTypeConverter())),
                 Map.entry("Kiadás:", new EditionNumberPropertyUpdatingStrategy()),
                 Map.entry("Tárgyszavak:", new SpecialCoverTypeMapAndDigitalCheckPropertyUpdatingStrategy(getCoverTypeConverter())),
-                Map.entry("Egységesített cím - főtétel:", new SpecialCoverTypeMapCheckerPropertyUpdatingStrategy(getCoverTypeConverter())),
+                Map.entry("Egységesített cím - főtétel:", new SpecialCoverTypeMapCheckerPropertyUpdatingStrategy()),
                 Map.entry("Elektr. dok. jell.:", new SpecialCoverTypeDigitalCheckerPropertyUpdatingStrategy())
         );
     }

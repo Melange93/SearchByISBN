@@ -3,14 +3,10 @@ package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.upda
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.CoverType;
-import lombok.RequiredArgsConstructor;
 
-import java.util.Map;
-
-@RequiredArgsConstructor
 public class SpecialCoverTypeMapCheckerPropertyUpdatingStrategy implements PropertyUpdatingStrategy {
 
-    private final Map<String, CoverType> coverTypeConverter;
+    private static final CoverType mapType = CoverType.MAP;
 
     @Override
     public void updateProperty(Book book, String property) {
@@ -20,7 +16,7 @@ public class SpecialCoverTypeMapCheckerPropertyUpdatingStrategy implements Prope
     private void setCoverTypeMap(Book book, String property) {
         String map = "térkép";
         if (book.getCoverType() == null && property.contains(map)) {
-            book.setCoverType(coverTypeConverter.get(map));
+            book.setCoverType(mapType);
         }
     }
 }
