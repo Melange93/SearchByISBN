@@ -30,7 +30,8 @@ public class UrlFactory {
     }
 
     private Optional<String> cleanUrl(final String serverUrl) {
-        Matcher matcher = Pattern.compile("http:[\\/]{2}.*?[\\.]hu\\/").matcher(serverUrl);
+        String basicServerUrlRegex = "http:[\\/]{2}.*?[\\.]hu\\/";
+        Matcher matcher = Pattern.compile(basicServerUrlRegex).matcher(serverUrl);
         return matcher.find() ? Optional.of(matcher.group()) : Optional.empty();
     }
 }
