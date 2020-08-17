@@ -36,7 +36,7 @@ public class TitlePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
             return;
         }
 
-        Pattern specialCoverTypePattern = Pattern.compile("(?![\\[])[^\\[\\.]*?(?=[\\]])");
+        Pattern specialCoverTypePattern = Pattern.compile("(?![\\[])[^\\[]*?(?=[\\]])");
         Matcher matcher = specialCoverTypePattern.matcher(value);
         if (matcher.find()) {
             String result = matcher.group();
