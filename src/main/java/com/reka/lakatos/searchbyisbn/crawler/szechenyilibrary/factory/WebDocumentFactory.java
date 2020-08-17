@@ -24,7 +24,7 @@ public class WebDocumentFactory {
     private String currentServerSessionId;
 
     // TODO: 2020. 08. 17. Need to catch this
-    public WebDocument getSearchingResult(String scanTerm) {
+    public WebDocument getFirstSearchingResult(String scanTerm) {
         try {
             setCurrentServerUrlAndCurrentServerSessionId();
             final String searchingUrl = urlFactory.getSearchingUrl(currentServerUrl);

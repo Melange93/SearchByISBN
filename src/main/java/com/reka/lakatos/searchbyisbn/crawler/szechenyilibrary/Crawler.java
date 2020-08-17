@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -20,21 +21,44 @@ public class Crawler implements BookCrawler {
     private final WebDocumentFactory documentFactory;
     private final DocumentReader documentReader;
 
+    private final String[] isbnSearchingTerm = {"978-963", "978-615", "963", "615"};
+    private final String[] nextInvalidIsbnGroup = {"978-964", "978-616", "964", "616"};
     private String scanTermToNextPage;
+    private int isbnGroupIndex = 0;
 
     @Override
     public List<Book> getNextBooks() {
+        if (isbnGroupIndex > isbnSearchingTerm.length - 1) {
+            return null;
+        }
+
+        List<Book> crawledBooks;
+        WebDocument webDocument;
 
         if (scanTermToNextPage == null) {
-            log.info("First page crawling.");
-            WebDocument webDocument = documentFactory.getSearchingResult();
-            scanTermToNextPage = documentReader.getScanTermToNextPage(webDocument);
-            return bookListCreator.getCrawledBooks(webDocument);
+            log.info("First page crawling. Searching group: " + isbnSearchingTerm[isbnGroupIndex]);
+            webDocument = documentFactory.getFirstSearchingResult(isbnSearchingTerm[isbnGroupIndex]);
+        } else {
+            log.info("Next page crawling. ScanTerm: " + scanTermToNextPage);
+            webDocument = documentFactory.getNextSearchingPage(scanTermToNextPage);
         }
-        log.info("Next page crawling. ScanTerm: " + scanTermToNextPage);
 
-        WebDocument nextSearchingPage = documentFactory.getNextSearchingPage(scanTermToNextPage);
-        scanTermToNextPage = documentReader.getScanTermToNextPage(nextSearchingPage);
-        return bookListCreator.getCrawledBooks(nextSearchingPage);
+        scanTermToNextPage = documentReader.getScanTermToNextPage(webDocument);
+        crawledBooks = bookListCreator.getCrawledBooks(webDocument);
+
+        List<Book> invalidBooks = filterBooksIsbn(crawledBooks, nextInvalidIsbnGroup[isbnGroupIndex]);
+        if (invalidBooks.size() != 0) {
+            log.info("Finished the " + isbnSearchingTerm[isbnGroupIndex] + " book group.");
+            scanTermToNextPage = null;
+            isbnGroupIndex++;
+        }
+
+        return filterBooksIsbn(crawledBooks, isbnSearchingTerm[isbnGroupIndex]);
+    }
+
+    private List<Book> filterBooksIsbn(List<Book> crawledBooks, String isbnScanTerm) {
+        return crawledBooks.stream()
+                .filter(book -> book.getIsbn().startsWith(isbnScanTerm))
+                .collect(Collectors.toList());
     }
 }
