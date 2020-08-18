@@ -3,6 +3,7 @@ package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary;
 import com.reka.lakatos.searchbyisbn.webdocument.WebElement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.stream.IntStream;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "crawler.book-crawler", havingValue = "szechenyi")
 public class BookListPreparatory {
 
     private static final String SPECIAL_CASE_CONTRIBUTORS = "Név/nevek:";

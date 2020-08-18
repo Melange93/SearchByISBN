@@ -11,6 +11,7 @@ import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
 import com.reka.lakatos.searchbyisbn.webdocument.WebElement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "crawler.book-crawler", havingValue = "szechenyi")
 public class BookListCreator {
 
     private final DocumentReader documentReader;

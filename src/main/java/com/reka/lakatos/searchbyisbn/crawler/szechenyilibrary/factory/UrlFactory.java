@@ -1,6 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.factory;
 
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.exception.ServerUrlCleaningException;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -8,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
+@ConditionalOnProperty(name = "crawler.book-crawler", havingValue = "szechenyi")
 public class UrlFactory {
 
     public String getSearchingUrl(final String serverUrl) {

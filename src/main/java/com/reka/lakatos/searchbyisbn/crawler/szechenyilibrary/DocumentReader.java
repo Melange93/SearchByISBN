@@ -2,6 +2,7 @@ package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary;
 
 import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
 import com.reka.lakatos.searchbyisbn.webdocument.WebElement;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
+@ConditionalOnProperty(name = "crawler.book-crawler", havingValue = "szechenyi")
 public class DocumentReader {
 
     public List<String> getBookEditionsPageLinks(final WebDocument webDocument) {

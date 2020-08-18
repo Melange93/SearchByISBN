@@ -8,11 +8,13 @@ import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
 import com.reka.lakatos.searchbyisbn.webdocument.exception.WebClientException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "crawler.book-crawler", havingValue = "szechenyi")
 public class WebDocumentFactory {
 
     private final WebClient webClient;

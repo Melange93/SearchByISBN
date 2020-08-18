@@ -9,10 +9,12 @@ import com.reka.lakatos.searchbyisbn.webdocument.WebClient;
 import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
 import com.reka.lakatos.searchbyisbn.webdocument.exception.WebClientException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "crawler.book-crawler", havingValue = "szechenyi")
 public class SessionFacade {
 
     private final SessionURLFactory urlFactory;

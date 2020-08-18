@@ -4,12 +4,14 @@ import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrate
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.CoverType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "crawler.book-crawler", havingValue = "szechenyi")
 public class TitlePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
 
     private final Map<String, CoverType> coverTypeConverter;
