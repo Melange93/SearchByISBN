@@ -63,4 +63,38 @@ class JsoupWebDocumentTest {
         String result = webDocument.toString();
         assertThat(result).isEqualTo(TEST_DOCUMENT_TEXT);
     }
+
+    @Test
+    void getElementsByAttributeValueStarting() {
+        Elements elements = mock(Elements.class);
+        Element firstElement = mock(Element.class);
+        List<Element> elementsAsList = Lists.newArrayList(firstElement);
+
+        when(document.getElementsByAttributeValueStarting("testKey", "testValue"))
+                .thenReturn(elements);
+
+        when(elements.stream()).thenReturn(elementsAsList.stream());
+
+        List<WebElement> result = webDocument
+                .getElementsByAttributeValueStarting("testKey", "testValue");
+
+        assertThat(result).hasSize(1);
+    }
+
+    @Test
+    void getElementsByAttributeValueMatching() {
+        Elements elements = mock(Elements.class);
+        Element firstElement = mock(Element.class);
+        List<Element> elementsAsList = Lists.newArrayList(firstElement);
+
+        when(document.getElementsByAttributeValueMatching("testKey", "testRegex"))
+                .thenReturn(elements);
+
+        when(elements.stream()).thenReturn(elementsAsList.stream());
+
+        List<WebElement> result = webDocument
+                .getElementsByAttributeValueMatching("testKey", "testRegex");
+
+        assertThat(result).hasSize(1);
+    }
 }

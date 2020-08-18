@@ -1,11 +1,12 @@
-package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.strategy;
+package com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies;
 
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SizePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
+public class DefaultSizePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
 
     private static final int INDEX_OF_BASIC_EDITION = 0;
 
@@ -16,10 +17,18 @@ public class SizePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
     }
 
     private void setThickness(String value, Book book) {
-        Pattern thickness = Pattern.compile("([0-9,]*[\\s]*cm)");
+        String thicknessRegex = "([0-9,]*[\\s]*cm)";
+        String cartographyRegex = "([x][0-9,]*[\\s]*cm)";
+
+        if (Pattern.compile(cartographyRegex).matcher(value).find()) {
+            return;
+        }
+
+        Pattern thickness = Pattern.compile(thicknessRegex);
         Matcher matcher = thickness.matcher(value);
         if (matcher.find()) {
-            String result = matcher.group().replaceAll("[^0-9]*", "");
+            String coma = matcher.group().replaceAll(",", ".");
+            String result = coma.replaceAll("[^0-9.]*", "");
             book.getEditions().get(INDEX_OF_BASIC_EDITION).setThickness(Float.parseFloat(result));
         }
     }

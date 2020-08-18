@@ -1,5 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.strategy;
 
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.DefaultSizePropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.Edition;
 import org.assertj.core.util.Lists;
@@ -15,7 +17,7 @@ class SizePropertyUpdatingStrategyTest {
 
     @BeforeEach
     void ini() {
-        sizePropertyUpdatingStrategy = new SizePropertyUpdatingStrategy();
+        sizePropertyUpdatingStrategy = new DefaultSizePropertyUpdatingStrategy();
     }
 
     @Test
@@ -24,8 +26,10 @@ class SizePropertyUpdatingStrategyTest {
         String testProperty = "152 p. : ill. ; 31 cm";
         sizePropertyUpdatingStrategy.updateProperty(testBook, testProperty);
 
-        assertThat(testBook.getEditions().get(TEST_EDITION_INDEX).getThickness()).isEqualTo(31);
-        assertThat(testBook.getEditions().get(TEST_EDITION_INDEX).getPageNumber()).isEqualTo(152);
+        float thicknessResult = testBook.getEditions().get(TEST_EDITION_INDEX).getThickness();
+        int pageNumberResult = testBook.getEditions().get(TEST_EDITION_INDEX).getPageNumber();
+        assertThat(thicknessResult).isEqualTo(31);
+        assertThat(pageNumberResult).isEqualTo(152);
     }
 
     @Test
@@ -34,8 +38,22 @@ class SizePropertyUpdatingStrategyTest {
         String testProperty = "152 p., 31 cm";
         sizePropertyUpdatingStrategy.updateProperty(testBook, testProperty);
 
-        assertThat(testBook.getEditions().get(TEST_EDITION_INDEX).getThickness()).isEqualTo(31);
-        assertThat(testBook.getEditions().get(TEST_EDITION_INDEX).getPageNumber()).isEqualTo(152);
+        float thicknessResult = testBook.getEditions().get(TEST_EDITION_INDEX).getThickness();
+        int pageNumberResult = testBook.getEditions().get(TEST_EDITION_INDEX).getPageNumber();
+        assertThat(thicknessResult).isEqualTo(31);
+        assertThat(pageNumberResult).isEqualTo(152);
+    }
+
+    @Test
+    void updatePropertyCartography() {
+        Book testBook = Book.builder().editions(Lists.newArrayList(new Edition())).build();
+        String testProperty = "152 p., 81x31 cm";
+        sizePropertyUpdatingStrategy.updateProperty(testBook, testProperty);
+
+        float thicknessResult = testBook.getEditions().get(TEST_EDITION_INDEX).getThickness();
+        int pageNumberResult = testBook.getEditions().get(TEST_EDITION_INDEX).getPageNumber();
+        assertThat(thicknessResult).isEqualTo(0);
+        assertThat(pageNumberResult).isEqualTo(152);
     }
 
     @Test
@@ -44,8 +62,10 @@ class SizePropertyUpdatingStrategyTest {
         String testProperty = "91, [2] p. ; 19 cm";
         sizePropertyUpdatingStrategy.updateProperty(testBook, testProperty);
 
-        assertThat(testBook.getEditions().get(TEST_EDITION_INDEX).getThickness()).isEqualTo(19);
-        assertThat(testBook.getEditions().get(TEST_EDITION_INDEX).getPageNumber()).isEqualTo(91);
+        float thicknessResult = testBook.getEditions().get(TEST_EDITION_INDEX).getThickness();
+        int pageNumberResult = testBook.getEditions().get(TEST_EDITION_INDEX).getPageNumber();
+        assertThat(thicknessResult).isEqualTo(19.0f);
+        assertThat(pageNumberResult).isEqualTo(91);
     }
 
     @Test
@@ -54,8 +74,10 @@ class SizePropertyUpdatingStrategyTest {
         String testProperty = "127, [5] p. ; 21 cm + 1 füz. (16 p.)";
         sizePropertyUpdatingStrategy.updateProperty(testBook, testProperty);
 
-        assertThat(testBook.getEditions().get(TEST_EDITION_INDEX).getThickness()).isEqualTo(21);
-        assertThat(testBook.getEditions().get(TEST_EDITION_INDEX).getPageNumber()).isEqualTo(143);
+        float thicknessResult = testBook.getEditions().get(TEST_EDITION_INDEX).getThickness();
+        int pageNumberResult = testBook.getEditions().get(TEST_EDITION_INDEX).getPageNumber();
+        assertThat(thicknessResult).isEqualTo(21);
+        assertThat(pageNumberResult).isEqualTo(143);
     }
 
 }

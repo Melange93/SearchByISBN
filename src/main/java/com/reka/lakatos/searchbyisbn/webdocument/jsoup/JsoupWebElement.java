@@ -20,7 +20,7 @@ class JsoupWebElement implements WebElement {
     }
 
     @Override
-    public List<WebElement> select(String cssQuery) {
+    public List<WebElement> select(final String cssQuery) {
         return element.select(cssQuery).stream()
                 .map(JsoupWebElement::new)
                 .collect(Collectors.toList());
@@ -29,5 +29,20 @@ class JsoupWebElement implements WebElement {
     @Override
     public String toString() {
         return element.toString();
+    }
+
+    @Override
+    public String attr(final String attributeKey) {
+        return element.attr(attributeKey);
+    }
+
+    @Override
+    public boolean hasAttr(final String attr) {
+        return element.hasAttr(attr);
+    }
+
+    @Override
+    public boolean hasText() {
+        return element.hasText();
     }
 }

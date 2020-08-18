@@ -1,4 +1,4 @@
-package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.strategy;
+package com.reka.lakatos.searchbyisbn.crawler.bookcreation;
 
 import com.reka.lakatos.searchbyisbn.document.Book;
 

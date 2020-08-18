@@ -1,12 +1,14 @@
 package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary;
 
-import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.propertiesvalidator.startegy.ISBNPropertyValidatorStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.propertiesvalidator.startegy.NotesPropertyValidatorStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.propertiesvalidator.startegy.PropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.*;
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy.DefaultNotesPropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.propertiesvalidator.startegy.SeeAlsoPropertyValidatorStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.strategy.*;
 import com.reka.lakatos.searchbyisbn.service.util.BookISBNManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,6 +16,7 @@ import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "crawler.book-crawler", havingValue = "ervin")
 public class StrategyConfiguration {
 
     private final BookISBNManager bookISBNManager;
@@ -21,21 +24,22 @@ public class StrategyConfiguration {
     @Bean
     public Map<String, PropertyUpdatingStrategy> getBookPropertyUpdatingStrategyMap() {
         return Map.ofEntries(
-                Map.entry("Cím:", new TitlePropertyUpdatingStrategy()),
-                Map.entry("Szerző:", new AuthorPropertyUpdatingStrategy()),
-                Map.entry("ISBN:", new ISBNPropertyUpdatingStrategy()),
-                Map.entry("Megjelenés:", new PublisherPropertyUpdatingStrategy()),
-                Map.entry("Dátum:", new DatePropertyUpdatingStrategy()),
-                Map.entry("Terjedelem:", new SizePropertyUpdatingStrategy()),
-                Map.entry("Egyéb nevek:", new ContributorsPropertyUpdatingStrategy())
+                Map.entry("Cím:", new DefaultTitlePropertyUpdatingStrategy()),
+                Map.entry("Szerző:", new DefaultAuthorPropertyUpdatingStrategy()),
+                Map.entry("ISBN:", new DefaultISBNPropertyUpdatingStrategy()),
+                Map.entry("Megjelenés:", new DefaultPublisherPropertyUpdatingStrategy()),
+                Map.entry("Dátum:", new DefaultDatePropertyUpdatingStrategy()),
+                Map.entry("Terjedelem:", new DefaultSizePropertyUpdatingStrategy()),
+                Map.entry("Egyéb nevek:", new DefaultContributorsPropertyUpdatingStrategy())
         );
     }
 
-    @Bean Map<String, PropertyValidatorStrategy> getPropertyValidatorStrategyMap() {
+    @Bean
+    public Map<String, PropertyValidatorStrategy> getPropertyValidatorStrategyMap() {
         return Map.ofEntries(
-                Map.entry("Megjegyzések:", new NotesPropertyValidatorStrategy()),
+                Map.entry("Megjegyzések:", new DefaultNotesPropertyValidatorStrategy()),
                 Map.entry("Lásd még:", new SeeAlsoPropertyValidatorStrategy()),
-                Map.entry("ISBN:", new ISBNPropertyValidatorStrategy(bookISBNManager))
+                Map.entry("ISBN:", new DefaultISBNPropertyValidatorStrategy(bookISBNManager))
         );
     }
 }

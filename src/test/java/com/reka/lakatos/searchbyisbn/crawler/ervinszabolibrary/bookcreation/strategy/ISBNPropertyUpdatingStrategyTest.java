@@ -1,5 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.strategy;
 
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.DefaultISBNPropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.CoverType;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +15,7 @@ class ISBNPropertyUpdatingStrategyTest {
 
     @BeforeEach
     void ini() {
-        isbnPropertyUpdatingStrategy = new ISBNPropertyUpdatingStrategy();
+        isbnPropertyUpdatingStrategy = new DefaultISBNPropertyUpdatingStrategy();
     }
 
     @Test
@@ -72,5 +74,14 @@ class ISBNPropertyUpdatingStrategyTest {
 
         assertThat(testBook.getIsbn()).isEqualTo("963-06-5122-X");
         assertThat(testBook.getCoverType()).isEqualTo(CoverType.HARDCORE);
+    }
+
+    @Test
+    void updatePropertyHaveCoverType() {
+        Book book = Book.builder().coverType(CoverType.SOUND_RECORD).build();
+        String testProperty = "963-06-5122-X (kötött)";
+        isbnPropertyUpdatingStrategy.updateProperty(book, testProperty);
+        CoverType result = book.getCoverType();
+        assertThat(result).isEqualTo(CoverType.SOUND_RECORD);
     }
 }

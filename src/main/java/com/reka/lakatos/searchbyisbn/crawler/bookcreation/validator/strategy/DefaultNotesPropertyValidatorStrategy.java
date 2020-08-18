@@ -1,9 +1,11 @@
-package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.propertiesvalidator.startegy;
+package com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy;
+
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class NotesPropertyValidatorStrategy implements PropertyValidatorStrategy {
+public class DefaultNotesPropertyValidatorStrategy implements PropertyValidatorStrategy {
 
     private static final String ISBN13_REGEX = "((?:[\\dX]{13})|(?:[\\d\\-X]{17}))";
     private static final String ISBN10_REGEX = "((?:[\\dX]{10})|(?:[\\d\\-X]{13}))";

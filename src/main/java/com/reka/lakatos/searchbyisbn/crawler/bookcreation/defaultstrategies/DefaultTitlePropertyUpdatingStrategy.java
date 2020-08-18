@@ -1,12 +1,13 @@
-package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.strategy;
+package com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies;
 
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.CoverType;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TitlePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
+public class DefaultTitlePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
 
     @Override
     public void updateProperty(Book book, String property) {

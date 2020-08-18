@@ -55,9 +55,10 @@ class BookISBNManagerTest {
     @Test
     void convertISBNToISBN13InputISBN10() {
         String isbn10 = "963-06-5122-X";
-        String cleanIsbn13 = "9789630651226";
-        when(isbnValidator.convertToISBN13(isbn10)).thenReturn(cleanIsbn13);
-        assertThat(bookISBNManager.convertISBNToISBN13(isbn10)).isEqualTo(cleanIsbn13);
+        String cleanIsbn10 = "963065122X";
+        when(isbnValidator.convertToISBN13(cleanIsbn10)).thenReturn("9789630651226");
+        String resultISBN = bookISBNManager.convertISBNToISBN13(isbn10);
+        assertThat(resultISBN).isEqualTo("9789630651226");
     }
 
     @Test

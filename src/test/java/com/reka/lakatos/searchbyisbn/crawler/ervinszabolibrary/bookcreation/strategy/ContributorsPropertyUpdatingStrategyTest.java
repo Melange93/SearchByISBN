@@ -1,5 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.strategy;
 
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.DefaultContributorsPropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.Edition;
 import org.assertj.core.util.Lists;
@@ -19,7 +21,7 @@ class ContributorsPropertyUpdatingStrategyTest {
 
     @BeforeEach
     void ini() {
-        contributorsPropertyUpdatingStrategy = new ContributorsPropertyUpdatingStrategy();
+        contributorsPropertyUpdatingStrategy = new DefaultContributorsPropertyUpdatingStrategy();
     }
 
     @Test

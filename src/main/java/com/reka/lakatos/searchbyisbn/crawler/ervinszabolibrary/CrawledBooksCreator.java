@@ -1,6 +1,6 @@
 package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary;
 
-import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.BookCreator;
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.DefaultBookCreator;
 import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.documentreader.DocumentReaderFacade;
 import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.exception.BookDownloadException;
 import com.reka.lakatos.searchbyisbn.document.Book;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CrawledBooksCreator {
 
-    private final BookCreator bookCreator;
+    private final DefaultBookCreator bookCreator;
     private final URLFactory urlFactory;
     private final DocumentReaderFacade documentReaderFacade;
     private final WebClient webClient;
