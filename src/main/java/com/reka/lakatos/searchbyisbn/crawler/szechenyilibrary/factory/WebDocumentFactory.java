@@ -57,6 +57,7 @@ public class WebDocumentFactory {
 
     public WebDocument getNextSearchingPage(final String scanTerm) {
         try {
+            setCurrentServerUrlAndCurrentServerSessionId();
             final String url = urlFactory.getSearchingUrl(currentServerUrl);
             final String requestBody = requestBodyFactory.getNextPageBody(currentServerSessionId, scanTerm);
             log.info("Visit next searching page.");
@@ -76,7 +77,7 @@ public class WebDocumentFactory {
         } catch (WebClientException e) {
             throw new RelatedBookException("Failed to get related books. Book id: " + bookAmicusId, e);
         } catch (ServerUrlCleaningException e) {
-            throw new RelatedBookException("Failed to get related books.",  e);
+            throw new RelatedBookException("Failed to get related books.", e);
         }
     }
 
