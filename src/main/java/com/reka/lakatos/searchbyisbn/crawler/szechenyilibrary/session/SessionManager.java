@@ -14,7 +14,6 @@ public class SessionManager {
 
     private final SessionDocumentReader documentReader;
     private final SessionFacade sessionFacade;
-    private final SessionActivationChecker activationChecker;
 
     public Session getActiveSession() {
         try {
@@ -28,9 +27,5 @@ public class SessionManager {
             throw new SessionException(
                     getClass().getSimpleName() + " can't provide an active Session.", e);
         }
-    }
-
-    public boolean isSessionActive(final WebDocument webDocument) {
-        return activationChecker.isSessionActive(webDocument);
     }
 }
