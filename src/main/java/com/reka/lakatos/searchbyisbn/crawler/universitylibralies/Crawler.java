@@ -19,7 +19,7 @@ public class Crawler implements BookCrawler {
 
     @Override
     public List<Book> getNextBooks() {
-        sessionManager.getActiveSession();
+        System.out.println(sessionManager.getActiveSession());
         return null;
     }
 }
