@@ -23,6 +23,15 @@ public class JsoupWebClient implements WebClient {
     }
 
     @Override
+    public WebDocument sendGetRequestWithCookies(String baseUrl, Map<String, String> cookies) {
+        try {
+            return new JsoupWebDocument(Jsoup.connect(baseUrl).cookies(cookies).get());
+        } catch (IOException e) {
+            throw new WebClientException("Failed to reach the url: " + baseUrl + " with this cookies " + cookies, e);
+        }
+    }
+
+    @Override
     public WebDocument sendPostRequest(String baseUrl, String requestBody) {
         try {
             return new JsoupWebDocument(
@@ -33,6 +42,25 @@ public class JsoupWebClient implements WebClient {
         } catch (IOException e) {
             throw new WebClientException("Failed to reach the url: " + baseUrl +
                     " with this request body: " + requestBody, e);
+        }
+    }
+
+    @Override
+    public WebDocument sendPostRequestWithCookies(String baseUrl, String requestBody, Map<String, String> cookies) {
+        try {
+            return new JsoupWebDocument(
+                    Jsoup.connect(baseUrl)
+                            .cookies(cookies)
+                            .requestBody(requestBody)
+                            .post()
+            );
+        } catch (IOException e) {
+            throw new WebClientException(
+                    "Failed to reach the url: " + baseUrl +
+                            " with this request body: " + requestBody +
+                            " and with this cookies: " + cookies,
+                    e
+            );
         }
     }
 
