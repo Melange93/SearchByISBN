@@ -11,17 +11,14 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "crawler.book-crawler", havingValue = "universities")
-public class SessionManager {
-    private static final String SESSION_ID_NAME = "JSESSIONID";
+public class CookiesManager {
+
     private final WebClient webClient;
 
     @Value("${crawler.book-crawler.university-catalog-main-url}")
     private String universityUrl;
 
-    public Session getActiveSession() {
-        Map<String, String> cookies = webClient.getCookies(universityUrl);
-        Session session = new Session();
-        session.setJsessionId(cookies.get(SESSION_ID_NAME));
-        return session;
+    public Map<String, String> getCookies() {
+        return webClient.getCookies(universityUrl);
     }
 }
