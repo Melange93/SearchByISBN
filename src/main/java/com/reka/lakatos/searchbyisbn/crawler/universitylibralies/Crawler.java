@@ -2,20 +2,15 @@ package com.reka.lakatos.searchbyisbn.crawler.universitylibralies;
 
 import com.reka.lakatos.searchbyisbn.crawler.BookCrawler;
 import com.reka.lakatos.searchbyisbn.document.Book;
-import com.reka.lakatos.searchbyisbn.webdocument.WebClient;
 import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
 import com.reka.lakatos.searchbyisbn.webdocument.WebElement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -24,33 +19,14 @@ import java.util.stream.Collectors;
 @ConditionalOnProperty(name = "crawler.book-crawler", havingValue = "universities")
 public class Crawler implements BookCrawler {
 
-    private final CookiesManager cookiesManager;
-    private final WebClient webClient;
-
-    @Value("${crawler.book-crawler.university-catalog-main-url}")
-    private String universityUrl;
+    private final WebDocumentFactory documentFactory;
+    private final DocumentReader documentReader;
 
     @Override
     public List<Book> getNextBooks() {
-        Map<String, String> cookies = cookiesManager.getCookies();
-        WebDocument webDocument = webClient.sendGetRequestWithCookies(universityUrl, cookies);
-        Optional<WebElement> urlSpan = webDocument.select("span").stream()
-                .filter(webElement -> webElement.hasAttr("style"))
-                .filter(webElement -> webElement.attr("style").equals("display:none;"))
-                .findFirst();
-        String text = urlSpan.get().text();
-        Matcher matcher = Pattern.compile("(?<=[\\?]p_auth\\=)(.{8})(?=[\\&])").matcher(text);
-        String pAuth = "";
-        if (matcher.find()) {
-            pAuth = matcher.group();
-        }
-
-
-        String complexSearchUrl = "https://hunteka.sze.hu/search;" +
-                "?p_p_id=GenericSearch_WAR_akfweb&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_resource_id=getSearch&p_p_cacheability=cacheLevelPage&p_p_col_id=column-1&p_p_col_pos=2&p_p_col_count=5";
-        String csBody = "type=advanced&reset=false&searchId=";
-
-        webClient.sendPostRequestWithCookies(complexSearchUrl, csBody, cookies);
+        WebDocument webDocument = documentFactory.getMainPage();
+        Optional<String> pAuthorCode = documentReader.getPAuthorCode(webDocument);
+        documentFactory.navigateToComplexSearch();
 
         String url = "https://hunteka.sze.hu/search" +
                 "?p_auth=" + pAuth +
