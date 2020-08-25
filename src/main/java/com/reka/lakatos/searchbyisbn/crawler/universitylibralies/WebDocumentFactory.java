@@ -33,6 +33,12 @@ public class WebDocumentFactory {
         webClient.sendPostRequestWithCookies(url, body, cookies);
     }
 
+    public WebDocument searchingByISBN(String pAuthorCode, long isbn) {
+        String url = urlFactory.getSearchingUrl(pAuthorCode);
+        String body = requestBodyFactory.getSearchingBody(isbn);
+        return webClient.sendPostRequestWithCookies(url, body, cookies);
+    }
+
     private void setCookies() {
         cookies = cookiesManager.getCookies();
     }

@@ -30,4 +30,9 @@ public class DocumentReader {
         return Optional.empty();
     }
 
+    public Optional<WebElement> getSearchingForm(WebDocument webDocument) {
+        return webDocument.select("form").stream()
+                .filter(webElement -> webElement.hasAttr("name") && webElement.attr("name").equals("selectFacetForm"))
+                .findFirst();
+    }
 }
