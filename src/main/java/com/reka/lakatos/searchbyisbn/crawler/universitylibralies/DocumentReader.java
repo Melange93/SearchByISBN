@@ -6,9 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 @RequiredArgsConstructor
@@ -16,23 +20,61 @@ import java.util.regex.Pattern;
 public class DocumentReader {
 
     public Optional<String> getPAuthorCode(WebDocument webDocument) {
-         Optional< WebElement > urlSpan = webDocument.select("span").stream()
+        Optional<WebElement> urlSpan = webDocument.select("span").stream()
                 .filter(webElement -> webElement.hasAttr("style"))
                 .filter(webElement -> webElement.attr("style").equals("display:none;"))
                 .findFirst();
-        String text = urlSpan.get().text();
-        Matcher matcher = Pattern.compile("(?<=[\\?]p_auth\\=)(.{8})(?=[\\&])").matcher(text);
 
-        if (matcher.find()) {
-            return Optional.of(matcher.group());
+        if (urlSpan.isPresent()) {
+            return findPAuthCode(urlSpan.get().text());
         }
-
         return Optional.empty();
     }
 
-    public Optional<WebElement> getSearchingForm(WebDocument webDocument) {
-        return webDocument.select("form").stream()
-                .filter(webElement -> webElement.hasAttr("name") && webElement.attr("name").equals("selectFacetForm"))
-                .findFirst();
+    private Optional<String> findPAuthCode(String text) {
+        Matcher matcher = Pattern.compile("(?<=[\\?]p_auth\\=)(.{8})(?=[\\&])").matcher(text);
+        if (matcher.find()) {
+            return Optional.of(matcher.group());
+        }
+        return Optional.empty();
+    }
+
+    public List<String> getSearchingResultDetailLinks(WebDocument document) {
+        return document.select("a").stream()
+                .filter(webElement -> webElement.text().equals("Részletek"))
+                .map(webElement -> webElement.attr("href"))
+                .collect(Collectors.toList());
+    }
+
+    public Map<String, String> getBookProperties(WebDocument webDocument) {
+        List<String> bookPropertiesName = getBookPropertiesName(webDocument);
+        List<String> bookPropertiesValue = getBookPropertiesValue(webDocument);
+        return createPropertiesMap(bookPropertiesName, bookPropertiesValue);
+    }
+
+    private List<String> getBookPropertiesName(WebDocument webDocument) {
+        return webDocument.select(".metadata-name").stream()
+                .map(WebElement::text)
+                .collect(Collectors.toList());
+    }
+
+    private List<String> getBookPropertiesValue(WebDocument webDocument) {
+        return webDocument.select(".metadata-value").stream()
+                .map(WebElement::text)
+                .collect(Collectors.toList());
+    }
+
+    private Map<String, String> createPropertiesMap(
+            List<String> bookPropertiesName,
+            List<String> bookPropertiesValues
+    ) {
+        return IntStream.range(0, bookPropertiesValues.size())
+                .boxed()
+                .collect(
+                        Collectors.toMap(
+                                bookPropertiesName::get,
+                                bookPropertiesValues::get
+                        )
+                );
     }
 }

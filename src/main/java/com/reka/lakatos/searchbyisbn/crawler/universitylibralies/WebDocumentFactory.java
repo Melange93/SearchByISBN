@@ -4,11 +4,13 @@ package com.reka.lakatos.searchbyisbn.crawler.universitylibralies;
 import com.reka.lakatos.searchbyisbn.webdocument.WebClient;
 import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "crawler.book-crawler", havingValue = "universities")
@@ -34,9 +36,15 @@ public class WebDocumentFactory {
     }
 
     public WebDocument searchingByISBN(String pAuthorCode, long isbn) {
+        log.info("Start searching ISBN: " + isbn);
         String url = urlFactory.getSearchingUrl(pAuthorCode);
         String body = requestBodyFactory.getSearchingBody(isbn);
         return webClient.sendPostRequestWithCookies(url, body, cookies);
+    }
+
+    public WebDocument visitBook(String url) {
+        log.info("Visit book: " + url);
+        return webClient.sendGetRequestWithCookies(url, cookies);
     }
 
     private void setCookies() {
