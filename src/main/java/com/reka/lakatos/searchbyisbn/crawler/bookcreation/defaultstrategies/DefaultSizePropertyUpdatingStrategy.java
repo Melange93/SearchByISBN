@@ -34,7 +34,7 @@ public class DefaultSizePropertyUpdatingStrategy implements PropertyUpdatingStra
     }
 
     private void setPageNumber(String value, Book book) {
-        Pattern pageNumberPattern = Pattern.compile("([0-9]*?(?=\\s*?p\\.))|([0-9]*?(?=[\\[\\s,]*?[0-9][\\]\\s]*?\\s*?p\\.))");
+        Pattern pageNumberPattern = Pattern.compile("([0-9]*?(?=\\s*?p)[\\.]?)|([0-9]*?(?=[\\[\\s,]*?[0-9][\\]\\s]*?\\s*?p)[\\.]?)");
         Matcher matcher = pageNumberPattern.matcher(value);
         int pageCounter = 0;
         while (matcher.find()) {
