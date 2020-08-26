@@ -1,6 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary;
 
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.DefaultBookCreator;
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.DefaultBookListPreparatory;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.exception.BookEditionsPageException;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.exception.BookIdException;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.exception.RelatedBookException;
@@ -28,7 +29,7 @@ public class BookListCreator {
     private final DocumentReader documentReader;
     private final WebDocumentFactory documentFactory;
     private final DefaultBookCreator bookCreator;
-    private final BookListPreparatory bookListPreparatory;
+    private final DefaultBookListPreparatory bookListPreparatory;
 
     public List<Book> getCrawledBooks(final WebDocument webDocument) {
         List<Book> books = new ArrayList<>();
@@ -94,7 +95,8 @@ public class BookListCreator {
             bookListPreparatory.setContributors(
                     bookPropertiesName,
                     bookPropertiesValuesWebElement,
-                    bookPropertiesValues
+                    bookPropertiesValues,
+                    "a"
             );
         }
 

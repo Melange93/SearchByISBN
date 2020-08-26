@@ -1,44 +1,41 @@
-package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary;
+package com.reka.lakatos.searchbyisbn.crawler.bookcreation;
 
 import com.reka.lakatos.searchbyisbn.webdocument.WebElement;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@Slf4j
-@Service
-@RequiredArgsConstructor
-@ConditionalOnProperty(name = "crawler.book-crawler", havingValue = "szechenyi")
-public class BookListPreparatory {
+public class DefaultBookListPreparatory {
 
-    private static final String SPECIAL_CASE_CONTRIBUTORS = "Név/nevek:";
     private static final String SPECIAL_SEPARATION_CHARACTER = "$";
+    private String specialCaseContributors;
 
-    List<String> prepareBookProperties(List<WebElement> bookPropertiesValuesWebElement) {
+    public DefaultBookListPreparatory(String specialCaseContributors) {
+        this.specialCaseContributors = specialCaseContributors;
+    }
+
+    public List<String> prepareBookProperties(List<WebElement> bookPropertiesValuesWebElement) {
         return bookPropertiesValuesWebElement
                 .stream()
                 .map(WebElement::text)
                 .collect(Collectors.toList());
     }
 
-    void setContributors(
+    public void setContributors(
             List<String> bookPropertiesName,
             List<WebElement> bookPropertiesValuesWebElement,
-            List<String> bookPropertiesValues
+            List<String> bookPropertiesValues,
+            String selectCssQuery
     ) {
-        int contributorsIndex = bookPropertiesName.indexOf(SPECIAL_CASE_CONTRIBUTORS);
+        int contributorsIndex = bookPropertiesName.indexOf(specialCaseContributors);
         String contributorsSeparateBySpecialCharacter =
-                getContributorsSeparateBySpecialCharacter(bookPropertiesValuesWebElement, contributorsIndex);
+                getContributorsSeparateBySpecialCharacter(bookPropertiesValuesWebElement, contributorsIndex, selectCssQuery);
         bookPropertiesValues.set(contributorsIndex, contributorsSeparateBySpecialCharacter);
     }
 
-    Map<String, String> createPropertiesMap(
+    public Map<String, String> createPropertiesMap(
             List<String> bookPropertiesName,
             List<String> bookPropertiesValues
     ) {
@@ -54,16 +51,17 @@ public class BookListPreparatory {
 
     private String getContributorsSeparateBySpecialCharacter(
             List<WebElement> bookPropertiesValuesWebElement,
-            int contributorsIndex
+            int contributorsIndex,
+            String selectCssQuery
     ) {
         return bookPropertiesValuesWebElement.get(contributorsIndex)
-                .select("a")
+                .select(selectCssQuery)
                 .stream()
                 .map(WebElement::text)
                 .collect(Collectors.joining(SPECIAL_SEPARATION_CHARACTER));
     }
 
-    boolean hasContributors(List<String> bookPropertiesKey) {
-        return bookPropertiesKey.contains(SPECIAL_CASE_CONTRIBUTORS);
+    public boolean hasContributors(List<String> bookPropertiesKey) {
+        return bookPropertiesKey.contains(specialCaseContributors);
     }
 }
