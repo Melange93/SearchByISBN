@@ -1,15 +1,12 @@
-package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.updatingtrategy;
+package com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies;
 
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@ConditionalOnProperty(name = "crawler.book-crawler", havingValue = "szechenyi")
-public class EditionNumberPropertyUpdatingStrategy implements PropertyUpdatingStrategy {
-
+public class DefaultEditionNumberPropetryUpdatingStrategy implements PropertyUpdatingStrategy {
     private static final int INDEX_OF_BASIC_EDITION = 0;
 
     @Override

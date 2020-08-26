@@ -1,10 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation;
 
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.DefaultAuthorPropertyUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.DefaultContributorsPropertyUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.DefaultISBNPropertyUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.DefaultSizePropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.*;
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.updatingtrategy.*;
@@ -34,7 +31,7 @@ public class StrategyConfiguration {
                 Map.entry("Név/nevek:", new DefaultContributorsPropertyUpdatingStrategy()),
                 Map.entry("Szerző:", new DefaultAuthorPropertyUpdatingStrategy()),
                 Map.entry("Megjelenés:", new PublisherPropertyUpdatingStrategy()),
-                Map.entry("Kiadás:", new EditionNumberPropertyUpdatingStrategy()),
+                Map.entry("Kiadás:", new DefaultEditionNumberPropetryUpdatingStrategy()),
                 Map.entry("Tárgyszavak:", new SpecialCoverTypeMapAndDigitalCheckPropertyUpdatingStrategy(getCoverTypeConverter())),
                 Map.entry("Egységesített cím - főtétel:", new SpecialCoverTypeMapCheckerPropertyUpdatingStrategy()),
                 Map.entry("Elektr. dok. jell.:", new SpecialCoverTypeDigitalCheckerPropertyUpdatingStrategy())
