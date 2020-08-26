@@ -7,12 +7,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Component
 @RequiredArgsConstructor
@@ -46,35 +44,11 @@ public class DocumentReader {
                 .collect(Collectors.toList());
     }
 
-    public Map<String, String> getBookProperties(WebDocument webDocument) {
-        List<String> bookPropertiesName = getBookPropertiesName(webDocument);
-        List<String> bookPropertiesValue = getBookPropertiesValue(webDocument);
-        return createPropertiesMap(bookPropertiesName, bookPropertiesValue);
+    public List<WebElement> getBookPropertiesName(WebDocument webDocument) {
+        return webDocument.select(".metadata-name");
     }
 
-    private List<String> getBookPropertiesName(WebDocument webDocument) {
-        return webDocument.select(".metadata-name").stream()
-                .map(WebElement::text)
-                .collect(Collectors.toList());
-    }
-
-    private List<String> getBookPropertiesValue(WebDocument webDocument) {
-        return webDocument.select(".metadata-value").stream()
-                .map(WebElement::text)
-                .collect(Collectors.toList());
-    }
-
-    private Map<String, String> createPropertiesMap(
-            List<String> bookPropertiesName,
-            List<String> bookPropertiesValues
-    ) {
-        return IntStream.range(0, bookPropertiesValues.size())
-                .boxed()
-                .collect(
-                        Collectors.toMap(
-                                bookPropertiesName::get,
-                                bookPropertiesValues::get
-                        )
-                );
+    public List<WebElement> getBookPropertiesValue(WebDocument webDocument) {
+        return webDocument.select(".metadata-value");
     }
 }

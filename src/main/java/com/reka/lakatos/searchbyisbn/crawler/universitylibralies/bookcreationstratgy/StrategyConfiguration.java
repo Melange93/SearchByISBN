@@ -25,8 +25,7 @@ public class StrategyConfiguration {
                 Map.entry("Terjedelem, fizikai jellemzők:", new DefaultSizePropertyUpdatingStrategy()),
                 Map.entry("ISBN:", new DefaultISBNPropertyUpdatingStrategy()),
                 Map.entry("Kiadás:", new DefaultEditionNumberPropetryUpdatingStrategy()),
-
-                Map.entry("Név/nevek:", new DefaultContributorsPropertyUpdatingStrategy())
+                Map.entry("További személynév:", new DefaultContributorsPropertyUpdatingStrategy())
         );
     }
 
