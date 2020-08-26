@@ -1,6 +1,7 @@
-package com.reka.lakatos.searchbyisbn.crawler.universitylibralies;
+package com.reka.lakatos.searchbyisbn.crawler.universitylibralies.webdocumentumfactory;
 
 
+import com.reka.lakatos.searchbyisbn.crawler.universitylibralies.CookiesManager;
 import com.reka.lakatos.searchbyisbn.webdocument.WebClient;
 import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class WebDocumentFactory {
         webClient.sendPostRequestWithCookies(url, body, cookies);
     }
 
-    public WebDocument searchingByISBN(String pAuthorCode, long isbn) {
+    public WebDocument searchingByISBN(String pAuthorCode, String isbn) {
         log.info("Start searching ISBN: " + isbn);
         String url = urlFactory.getSearchingUrl(pAuthorCode);
         String body = requestBodyFactory.getSearchingBody(isbn);

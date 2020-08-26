@@ -19,7 +19,7 @@ public class Crawler implements BookCrawler {
 
     @Override
     public List<Book> getNextBooks() {
-        bookListCreator.createBookList(9789632440453L);
-        return bookListCreator.createBookList(9634317960L);
+        bookListCreator.createBookList("9789632440453");
+        return bookListCreator.createBookList("9634317960");
     }
 }

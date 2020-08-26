@@ -1,5 +1,6 @@
 package com.reka.lakatos.searchbyisbn.crawler.universitylibralies;
 
+import com.reka.lakatos.searchbyisbn.crawler.universitylibralies.webdocumentumfactory.WebDocumentFactory;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class BookListCreator {
     private final WebDocumentFactory documentFactory;
     private final DocumentReader documentReader;
 
-    public List<Book> createBookList(long isbn) {
+    public List<Book> createBookList(String isbn) {
         WebDocument webDocument = documentFactory.getMainPage();
         Optional<String> pAuthorCode = documentReader.getPAuthorCode(webDocument);
         if (pAuthorCode.isEmpty()) {

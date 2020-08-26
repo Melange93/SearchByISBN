@@ -1,4 +1,4 @@
-package com.reka.lakatos.searchbyisbn.crawler.universitylibralies;
+package com.reka.lakatos.searchbyisbn.crawler.universitylibralies.webdocumentumfactory;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ public class RequestBodyFactory {
         return "type=advanced&reset=false&searchId=";
     }
 
-    public String getSearchingBody(long isbn) {
+    public String getSearchingBody(String isbn) {
         return "rowCount=3" +
                 "&test2=false" +
                 "&formclosestatus=true" +
