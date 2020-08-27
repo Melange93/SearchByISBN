@@ -44,8 +44,8 @@ public class StrategyConfiguration {
                 Map.entry("hangfelvétel", CoverType.SOUND_RECORD),
                 Map.entry("elektronikus dok.", CoverType.DIGITAL),
                 Map.entry("elektronikus kartográfiai dok.", CoverType.DIGITAL),
-                Map.entry("nyomtatott kotta", CoverType.SHEET_MUSIC),
-                Map.entry("kotta", CoverType.SHEET_MUSIC),
+                Map.entry("nyomtatott kotta", CoverType.MUSIC_BOOK),
+                Map.entry("kotta", CoverType.MUSIC_BOOK),
                 Map.entry("kartográfiai dokumentum", CoverType.MAP),
                 Map.entry("elektronikus dokumentum", CoverType.DIGITAL),
                 Map.entry("térkép", CoverType.MAP)
