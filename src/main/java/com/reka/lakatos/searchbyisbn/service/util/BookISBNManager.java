@@ -17,7 +17,7 @@ public class BookISBNManager {
             return false;
         }
 
-        return isbnValidator.isValid(isbn);
+        return isbnValidator.isValid(cleanISBN(isbn));
     }
 
     public String convertISBNToISBN13(final String isbn) {
@@ -27,7 +27,7 @@ public class BookISBNManager {
     }
 
     public String cleanISBN(String isbn) {
-        return isbn.replaceAll("[-\\s]", "");
+        return isbn.replaceAll("[-\\s]*", "");
     }
 
     public boolean isISBN10(String isbn) {
