@@ -60,25 +60,25 @@ class TitlePropertyUpdatingStrategyTest {
     }
 
     @Test
-    void updatePropertyCoverTypeSheetMusic1() {
+    void updatePropertyCoverTypeMusicBook1() {
         Book book = Book.builder().build();
         String property = "55 kétszólamú énekgyakorlat [nyomtatott kotta] : felső szólam / Kodály Zoltán.";
-        when(coverTypeConverter.get("nyomtatott kotta")).thenReturn(CoverType.SHEET_MUSIC);
+        when(coverTypeConverter.get("nyomtatott kotta")).thenReturn(CoverType.MUSIC_BOOK);
         propertyUpdatingStrategy.updateProperty(book, property);
 
         CoverType result = book.getCoverType();
-        assertThat(result).isEqualTo(CoverType.SHEET_MUSIC);
+        assertThat(result).isEqualTo(CoverType.MUSIC_BOOK);
     }
 
     @Test
-    void updatePropertyCoverTypeSheetMusic2() {
+    void updatePropertyCoverTypeMusicBook2() {
         Book book = Book.builder().build();
         String property = "55 kétszólamú énekgyakorlat [kotta] : felső szólam / Kodály Zoltán.";
-        when(coverTypeConverter.get("kotta")).thenReturn(CoverType.SHEET_MUSIC);
+        when(coverTypeConverter.get("kotta")).thenReturn(CoverType.MUSIC_BOOK);
         propertyUpdatingStrategy.updateProperty(book, property);
 
         CoverType result = book.getCoverType();
-        assertThat(result).isEqualTo(CoverType.SHEET_MUSIC);
+        assertThat(result).isEqualTo(CoverType.MUSIC_BOOK);
     }
 
     @Test
