@@ -51,4 +51,13 @@ public class DocumentReader {
     public List<WebElement> getBookPropertiesValue(WebDocument webDocument) {
         return webDocument.select(".metadata-value");
     }
+
+    public String getFurtherSearchingUrl(WebDocument webDocument) {
+        // TODO: 2020. 08. 27. create exception!
+        return webDocument.select("#page_form_mobile-top").stream()
+                .filter(webElement -> webElement.hasAttr("jumpUrl"))
+                .findFirst()
+                .map(webElement -> webElement.attr("jumpUrl").trim())
+                .orElseThrow(RuntimeException::new);
+    }
 }

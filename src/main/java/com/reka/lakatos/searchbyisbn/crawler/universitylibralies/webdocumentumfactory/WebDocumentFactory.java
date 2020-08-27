@@ -36,11 +36,16 @@ public class WebDocumentFactory {
         webClient.sendPostRequestWithCookies(url, body, cookies);
     }
 
-    public WebDocument searchingByISBN(String pAuthorCode, String isbn) {
-        log.info("Start searching ISBN: " + isbn);
+    public WebDocument searchingByDocumentType(String pAuthorCode, String documentType) {
+        log.info("Start searching by document type: " + documentType);
         String url = urlFactory.getSearchingUrl(pAuthorCode);
-        String body = requestBodyFactory.getSearchingBody(isbn);
+        String body = requestBodyFactory.getSearchingBodyDocumentType(documentType);
         return webClient.sendPostRequestWithCookies(url, body, cookies);
+    }
+
+    public WebDocument furtherSearchingByDocumentType(String url) {
+        log.info("Start searching. Url: " + url);
+        return webClient.sendGetRequestWithCookies(url, cookies);
     }
 
     public WebDocument visitBook(String url) {

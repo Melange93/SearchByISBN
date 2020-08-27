@@ -37,4 +37,32 @@ public class RequestBodyFactory {
                 "&ftype4=documentType" +
                 "&flogic4=OR";
     }
+
+    public String getSearchingBodyDocumentType(String documentType) {
+        return "rowCount=3" +
+                "&test2=true" +
+                "&formclosestatus=true" +
+                "&extraparam_fullAdvancedSearch=true" +
+                "&term0=" +
+                "&type0=author" +
+                "&logic1=AND" +
+                "&term1=" +
+                "&type1=title" +
+                "&logic2=AND" +
+                "&term2=" +
+                "&type2=topic" +
+                "&dbid=solr" +
+                "&filter0filterintervalbegin=" +
+                "&filter0filterintervalend=" +
+                "&ftype0=publishDate" +
+                "&filter1=" +
+                "&ftype1=publishPlace" +
+                "&filter2=" +
+                "&ftype2=documentSubtype" +
+                "&filter3=" +
+                "&ftype3=language" +
+                "&filter4_0=" + documentType +
+                "&ftype4=documentType" +
+                "&flogic4=OR";
+    }
 }

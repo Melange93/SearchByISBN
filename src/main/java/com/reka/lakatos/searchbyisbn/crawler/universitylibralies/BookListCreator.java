@@ -25,17 +25,8 @@ public class BookListCreator {
     private final DefaultBookCreator defaultBookCreator;
     private final DefaultBookListPreparatory bookListPreparatory;
 
-    public List<Book> createBookList(String isbn) {
-        WebDocument webDocument = documentFactory.getMainPage();
-        Optional<String> pAuthorCode = documentReader.getPAuthorCode(webDocument);
-        if (pAuthorCode.isEmpty()) {
-            // TODO: 2020. 08. 25. Create a unique exception
-            throw new RuntimeException("Can't find the Author code.");
-        }
-
-        documentFactory.navigateToComplexSearch();
-        WebDocument searchResult = documentFactory.searchingByISBN(pAuthorCode.get(), isbn);
-        List<String> searchingResultDetailLinks = documentReader.getSearchingResultDetailLinks(searchResult);
+    public List<Book> createBookListDocumentType(WebDocument bookListPage) {
+        List<String> searchingResultDetailLinks = documentReader.getSearchingResultDetailLinks(bookListPage);
         return searchingResultDetailLinks.stream()
                 .map(documentFactory::visitBook)
                 .map(this::createBookPropertiesMap)
