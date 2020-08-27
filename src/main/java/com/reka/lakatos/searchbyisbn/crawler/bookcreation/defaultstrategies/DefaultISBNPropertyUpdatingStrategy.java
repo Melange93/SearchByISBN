@@ -9,8 +9,8 @@ import java.util.regex.Pattern;
 
 public class DefaultISBNPropertyUpdatingStrategy implements PropertyUpdatingStrategy {
 
-    private static final String ISBN13_REGEX = "((?:[\\d\\sX]{13})|(?:[\\d\\-\\sX]{17}))";
-    private static final String ISBN10_REGEX = "((?:[\\d\\sX]{10})|(?:[\\d\\-\\sX]{13}))";
+    private static final String ISBN13_REGEX = "((?:[\\dX]{13})|(?:[\\d\\-\\sX]{17}))";
+    private static final String ISBN10_REGEX = "((?:[\\dX]{10})|(?:[\\d\\-\\sX]{13}))";
 
     @Override
     public void updateProperty(Book book, String property) {

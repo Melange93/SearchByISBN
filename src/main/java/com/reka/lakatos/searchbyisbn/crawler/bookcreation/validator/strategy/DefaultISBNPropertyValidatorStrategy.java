@@ -16,8 +16,8 @@ public class DefaultISBNPropertyValidatorStrategy implements PropertyValidatorSt
 
     private final BookISBNManager bookISBNManager;
 
-    private static final String ISBN13_REGEX = "((?:[\\dX]{13})|(?:[\\d\\-X]{17}))";
-    private static final String ISBN10_REGEX = "((?:[\\dX]{10})|(?:[\\d\\-X]{13}))";
+    private static final String ISBN13_REGEX = "((?:[\\dX]{13})|(?:[\\d\\-\\sX]{17}))";
+    private static final String ISBN10_REGEX = "((?:[\\dX]{10})|(?:[\\d\\-\\sX]{13}))";
     private static final int ISBN13_CLEAN_LENGTH = 13;
     private static final int ISBN10_CLEAN_LENGTH = 10;
 
