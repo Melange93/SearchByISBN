@@ -25,22 +25,35 @@ public class Crawler implements BookCrawler {
     private final BookListCreator bookListCreator;
     private final List<String> documentType = new ArrayList<>(Arrays.asList("book", "edocument", "map"));
 
-    private int pageNumber = 2;
+    //other possibilities: 12, 24, 48
+    private static final int RESULTS_PER_PAGE = 48;
+
+    private int documentTypeIndex = 0;
+    private int pageNumber = 1;
     private String pAuthor;
 
     @Override
     public List<Book> getNextBooks() {
+        if (documentType.size() - 1 < documentTypeIndex) {
+            return null;
+        }
+
         prepareSearching();
-        WebDocument bookListPage = documentFactory.searchingByDocumentType(pAuthor, documentType.get(0));
+        WebDocument bookListPage = documentFactory.searchingByDocumentType(pAuthor, documentType.get(documentTypeIndex));
+        int numberOfSearchingResult = documentReader.getNumberOfSearchingResult(bookListPage);
+
+        if (numberOfSearchingResult < RESULTS_PER_PAGE * pageNumber) {
+            documentTypeIndex++;
+            pageNumber = 1;
+        }
+
         if (pageNumber == 1) {
             pageNumber++;
             return bookListCreator.createBookListDocumentType(bookListPage);
         }
 
-        String furtherSearchingUrl = documentReader.getFurtherSearchingUrl(bookListPage);
-        String furtherSearchingUrlWithPageNumber = furtherSearchingUrl.replace("page_placeholder", String.valueOf(pageNumber++));
-        WebDocument furtherSearching = documentFactory.furtherSearchingByDocumentType(furtherSearchingUrlWithPageNumber);
-        System.out.println(furtherSearching);
+        String furtherSearchingUrl = documentReader.getFurtherSearchingUrl(bookListPage, String.valueOf(pageNumber++), String.valueOf(RESULTS_PER_PAGE));
+        WebDocument furtherSearching = documentFactory.furtherSearchingByDocumentType(furtherSearchingUrl);
         return bookListCreator.createBookListDocumentType(furtherSearching);
     }
 

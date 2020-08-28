@@ -52,12 +52,38 @@ public class DocumentReader {
         return webDocument.select(".metadata-value");
     }
 
-    public String getFurtherSearchingUrl(WebDocument webDocument) {
+    public String getFurtherSearchingUrl(WebDocument webDocument, String pageNumber, String resultPerPage) {
         // TODO: 2020. 08. 27. create exception!
-        return webDocument.select("#page_form_mobile-top").stream()
+        String url = webDocument.select("#page_form_mobile-top").stream()
                 .filter(webElement -> webElement.hasAttr("jumpUrl"))
                 .findFirst()
                 .map(webElement -> webElement.attr("jumpUrl").trim())
                 .orElseThrow(RuntimeException::new);
+        url = setPageNumber(url, pageNumber);
+        url =  setResultPerPage(url, resultPerPage);
+        System.out.println(url);
+        return url;
+    }
+
+    public int getNumberOfSearchingResult(WebDocument webDocument) {
+        Optional<WebElement> numberOfFound = webDocument.select("#numfound").stream()
+                .findFirst();
+        if (numberOfFound.isEmpty()) {
+            return 0;
+        }
+        Matcher matcher = Pattern.compile("[\\d\\s]*").matcher(numberOfFound.get().text());
+        if (matcher.find()) {
+            String result = matcher.group().replaceAll("\\s", "");
+            return Integer.parseInt(result);
+        }
+        return 0;
+    }
+
+    private String setPageNumber(String url, String pageNumber) {
+        return url.replace("page_placeholder", pageNumber);
+    }
+
+    private String setResultPerPage(String url, String resultPerPage) {
+        return url.replaceFirst("(?!\\/)24(?=\\/)", resultPerPage);
     }
 }

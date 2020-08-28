@@ -1,12 +1,15 @@
 package com.reka.lakatos.searchbyisbn.crawler.bookcreation;
 
 import com.reka.lakatos.searchbyisbn.webdocument.WebElement;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@Slf4j
 public class DefaultBookListPreparatory {
 
     private static final String SPECIAL_SEPARATION_CHARACTER = "$";
@@ -39,14 +42,19 @@ public class DefaultBookListPreparatory {
             List<String> bookPropertiesName,
             List<String> bookPropertiesValues
     ) {
-        return IntStream.range(0, bookPropertiesValues.size())
-                .boxed()
-                .collect(
-                        Collectors.toMap(
-                                bookPropertiesName::get,
-                                bookPropertiesValues::get
-                        )
-                );
+        try {
+            return IntStream.range(0, bookPropertiesValues.size())
+                    .boxed()
+                    .collect(
+                            Collectors.toMap(
+                                    bookPropertiesName::get,
+                                    bookPropertiesValues::get
+                            )
+                    );
+        } catch (IllegalStateException e) {
+            log.error(String.valueOf(e));
+            return new HashMap<>();
+        }
     }
 
     private String getContributorsSeparateBySpecialCharacter(
