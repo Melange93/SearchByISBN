@@ -61,7 +61,6 @@ public class DocumentReader {
                 .orElseThrow(RuntimeException::new);
         url = setPageNumber(url, pageNumber);
         url =  setResultPerPage(url, resultPerPage);
-        System.out.println(url);
         return url;
     }
 

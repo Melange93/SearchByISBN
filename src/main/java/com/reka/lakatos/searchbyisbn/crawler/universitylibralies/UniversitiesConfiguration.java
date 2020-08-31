@@ -27,7 +27,9 @@ public class UniversitiesConfiguration {
 
     private Map<String, List<String>> getUniversitiesSearchingDocumentTypes() {
         return Map.ofEntries(
-                Map.entry("https://hunteka.sze.hu/", Arrays.asList("book", "edocument", "map", "music"))
+                Map.entry("https://hunteka.sze.hu/", Arrays.asList("book", "edocument", "map", "music")),
+                Map.entry("http://hunteka.lib.semmelweis.hu/", Arrays.asList("book", "edocument", "map", "music")),
+                Map.entry("http://hunteka.neprajz.hu/", Arrays.asList("book", "edocument", "map", "music"))
         );
     }
 
