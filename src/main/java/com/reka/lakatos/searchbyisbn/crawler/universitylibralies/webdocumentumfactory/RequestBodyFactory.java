@@ -49,8 +49,8 @@ public class RequestBodyFactory {
                 "&term1=" +
                 "&type1=title" +
                 "&logic2=AND" +
-                "&term2=" +
-                "&type2=topic" +
+                "&term2=" + documentType +
+                "&type2=documentType" +
                 "&dbid=solr" +
                 "&filter0filterintervalbegin=" +
                 "&filter0filterintervalend=" +
@@ -61,7 +61,6 @@ public class RequestBodyFactory {
                 "&ftype2=documentSubtype" +
                 "&filter3=" +
                 "&ftype3=language" +
-                "&filter4_0=" + documentType +
                 "&ftype4=documentType" +
                 "&flogic4=OR";
     }

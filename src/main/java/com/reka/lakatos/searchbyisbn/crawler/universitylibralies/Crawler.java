@@ -3,15 +3,15 @@ package com.reka.lakatos.searchbyisbn.crawler.universitylibralies;
 import com.reka.lakatos.searchbyisbn.crawler.BookCrawler;
 import com.reka.lakatos.searchbyisbn.crawler.universitylibralies.webdocumentumfactory.WebDocumentFactory;
 import com.reka.lakatos.searchbyisbn.document.Book;
+import com.reka.lakatos.searchbyisbn.document.CoverType;
 import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -23,7 +23,8 @@ public class Crawler implements BookCrawler {
     private final WebDocumentFactory documentFactory;
     private final DocumentReader documentReader;
     private final BookListCreator bookListCreator;
-    private final List<String> documentType = new ArrayList<>(Arrays.asList("book", "edocument", "map"));
+    private final List<String> documentType;
+    private final Map<String, CoverType> coverTypeByDocumentType;
 
     //other possibilities: 12, 24, 48
     private static final int RESULTS_PER_PAGE = 48;
@@ -41,6 +42,7 @@ public class Crawler implements BookCrawler {
         prepareSearching();
         WebDocument bookListPage = documentFactory.searchingByDocumentType(pAuthor, documentType.get(documentTypeIndex));
         int numberOfSearchingResult = documentReader.getNumberOfSearchingResult(bookListPage);
+        CoverType coverType = coverTypeByDocumentType.get(documentType.get(documentTypeIndex));
 
         if (numberOfSearchingResult < RESULTS_PER_PAGE * pageNumber) {
             documentTypeIndex++;
@@ -49,12 +51,12 @@ public class Crawler implements BookCrawler {
 
         if (pageNumber == 1) {
             pageNumber++;
-            return bookListCreator.createBookListDocumentType(bookListPage);
+            return bookListCreator.createBookListDocumentType(bookListPage, coverType);
         }
 
         String furtherSearchingUrl = documentReader.getFurtherSearchingUrl(bookListPage, String.valueOf(pageNumber++), String.valueOf(RESULTS_PER_PAGE));
         WebDocument furtherSearching = documentFactory.furtherSearchingByDocumentType(furtherSearchingUrl);
-        return bookListCreator.createBookListDocumentType(furtherSearching);
+        return bookListCreator.createBookListDocumentType(furtherSearching, coverType);
     }
 
     private void prepareSearching() {
