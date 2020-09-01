@@ -1,10 +1,9 @@
 package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary;
 
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.*;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy.DefaultNotesPropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.*;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.PropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.strategy.DefaultNotesPropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.propertiesvalidator.startegy.SeeAlsoPropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.service.util.BookISBNManager;
 import lombok.RequiredArgsConstructor;

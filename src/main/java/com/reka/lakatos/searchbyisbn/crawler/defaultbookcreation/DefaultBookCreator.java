@@ -1,6 +1,7 @@
-package com.reka.lakatos.searchbyisbn.crawler.bookcreation;
+package com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation;
 
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.PropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.PropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.Edition;
 import lombok.RequiredArgsConstructor;

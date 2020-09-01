@@ -1,4 +1,4 @@
-package com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator;
+package com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator;
 
 public interface PropertyValidatorStrategy {
 

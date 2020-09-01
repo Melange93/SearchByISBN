@@ -1,6 +1,6 @@
 package com.reka.lakatos.searchbyisbn.crawler.universitylibraries.bookcreationstratgy.validation;
 
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.PropertyValidatorStrategy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 

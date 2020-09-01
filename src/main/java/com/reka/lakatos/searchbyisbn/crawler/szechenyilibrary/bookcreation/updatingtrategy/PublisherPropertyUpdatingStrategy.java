@@ -1,6 +1,6 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.updatingtrategy;
 
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.PropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 

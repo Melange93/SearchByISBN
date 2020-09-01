@@ -1,14 +1,10 @@
 package com.reka.lakatos.searchbyisbn.crawler.universitylibraries.bookcreationstratgy;
 
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.DefaultBookListPreparatory;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.DefaultAuthorPropertyUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.DefaultContributorsPropertyUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.DefaultEditionNumberPropetryUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.DefaultSizePropertyUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy.DefaultNotValidPropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.DefaultBookListPreparatory;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.*;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.PropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.strategy.DefaultNotValidPropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.bookcreationstratgy.creation.DatePropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.bookcreationstratgy.creation.ISBNPropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.bookcreationstratgy.creation.PublisherPropertyUpdatingStrategy;

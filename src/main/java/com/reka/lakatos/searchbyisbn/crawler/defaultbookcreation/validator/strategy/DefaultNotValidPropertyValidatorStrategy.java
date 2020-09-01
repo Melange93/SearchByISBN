@@ -1,6 +1,6 @@
-package com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy;
+package com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.strategy;
 
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.PropertyValidatorStrategy;
 
 public class DefaultNotValidPropertyValidatorStrategy implements PropertyValidatorStrategy {
     @Override

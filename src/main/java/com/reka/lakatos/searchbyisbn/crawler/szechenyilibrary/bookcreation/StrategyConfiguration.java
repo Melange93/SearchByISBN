@@ -1,9 +1,8 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation;
 
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.*;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.*;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.PropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.updatingtrategy.*;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.validation.ExtendISBNPropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.document.CoverType;

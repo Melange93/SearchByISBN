@@ -1,6 +1,6 @@
-package com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy;
+package com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.strategy;
 
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.PropertyValidatorStrategy;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

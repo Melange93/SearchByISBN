@@ -1,6 +1,5 @@
-package com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies;
+package com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation;
 
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
 
 import java.util.regex.Matcher;

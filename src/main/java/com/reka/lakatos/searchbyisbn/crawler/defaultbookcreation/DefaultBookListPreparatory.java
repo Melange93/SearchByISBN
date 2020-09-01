@@ -1,4 +1,4 @@
-package com.reka.lakatos.searchbyisbn.crawler.bookcreation;
+package com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation;
 
 import com.reka.lakatos.searchbyisbn.webdocument.WebElement;
 import lombok.extern.slf4j.Slf4j;
@@ -13,13 +13,13 @@ import java.util.stream.IntStream;
 public class DefaultBookListPreparatory {
 
     private static final String SPECIAL_SEPARATION_CHARACTER = "$";
-    private String specialCaseContributors;
+    private final String specialCaseContributors;
 
-    public DefaultBookListPreparatory(String specialCaseContributors) {
+    public DefaultBookListPreparatory(final String specialCaseContributors) {
         this.specialCaseContributors = specialCaseContributors;
     }
 
-    public List<String> prepareBookProperties(List<WebElement> bookPropertiesValuesWebElement) {
+    public List<String> prepareBookProperties(final List<WebElement> bookPropertiesValuesWebElement) {
         return bookPropertiesValuesWebElement
                 .stream()
                 .map(WebElement::text)
@@ -27,20 +27,20 @@ public class DefaultBookListPreparatory {
     }
 
     public void setContributors(
-            List<String> bookPropertiesName,
-            List<WebElement> bookPropertiesValuesWebElement,
-            List<String> bookPropertiesValues,
-            String selectCssQuery
+            final List<String> bookPropertiesName,
+            final List<WebElement> bookPropertiesValuesWebElement,
+            final List<String> bookPropertiesValues,
+            final String selectCssQuery
     ) {
-        int contributorsIndex = bookPropertiesName.indexOf(specialCaseContributors);
-        String contributorsSeparateBySpecialCharacter =
+        final int contributorsIndex = bookPropertiesName.indexOf(specialCaseContributors);
+        final String contributorsSeparateBySpecialCharacter =
                 getContributorsSeparateBySpecialCharacter(bookPropertiesValuesWebElement, contributorsIndex, selectCssQuery);
         bookPropertiesValues.set(contributorsIndex, contributorsSeparateBySpecialCharacter);
     }
 
     public Map<String, String> createPropertiesMap(
-            List<String> bookPropertiesName,
-            List<String> bookPropertiesValues
+            final List<String> bookPropertiesName,
+            final List<String> bookPropertiesValues
     ) {
         try {
             return IntStream.range(0, bookPropertiesValues.size())
@@ -58,9 +58,9 @@ public class DefaultBookListPreparatory {
     }
 
     private String getContributorsSeparateBySpecialCharacter(
-            List<WebElement> bookPropertiesValuesWebElement,
-            int contributorsIndex,
-            String selectCssQuery
+            final List<WebElement> bookPropertiesValuesWebElement,
+            final int contributorsIndex,
+            final String selectCssQuery
     ) {
         return bookPropertiesValuesWebElement.get(contributorsIndex)
                 .select(selectCssQuery)
@@ -69,7 +69,7 @@ public class DefaultBookListPreparatory {
                 .collect(Collectors.joining(SPECIAL_SEPARATION_CHARACTER));
     }
 
-    public boolean hasContributors(List<String> bookPropertiesKey) {
+    public boolean hasContributors(final List<String> bookPropertiesKey) {
         return bookPropertiesKey.contains(specialCaseContributors);
     }
 }

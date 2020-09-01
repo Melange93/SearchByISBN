@@ -1,7 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary;
 
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.DefaultBookCreator;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.DefaultBookListPreparatory;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.DefaultBookCreator;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.DefaultBookListPreparatory;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.exception.BookEditionsPageException;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.exception.BookIdException;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.exception.RelatedBookException;
