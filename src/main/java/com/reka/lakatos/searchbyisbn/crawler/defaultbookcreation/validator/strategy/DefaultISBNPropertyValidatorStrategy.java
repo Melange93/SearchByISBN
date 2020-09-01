@@ -16,37 +16,37 @@ public class DefaultISBNPropertyValidatorStrategy implements PropertyValidatorSt
 
     private final BookISBNManager bookISBNManager;
 
+    private static final String[] HUNGARY_ISBN_STARTING_NUMBERS = {"978963", "978615", "963"};
     private static final String ISBN13_REGEX = "((?:[\\dX]{13})|(?:[\\d\\-\\sX]{17}))";
     private static final String ISBN10_REGEX = "((?:[\\dX]{10})|(?:[\\d\\-\\sX]{13}))";
     private static final int ISBN13_CLEAN_LENGTH = 13;
     private static final int ISBN10_CLEAN_LENGTH = 10;
 
     @Override
-    public boolean validateProperty(String property) {
+    public boolean validateProperty(final String property) {
         if (property == null) {
             return false;
         }
         return !containsISBNMoreThanOneBookISBN(property);
     }
 
-    private boolean containsISBNMoreThanOneBookISBN(String ISBNFieldValue) {
-        List<String> isbNsFromISBNField = getISBNsFromISBNField(ISBNFieldValue);
+    private boolean containsISBNMoreThanOneBookISBN(final String ISBNFieldValue) {
+        final List<String> isbnFromISBNField = getISBNsFromISBNField(ISBNFieldValue);
 
-        if (isbNsFromISBNField.size() == 1) {
+        if (isbnFromISBNField.size() == 1) {
             return false;
         }
 
-        if (isbNsFromISBNField.size() > 2 || isbNsFromISBNField.size() == 0) {
+        if (isbnFromISBNField.size() > 2 || isbnFromISBNField.size() == 0) {
             return true;
         }
 
-
-        if (isSameISBNLength(isbNsFromISBNField, ISBN13_CLEAN_LENGTH)
-                || isSameISBNLength(isbNsFromISBNField, ISBN10_CLEAN_LENGTH)) {
+        if (isSameISBNLength(isbnFromISBNField, ISBN13_CLEAN_LENGTH)
+                || isSameISBNLength(isbnFromISBNField, ISBN10_CLEAN_LENGTH)) {
             return true;
         }
-        String isbn13 = isbNsFromISBNField.get(0);
-        String isbn10 = isbNsFromISBNField.get(1);
+        final String isbn13 = isbnFromISBNField.get(0);
+        final String isbn10 = isbnFromISBNField.get(1);
 
         return !isTheSameBook(isbn13, isbn10);
     }
@@ -57,7 +57,7 @@ public class DefaultISBNPropertyValidatorStrategy implements PropertyValidatorSt
         return bookISBNManager.convertISBNToISBN13(isbn10).equals(isbn13);
     }
 
-    private boolean isSameISBNLength(List<String> isbns, int isbnLength) {
+    private boolean isSameISBNLength(final List<String> isbns, final int isbnLength) {
         return isbns.stream()
                 .map(bookISBNManager::cleanISBN)
                 .mapToInt(String::length)
@@ -65,26 +65,38 @@ public class DefaultISBNPropertyValidatorStrategy implements PropertyValidatorSt
     }
 
     private List<String> getISBNsFromISBNField(String ISBNFieldValue) {
-        List<String> isbn13s = getISBNs(ISBNFieldValue, ISBN13_REGEX);
+        final List<String> isbn13s = getISBNs(ISBNFieldValue, ISBN13_REGEX);
 
         for (String isbn13 : isbn13s) {
             ISBNFieldValue = ISBNFieldValue.replace(isbn13, "");
         }
 
-        List<String> isbNs10s = getISBNs(ISBNFieldValue, ISBN10_REGEX);
+        final List<String> isbNs10s = getISBNs(ISBNFieldValue, ISBN10_REGEX);
         return Stream.concat(isbn13s.stream(), isbNs10s.stream())
                 .collect(Collectors.toList());
     }
 
-    private List<String> getISBNs(String ISBNFieldValue, String ISBNRegex) {
-        List<String> isnbs = new ArrayList<>();
+    private List<String> getISBNs(final String ISBNFieldValue, final String ISBNRegex) {
+        List<String> isbns = new ArrayList<>();
 
         Pattern isbnPattern = Pattern.compile(ISBNRegex);
         Matcher isbnMatcher = isbnPattern.matcher(ISBNFieldValue);
         while (isbnMatcher.find()) {
-            isnbs.add(isbnMatcher.group());
+            String isbn = isbnMatcher.group();
+            if (isHungaryISBN(isbn)) {
+                isbns.add(isbn);
+            }
         }
 
-        return isnbs;
+        return isbns;
+    }
+
+    private boolean isHungaryISBN(String ISBN) {
+        for (String startingNumber : HUNGARY_ISBN_STARTING_NUMBERS) {
+            if (ISBN.startsWith(startingNumber)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
