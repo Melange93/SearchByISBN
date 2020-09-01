@@ -1,11 +1,15 @@
 package com.reka.lakatos.searchbyisbn.crawler.universitylibralies.bookcreationstratgy;
 
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.*;
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.DefaultAuthorPropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.DefaultContributorsPropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.DefaultEditionNumberPropetryUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.DefaultSizePropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy.DefaultNotValidPropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.universitylibralies.bookcreationstratgy.creation.DatePropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.universitylibralies.bookcreationstratgy.creation.ISBNPropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.universitylibralies.bookcreationstratgy.creation.PublisherPropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.universitylibralies.bookcreationstratgy.creation.TitlePropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.service.util.BookISBNManager;
@@ -31,7 +35,7 @@ public class StrategyConfiguration {
                 Map.entry("Megj. éve:", new DatePropertyUpdatingStrategy()),
                 Map.entry("Kiadó neve:", new PublisherPropertyUpdatingStrategy()),
                 Map.entry("Terjedelem, fizikai jellemzők:", new DefaultSizePropertyUpdatingStrategy()),
-                Map.entry("ISBN:", new DefaultISBNPropertyUpdatingStrategy()),
+                Map.entry("ISBN:", new ISBNPropertyUpdatingStrategy()),
                 Map.entry("Kiadás:", new DefaultEditionNumberPropetryUpdatingStrategy()),
                 Map.entry("További személynév:", new DefaultContributorsPropertyUpdatingStrategy())
         );
