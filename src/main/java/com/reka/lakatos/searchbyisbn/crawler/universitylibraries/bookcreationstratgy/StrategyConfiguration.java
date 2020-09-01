@@ -1,5 +1,6 @@
 package com.reka.lakatos.searchbyisbn.crawler.universitylibraries.bookcreationstratgy;
 
+import com.reka.lakatos.searchbyisbn.crawler.bookcreation.DefaultBookListPreparatory;
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.DefaultAuthorPropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.DefaultContributorsPropertyUpdatingStrategy;
@@ -49,4 +50,8 @@ public class StrategyConfiguration {
         );
     }
 
+    @Bean
+    public DefaultBookListPreparatory getDefaultBookListPreparatory() {
+        return new DefaultBookListPreparatory("További személynév:");
+    }
 }

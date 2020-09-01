@@ -24,7 +24,6 @@ public class UniversitiesConfiguration {
         return getUniversitiesSearchingDocumentTypes().get(universityCatalogMainUrl);
     }
 
-
     private Map<String, List<String>> getUniversitiesSearchingDocumentTypes() {
         return Map.ofEntries(
                 Map.entry("https://hunteka.sze.hu/", Arrays.asList("book", "edocument", "map", "music")),
@@ -44,5 +43,4 @@ public class UniversitiesConfiguration {
                 Map.entry("music", CoverType.SOUND_RECORD)
         );
     }
-
 }
