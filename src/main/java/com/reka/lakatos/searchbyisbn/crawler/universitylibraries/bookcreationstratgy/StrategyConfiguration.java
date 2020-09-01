@@ -6,7 +6,6 @@ import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.Prope
 import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.strategy.DefaultNotValidPropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.bookcreationstratgy.creation.DatePropertyUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.bookcreationstratgy.creation.ISBNPropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.bookcreationstratgy.creation.PublisherPropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.bookcreationstratgy.creation.TitlePropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.service.util.BookISBNManager;
@@ -32,7 +31,7 @@ public class StrategyConfiguration {
                 Map.entry("Megj. éve:", new DatePropertyUpdatingStrategy()),
                 Map.entry("Kiadó neve:", new PublisherPropertyUpdatingStrategy()),
                 Map.entry("Terjedelem, fizikai jellemzők:", new DefaultSizePropertyUpdatingStrategy()),
-                Map.entry("ISBN:", new ISBNPropertyUpdatingStrategy()),
+                Map.entry("ISBN:", new DefaultISBNPropertyUpdatingStrategy()),
                 Map.entry("Kiadás:", new DefaultEditionNumberPropetryUpdatingStrategy()),
                 Map.entry("További személynév:", new DefaultContributorsPropertyUpdatingStrategy())
         );

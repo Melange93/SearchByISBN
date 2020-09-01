@@ -3,6 +3,7 @@ package com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.CoverType;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,26 +14,30 @@ public class DefaultISBNPropertyUpdatingStrategy implements PropertyUpdatingStra
 
     @Override
     public void updateProperty(Book book, String property) {
-        setISBN(property, book);
+        setISBN(book, property);
         setBasicCoverType(property, book);
     }
 
-    private void setISBN(String preISBN, Book book) {
-        Pattern isbn13Pattern = Pattern.compile(ISBN13_REGEX);
-        Matcher isbn13Matcher = isbn13Pattern.matcher(preISBN);
-        if (isbn13Matcher.find()) {
-            book.setIsbn(isbn13Matcher.group());
-            return;
-        }
-
-        Pattern isbn10Pattern = Pattern.compile(ISBN10_REGEX);
-        Matcher isbn10Matcher = isbn10Pattern.matcher(preISBN);
-        if (isbn10Matcher.find()) {
-            book.setIsbn(isbn10Matcher.group());
+    private void setISBN(Book book, String property) {
+        Optional<String> isbn13 = findISBN(property, ISBN13_REGEX);
+        isbn13.ifPresent(book::setIsbn);
+        if (isbn13.isEmpty()) {
+            Optional<String> isbn10 = findISBN(property, ISBN10_REGEX);
+            isbn10.ifPresent(book::setIsbn);
         }
     }
 
-    private void setBasicCoverType(String value, Book book) {
+    private Optional<String> findISBN(final String property, final String ISBNRegex) {
+        Pattern isbnPattern = Pattern.compile(ISBNRegex);
+        Matcher isbnMatcher = isbnPattern.matcher(property);
+        if (isbnMatcher.find()) {
+            String result = isbnMatcher.group();
+            return Optional.of(result);
+        }
+        return Optional.empty();
+    }
+
+    private void setBasicCoverType(final String value, Book book) {
         if (book.getCoverType() != null) {
             return;
         }
