@@ -1,4 +1,4 @@
-package com.reka.lakatos.searchbyisbn.crawler.universitylibralies.bookcreationstratgy;
+package com.reka.lakatos.searchbyisbn.crawler.universitylibraries.bookcreationstratgy;
 
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.DefaultAuthorPropertyUpdatingStrategy;
@@ -8,10 +8,10 @@ import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.Defa
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy.DefaultNotValidPropertyValidatorStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.universitylibralies.bookcreationstratgy.creation.DatePropertyUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.universitylibralies.bookcreationstratgy.creation.ISBNPropertyUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.universitylibralies.bookcreationstratgy.creation.PublisherPropertyUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.universitylibralies.bookcreationstratgy.creation.TitlePropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.bookcreationstratgy.creation.DatePropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.bookcreationstratgy.creation.ISBNPropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.bookcreationstratgy.creation.PublisherPropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.bookcreationstratgy.creation.TitlePropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.service.util.BookISBNManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

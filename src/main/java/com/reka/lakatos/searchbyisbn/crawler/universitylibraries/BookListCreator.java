@@ -1,8 +1,8 @@
-package com.reka.lakatos.searchbyisbn.crawler.universitylibralies;
+package com.reka.lakatos.searchbyisbn.crawler.universitylibraries;
 
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.DefaultBookCreator;
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.DefaultBookListPreparatory;
-import com.reka.lakatos.searchbyisbn.crawler.universitylibralies.webdocumentumfactory.WebDocumentFactory;
+import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.webdocumentumfactory.WebDocumentFactory;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.CoverType;
 import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;

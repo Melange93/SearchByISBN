@@ -1,6 +1,6 @@
-package com.reka.lakatos.searchbyisbn.crawler.universitylibralies;
+package com.reka.lakatos.searchbyisbn.crawler.universitylibraries;
 
-import com.reka.lakatos.searchbyisbn.crawler.universitylibralies.exception.CookieException;
+import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.exception.CookieException;
 import com.reka.lakatos.searchbyisbn.webdocument.WebClient;
 import com.reka.lakatos.searchbyisbn.webdocument.exception.WebClientException;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.reka.lakatos.searchbyisbn.crawler.universitylibralies.bookcreationstratgy.validation;
+package com.reka.lakatos.searchbyisbn.crawler.universitylibraries.bookcreationstratgy.validation;
 
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
 import lombok.RequiredArgsConstructor;

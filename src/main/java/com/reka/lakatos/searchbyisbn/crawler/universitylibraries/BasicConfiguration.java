@@ -1,4 +1,4 @@
-package com.reka.lakatos.searchbyisbn.crawler.universitylibralies;
+package com.reka.lakatos.searchbyisbn.crawler.universitylibraries;
 
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.DefaultBookListPreparatory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

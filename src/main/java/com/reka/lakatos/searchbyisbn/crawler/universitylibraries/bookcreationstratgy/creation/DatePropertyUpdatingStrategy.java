@@ -1,4 +1,4 @@
-package com.reka.lakatos.searchbyisbn.crawler.universitylibralies.bookcreationstratgy.creation;
+package com.reka.lakatos.searchbyisbn.crawler.universitylibraries.bookcreationstratgy.creation;
 
 import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;

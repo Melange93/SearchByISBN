@@ -1,4 +1,4 @@
-package com.reka.lakatos.searchbyisbn.crawler.universitylibralies.webdocumentumfactory;
+package com.reka.lakatos.searchbyisbn.crawler.universitylibraries.webdocumentumfactory;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

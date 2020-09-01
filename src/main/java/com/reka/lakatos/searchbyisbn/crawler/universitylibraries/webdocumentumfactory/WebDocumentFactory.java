@@ -1,11 +1,11 @@
-package com.reka.lakatos.searchbyisbn.crawler.universitylibralies.webdocumentumfactory;
+package com.reka.lakatos.searchbyisbn.crawler.universitylibraries.webdocumentumfactory;
 
 
-import com.reka.lakatos.searchbyisbn.crawler.universitylibralies.CookiesManager;
-import com.reka.lakatos.searchbyisbn.crawler.universitylibralies.exception.FurtherSearchingException;
-import com.reka.lakatos.searchbyisbn.crawler.universitylibralies.exception.NavigationException;
-import com.reka.lakatos.searchbyisbn.crawler.universitylibralies.exception.SearchingByDocumentTypeException;
-import com.reka.lakatos.searchbyisbn.crawler.universitylibralies.exception.VisitBookException;
+import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.CookiesManager;
+import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.exception.FurtherSearchingException;
+import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.exception.NavigationException;
+import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.exception.SearchingByDocumentTypeException;
+import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.exception.VisitBookException;
 import com.reka.lakatos.searchbyisbn.webdocument.WebClient;
 import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
 import com.reka.lakatos.searchbyisbn.webdocument.exception.WebClientException;
