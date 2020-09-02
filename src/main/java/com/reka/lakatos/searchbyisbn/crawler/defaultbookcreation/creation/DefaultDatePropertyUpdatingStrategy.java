@@ -28,17 +28,8 @@ public class DefaultDatePropertyUpdatingStrategy implements PropertyUpdatingStra
         String dateRegex= "[\\d]{4}";
         Matcher matcher = Pattern.compile(dateRegex).matcher(property);
 
-        if (isValidDate(matcher) && matcher.find()) {
+        if (matcher.results().count() == 1 && matcher.find()) {
             book.getEditions().get(INDEX_OF_BASIC_EDITION).setYearOfRelease(Integer.parseInt(matcher.group()));
         }
-    }
-
-    private boolean isValidDate(Matcher matcher) {
-        int counter = 0;
-        while (matcher.find()) {
-            counter++;
-        }
-        matcher.reset();
-        return counter == 1;
     }
 }
