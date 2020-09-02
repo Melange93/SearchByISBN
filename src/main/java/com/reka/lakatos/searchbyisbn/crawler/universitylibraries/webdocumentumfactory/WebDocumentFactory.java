@@ -3,7 +3,7 @@ package com.reka.lakatos.searchbyisbn.crawler.universitylibraries.webdocumentumf
 
 import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.CookiesManager;
 import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.exception.FurtherSearchingException;
-import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.exception.NavigationException;
+import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.exception.NavigationMainPageException;
 import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.exception.SearchingByDocumentTypeException;
 import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.exception.VisitBookException;
 import com.reka.lakatos.searchbyisbn.webdocument.WebClient;
@@ -39,16 +39,6 @@ public class WebDocumentFactory {
         }
     }
 
-    public void navigateToComplexSearch() {
-        try {
-            final String url = urlFactory.getComplexSearchMainUrl();
-            final String body = requestBodyFactory.getComplexSearchMainReqBody();
-            webClient.sendPostRequestWithCookies(url, body, cookies);
-        } catch (WebClientException e) {
-            throw new NavigationException("Failed to navigate to the complex searching page", e);
-        }
-    }
-
     public WebDocument searchingByDocumentType(String pAuthorCode, String documentType) {
         try {
             log.info("Start searching by document type: " + documentType);
@@ -65,7 +55,7 @@ public class WebDocumentFactory {
             log.info("Start searching. Url: " + url);
             return webClient.sendGetRequestWithCookies(url, cookies);
         } catch (WebClientException e) {
-            throw new FurtherSearchingException("Saerching failed for this url: " + url, e);
+            throw new FurtherSearchingException("Searching failed for this url: " + url, e);
         }
     }
 
@@ -74,7 +64,7 @@ public class WebDocumentFactory {
             log.info("Visit book: " + url);
             return webClient.sendGetRequestWithCookies(url, cookies);
         } catch (WebClientException e) {
-            throw new VisitBookException("Failed to visit this book. Url: " + url, e);
+            throw new VisitBookException("Failed to download this book. Url: " + url, e);
         }
     }
 
