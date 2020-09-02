@@ -15,7 +15,7 @@ public class DefaultISBNPropertyValidatorStrategy implements PropertyValidatorSt
     private final BookISBNManager bookISBNManager;
 
     private static final String[] HUNGARY_ISBN_STARTING_NUMBERS = {"978963", "978615", "963"};
-    private static final String ISBN10_AND_ISBN13 = "" +
+    private static final String ISBN10_AND_ISBN13 =
             "(\\d{1,3}([- ])\\d{1,5}\\2\\d{1,7}\\2\\d{1,6}\\2(\\d|X))" +
             "|(\\d{1,5}([- ])\\d{1,7}\\5\\d{1,6}\\5(\\d|X))" +
             "|(\\d{13})" +

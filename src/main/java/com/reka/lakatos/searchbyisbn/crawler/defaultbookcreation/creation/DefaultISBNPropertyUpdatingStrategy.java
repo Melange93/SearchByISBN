@@ -9,8 +9,11 @@ import java.util.regex.Pattern;
 
 public class DefaultISBNPropertyUpdatingStrategy implements PropertyUpdatingStrategy {
 
-    private static final String ISBN13_REGEX = "((?:[\\dX]{13})|(?:[\\d\\-\\sX]{17}))";
-    private static final String ISBN10_REGEX = "((?:[\\dX]{10})|(?:[\\d\\-\\sX]{13}))";
+    private static final String ISBN10_AND_ISBN13 =
+            "(\\d{1,3}([- ])\\d{1,5}\\2\\d{1,7}\\2\\d{1,6}\\2(\\d|X))" +
+            "|(\\d{1,5}([- ])\\d{1,7}\\5\\d{1,6}\\5(\\d|X))" +
+            "|(\\d{13})" +
+            "|(\\d{10})";
 
     @Override
     public void updateProperty(Book book, String property) {
@@ -19,17 +22,12 @@ public class DefaultISBNPropertyUpdatingStrategy implements PropertyUpdatingStra
     }
 
     private void setISBN(Book book, String property) {
-        Optional<String> isbn13 = findISBN(property, ISBN13_REGEX);
-        isbn13.ifPresent(book::setIsbn);
-        if (isbn13.isEmpty()) {
-            Optional<String> isbn10 = findISBN(property, ISBN10_REGEX);
-            isbn10.ifPresent(book::setIsbn);
-        }
+        Optional<String> isbn = findISBN(property);
+        isbn.ifPresent(book::setIsbn);
     }
 
-    private Optional<String> findISBN(final String property, final String ISBNRegex) {
-        Pattern isbnPattern = Pattern.compile(ISBNRegex);
-        Matcher isbnMatcher = isbnPattern.matcher(property);
+    private Optional<String> findISBN(final String property) {
+        Matcher isbnMatcher = Pattern.compile(ISBN10_AND_ISBN13).matcher(property);
         if (isbnMatcher.find()) {
             String result = isbnMatcher.group();
             return Optional.of(result);
