@@ -3,7 +3,6 @@ package com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation;
 import com.reka.lakatos.searchbyisbn.webdocument.WebElement;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -42,19 +41,14 @@ public class DefaultBookListPreparatory {
             final List<String> bookPropertiesName,
             final List<String> bookPropertiesValues
     ) {
-        try {
-            return IntStream.range(0, bookPropertiesValues.size())
-                    .boxed()
-                    .collect(
-                            Collectors.toMap(
-                                    bookPropertiesName::get,
-                                    bookPropertiesValues::get
-                            )
-                    );
-        } catch (IllegalStateException e) {
-            log.error(String.valueOf(e));
-            return new HashMap<>();
-        }
+        return IntStream.range(0, bookPropertiesValues.size())
+                .boxed()
+                .collect(
+                        Collectors.toMap(
+                                bookPropertiesName::get,
+                                bookPropertiesValues::get
+                        )
+                );
     }
 
     private String getContributorsSeparateBySpecialCharacter(
