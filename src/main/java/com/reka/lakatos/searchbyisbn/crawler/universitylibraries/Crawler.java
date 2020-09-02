@@ -64,8 +64,7 @@ public class Crawler implements BookCrawler {
         WebDocument webDocument = documentFactory.getMainPage();
         Optional<String> pAuthorCode = documentReader.getPAuthorCode(webDocument);
         if (pAuthorCode.isEmpty()) {
-            // TODO: 2020. 08. 25. Create a unique exception
-            throw new RuntimeException("Can't find the Author code.");
+            throw new PAuthorCodeException("Can't find the Author code.");
         }
         pAuthor = pAuthorCode.get();
         documentFactory.navigateToComplexSearch();
