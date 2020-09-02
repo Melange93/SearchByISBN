@@ -24,7 +24,7 @@ class TitlePropertyUpdatingStrategyTest {
 
     @BeforeEach
     void init() {
-        propertyUpdatingStrategy = new TitlePropertyUpdatingStrategy(coverTypeConverter);
+        propertyUpdatingStrategy = new SpecialCoverTypeInTitlePropertyUpdatingStrategy(coverTypeConverter);
     }
 
     @Test

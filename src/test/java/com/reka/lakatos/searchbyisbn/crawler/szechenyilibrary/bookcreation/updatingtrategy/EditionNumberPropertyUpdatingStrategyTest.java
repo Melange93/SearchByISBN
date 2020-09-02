@@ -1,6 +1,6 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.updatingtrategy;
 
-import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.DefaultEditionNumberPropetryUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.DefaultEditionNumberPropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.PropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.Edition;
@@ -17,7 +17,7 @@ class EditionNumberPropertyUpdatingStrategyTest {
 
     @BeforeEach
     public void init() {
-        editionNumberPropertyUpdating = new DefaultEditionNumberPropetryUpdatingStrategy();
+        editionNumberPropertyUpdating = new DefaultEditionNumberPropertyUpdatingStrategy("[\\d]+");
     }
 
     @Test

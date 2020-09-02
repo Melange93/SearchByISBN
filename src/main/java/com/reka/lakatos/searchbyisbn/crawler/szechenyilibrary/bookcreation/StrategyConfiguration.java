@@ -12,6 +12,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -22,18 +25,18 @@ public class StrategyConfiguration {
     private final BookISBNManager bookISBNManager;
 
     @Bean
-    public Map<String, PropertyUpdatingStrategy> getBookPropertyUpdatingStrategyMap() {
+    public Map<String, List<PropertyUpdatingStrategy>> getBookPropertyUpdatingStrategyMap() {
         return Map.ofEntries(
-                Map.entry("ISBN :", new DefaultISBNPropertyUpdatingStrategy()),
-                Map.entry("Terj./Fiz. jell.:", new DefaultSizePropertyUpdatingStrategy()),
-                Map.entry("Cím és szerzőségi közlés:", new TitlePropertyUpdatingStrategy(getCoverTypeConverter())),
-                Map.entry("Név/nevek:", new DefaultContributorsPropertyUpdatingStrategy()),
-                Map.entry("Szerző:", new DefaultAuthorPropertyUpdatingStrategy()),
-                Map.entry("Megjelenés:", new PublisherPropertyUpdatingStrategy()),
-                Map.entry("Kiadás:", new DefaultEditionNumberPropetryUpdatingStrategy()),
-                Map.entry("Tárgyszavak:", new SpecialCoverTypeMapAndDigitalCheckPropertyUpdatingStrategy(getCoverTypeConverter())),
-                Map.entry("Egységesített cím - főtétel:", new SpecialCoverTypeMapCheckerPropertyUpdatingStrategy()),
-                Map.entry("Elektr. dok. jell.:", new SpecialCoverTypeDigitalCheckerPropertyUpdatingStrategy())
+                Map.entry("ISBN :", Arrays.asList(new DefaultISBNPropertyUpdatingStrategy(), new DefaultBasicCoverTypePropertyUpdatingStrategy())),
+                Map.entry("Terj./Fiz. jell.:", Arrays.asList(new DefaultThicknessPropertyUpdatingStrategy(), new DefaultPageNumberPropertyUpdatingStrategy())),
+                Map.entry("Cím és szerzőségi közlés:", Arrays.asList(new DefaultTitlePropertyUpdatingStrategy(), new SpecialCoverTypeInTitlePropertyUpdatingStrategy(getCoverTypeConverter()))),
+                Map.entry("Név/nevek:", Collections.singletonList(new DefaultContributorsPropertyUpdatingStrategy())),
+                Map.entry("Szerző:", Collections.singletonList(new DefaultAuthorPropertyUpdatingStrategy())),
+                Map.entry("Megjelenés:", Arrays.asList(new PublisherPropertyUpdatingStrategy(), new DefaultDatePropertyUpdatingStrategy())),
+                Map.entry("Kiadás:", Collections.singletonList(new DefaultEditionNumberPropertyUpdatingStrategy("[\\d]+"))),
+                Map.entry("Tárgyszavak:", Collections.singletonList(new SpecialCoverTypeMapAndDigitalCheckPropertyUpdatingStrategy(getCoverTypeConverter()))),
+                Map.entry("Egységesített cím - főtétel:", Collections.singletonList(new SpecialCoverTypeMapCheckerPropertyUpdatingStrategy())),
+                Map.entry("Elektr. dok. jell.:", Collections.singletonList(new SpecialCoverTypeDigitalCheckerPropertyUpdatingStrategy()))
         );
     }
 

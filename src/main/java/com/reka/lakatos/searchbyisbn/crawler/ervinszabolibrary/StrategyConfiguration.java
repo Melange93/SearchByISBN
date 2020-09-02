@@ -11,6 +11,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -21,15 +24,15 @@ public class StrategyConfiguration {
     private final BookISBNManager bookISBNManager;
 
     @Bean
-    public Map<String, PropertyUpdatingStrategy> getBookPropertyUpdatingStrategyMap() {
+    public Map<String, List<PropertyUpdatingStrategy>> getBookPropertyUpdatingStrategyMap() {
         return Map.ofEntries(
-                Map.entry("Cím:", new DefaultTitlePropertyUpdatingStrategy()),
-                Map.entry("Szerző:", new DefaultAuthorPropertyUpdatingStrategy()),
-                Map.entry("ISBN:", new DefaultISBNPropertyUpdatingStrategy()),
-                Map.entry("Megjelenés:", new DefaultPublisherPropertyUpdatingStrategy()),
-                Map.entry("Dátum:", new DefaultDatePropertyUpdatingStrategy()),
-                Map.entry("Terjedelem:", new DefaultSizePropertyUpdatingStrategy()),
-                Map.entry("Egyéb nevek:", new DefaultContributorsPropertyUpdatingStrategy())
+                Map.entry("Cím:", Arrays.asList(new DefaultTitlePropertyUpdatingStrategy(), new DefaultSpecialCoverTypePropertyUpdatingStrategy())),
+                Map.entry("Szerző:", Collections.singletonList(new DefaultAuthorPropertyUpdatingStrategy())),
+                Map.entry("ISBN:", Arrays.asList(new DefaultISBNPropertyUpdatingStrategy(), new DefaultBasicCoverTypePropertyUpdatingStrategy())),
+                Map.entry("Megjelenés:", Collections.singletonList(new DefaultPublisherPropertyUpdatingStrategy())),
+                Map.entry("Dátum:", Arrays.asList(new DefaultDatePropertyUpdatingStrategy(), new DefaultEditionNumberPropertyUpdatingStrategy("[\\d]+(?=\\.\\skiad\\.)"))),
+                Map.entry("Terjedelem:", Arrays.asList(new DefaultThicknessPropertyUpdatingStrategy(), new DefaultPageNumberPropertyUpdatingStrategy())),
+                Map.entry("Egyéb nevek:", Collections.singletonList(new DefaultContributorsPropertyUpdatingStrategy()))
         );
     }
 

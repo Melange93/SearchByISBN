@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -15,7 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class DefaultBookCreator {
 
-    private final Map<String, PropertyUpdatingStrategy> bookPropertyUpdatingStrategyMap;
+    private final Map<String, List<PropertyUpdatingStrategy>> bookPropertyUpdatingStrategyMap;
     private final Map<String, PropertyValidatorStrategy> propertyValidatorStrategyMap;
 
     public Optional<Book> createBook(Map<String, String> bookProperties) {
@@ -34,7 +35,13 @@ public class DefaultBookCreator {
 
         for (String key : bookProperties.keySet()) {
             if (bookPropertyUpdatingStrategyMap.containsKey(key)) {
-                bookPropertyUpdatingStrategyMap.get(key).updateProperty(book, bookProperties.get(key));
+                bookPropertyUpdatingStrategyMap
+                        .get(key)
+                        .forEach(
+                                updatingStrategy ->
+                                        updatingStrategy.updateProperty(book, bookProperties.get(key)
+                                        )
+                        );
             }
         }
 

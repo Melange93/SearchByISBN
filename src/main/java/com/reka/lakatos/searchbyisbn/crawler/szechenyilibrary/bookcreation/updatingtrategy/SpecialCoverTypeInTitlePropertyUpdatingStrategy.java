@@ -12,26 +12,15 @@ import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "crawler.book-crawler", havingValue = "szechenyi")
-public class TitlePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
+public class SpecialCoverTypeInTitlePropertyUpdatingStrategy implements PropertyUpdatingStrategy {
 
     private final Map<String, CoverType> coverTypeConverter;
 
     @Override
     public void updateProperty(Book book, String property) {
-        setTitle(book, property.trim());
         setSpecialCoverType(property, book);
     }
 
-    private void setTitle(Book book, String property) {
-        Matcher matcher = Pattern.compile("(.*?)(?=[\\/])").matcher(property);
-        if (matcher.find()) {
-            String title = matcher.group()
-                    .replaceAll("\\[(.*?)\\]", "")
-                    .replaceAll("\\s+", " ")
-                    .trim();
-            book.setTitle(title);
-        }
-    }
 
     private void setSpecialCoverType(String value, Book book) {
         if (book.getCoverType() != null) {
