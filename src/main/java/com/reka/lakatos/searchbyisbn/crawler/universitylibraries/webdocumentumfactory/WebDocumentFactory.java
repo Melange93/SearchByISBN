@@ -35,7 +35,7 @@ public class WebDocumentFactory {
             final String universityUrl = urlFactory.getUniversityUrl();
             return webClient.sendGetRequestWithCookies(universityUrl, cookies);
         } catch (WebClientException e) {
-            throw new NavigationException("Failed to navigate to the main page", e);
+            throw new NavigationMainPageException("Failed to navigate to the main page", e);
         }
     }
 
