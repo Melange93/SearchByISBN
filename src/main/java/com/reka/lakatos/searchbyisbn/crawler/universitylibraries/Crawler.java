@@ -1,6 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.universitylibraries;
 
 import com.reka.lakatos.searchbyisbn.crawler.BookCrawler;
+import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.exception.*;
 import com.reka.lakatos.searchbyisbn.crawler.universitylibraries.webdocumentumfactory.WebDocumentFactory;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.CoverType;
@@ -35,28 +36,47 @@ public class Crawler implements BookCrawler {
 
     @Override
     public List<Book> getNextBooks() {
-        if (documentType.size() - 1 < documentTypeIndex) {
+        try {
+            if (documentType.size() - 1 < documentTypeIndex) {
+                return null;
+            }
+
+            prepareSearching();
+            WebDocument bookListPage = documentFactory.searchingByDocumentType(pAuthor, documentType.get(documentTypeIndex));
+            int numberOfSearchingResult = documentReader.getNumberOfSearchingResult(bookListPage);
+            CoverType coverType = coverTypeByDocumentType.get(documentType.get(documentTypeIndex));
+
+            if (numberOfSearchingResult < RESULTS_PER_PAGE * pageNumber) {
+                documentTypeIndex++;
+                pageNumber = 1;
+            }
+
+            if (pageNumber == 1) {
+                pageNumber++;
+                return bookListCreator.createBookListDocumentType(bookListPage, coverType);
+            }
+
+            String furtherSearchingUrl = documentReader.getFurtherSearchingUrl(bookListPage, String.valueOf(pageNumber++), String.valueOf(RESULTS_PER_PAGE));
+            WebDocument furtherSearching = documentFactory.furtherSearchingByDocumentType(furtherSearchingUrl);
+            return bookListCreator.createBookListDocumentType(furtherSearching, coverType);
+        } catch (PAuthorCodeException | CookieException | NavigationMainPageException e) {
+            log.error(String.valueOf(e));
+            return null;
+        } catch (SearchingByDocumentTypeException e) {
+            log.error(String.valueOf(e));
+            documentTypeIndex++;
+            return getNextBooks();
+        } catch (FurtherSearchingException e) {
+            log.error(String.valueOf(e));
+            pageNumber++;
+            return getNextBooks();
+        } catch (Exception e) {
+            log.error("Exception happened while crawling list book location!"
+                    + "Document type: " + documentType.get(documentTypeIndex)
+                    + "Page number: " + pageNumber
+                    + e);
             return null;
         }
-
-        prepareSearching();
-        WebDocument bookListPage = documentFactory.searchingByDocumentType(pAuthor, documentType.get(documentTypeIndex));
-        int numberOfSearchingResult = documentReader.getNumberOfSearchingResult(bookListPage);
-        CoverType coverType = coverTypeByDocumentType.get(documentType.get(documentTypeIndex));
-
-        if (numberOfSearchingResult < RESULTS_PER_PAGE * pageNumber) {
-            documentTypeIndex++;
-            pageNumber = 1;
-        }
-
-        if (pageNumber == 1) {
-            pageNumber++;
-            return bookListCreator.createBookListDocumentType(bookListPage, coverType);
-        }
-
-        String furtherSearchingUrl = documentReader.getFurtherSearchingUrl(bookListPage, String.valueOf(pageNumber++), String.valueOf(RESULTS_PER_PAGE));
-        WebDocument furtherSearching = documentFactory.furtherSearchingByDocumentType(furtherSearchingUrl);
-        return bookListCreator.createBookListDocumentType(furtherSearching, coverType);
     }
 
     private void prepareSearching() {
@@ -67,6 +87,5 @@ public class Crawler implements BookCrawler {
             throw new PAuthorCodeException("Can't find the Author code.");
         }
         pAuthor = pAuthorCode.get();
-        documentFactory.navigateToComplexSearch();
     }
 }
