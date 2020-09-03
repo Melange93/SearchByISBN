@@ -27,32 +27,32 @@ public class Crawler implements BookCrawler {
     private final WebClient webClient;
 
     private static final String NAME = "Ervin Szabo Library";
-    private static final String ISBN963 = "978963";
-    private static final String ISBN615 = "978615";
+    private static final String[] ISBN_GROUPS = {"978963", "978615", "963"};
     private static final String PAGE_SIZE = "10";
-    private static final int ISBN_MAX_SEVENTH_NUMBER = 9;
+    private static final int MAX_NUMBER = 9;
 
     private int page = 0;
     private int isbnSeventhNumber = 0;
-    private String searchingISBNMainGroup = ISBN963;
+    private int ISBNGroupIndex = 2;
 
     @Override
     public List<Book> getNextBooks() {
         try {
             log.info("Start crawling: {}, Page number: {}, Searching ISBN: {}",
-                    NAME, page + 1, searchingISBNMainGroup + isbnSeventhNumber);
+                    NAME, page + 1, ISBN_GROUPS[ISBNGroupIndex] + isbnSeventhNumber);
 
             List<Book> books = getCrawledBooks();
             booksPageScrolling(books);
 
-            if (isCrawlerFinishedThisISBNGroup(books, ISBN615)) {
+            System.out.println(books);
+            if (ISBNGroupIndex == ISBN_GROUPS.length) {
                 return null;
             }
 
             return books;
         } catch (Exception e) {
             log.error("Exception happened while crawling list book location! Page " + page
-                    + " Searching ISBN: " + searchingISBNMainGroup + isbnSeventhNumber, e);
+                    + " Searching ISBN: " + ISBN_GROUPS[ISBNGroupIndex] + isbnSeventhNumber, e);
 
             booksPageScrollingWhenExceptionHappened();
             return getNextBooks();
@@ -64,7 +64,7 @@ public class Crawler implements BookCrawler {
                 getInformationForBookPropertiesUrl(
                         urlFactory.createISBNSearchingUrl(
                                 page,
-                                searchingISBNMainGroup + isbnSeventhNumber,
+                                ISBN_GROUPS[ISBNGroupIndex] + isbnSeventhNumber,
                                 PAGE_SIZE
                         )
                 );
@@ -94,23 +94,20 @@ public class Crawler implements BookCrawler {
             isbnSeventhNumber++;
         }
 
-        if (isCrawlerFinishedThisISBNGroup(books, ISBN963)) {
+        if (isCrawlerFinishedThisISBNGroup(books)) {
             page = 0;
             isbnSeventhNumber = 0;
-            searchingISBNMainGroup = ISBN615;
+            ISBNGroupIndex++;
         }
     }
 
     private boolean isCrawlerFinishedThisSeventhISBNNumberCrawling(List<Book> books) {
-        return books != null
-                && books.size() == 0
-                && isbnSeventhNumber <= ISBN_MAX_SEVENTH_NUMBER;
+        return books.size() == 0
+                && isbnSeventhNumber <= MAX_NUMBER;
     }
 
-    private boolean isCrawlerFinishedThisISBNGroup(List<Book> books, String ISBNGroup) {
-        return books != null
-                && books.size() == 0
-                && isbnSeventhNumber > ISBN_MAX_SEVENTH_NUMBER
-                && searchingISBNMainGroup.equals(ISBNGroup);
+    private boolean isCrawlerFinishedThisISBNGroup(List<Book> books) {
+        return books.size() == 0
+                && isbnSeventhNumber > MAX_NUMBER;
     }
 }
