@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -34,9 +35,8 @@ public class Crawler implements BookCrawler {
             if (isbnGroupIndex > isbnSearchingTerm.length - 1) {
                 return null;
             }
-
-            List<Book> crawledBooks;
             WebDocument webDocument;
+            String newScanTermToNextPage;
 
             if (scanTermToNextPage == null) {
                 log.info("First page crawling. Searching group: " + isbnSearchingTerm[isbnGroupIndex]);
@@ -46,8 +46,12 @@ public class Crawler implements BookCrawler {
                 webDocument = documentFactory.getNextSearchingPage(scanTermToNextPage);
             }
 
-            scanTermToNextPage = documentReader.getScanTermToNextPage(webDocument);
-            crawledBooks = bookListCreator.getCrawledBooks(webDocument);
+            newScanTermToNextPage = documentReader.getScanTermToNextPage(webDocument);
+            if (Objects.equals(scanTermToNextPage, newScanTermToNextPage)) {
+                return null;
+            }
+            scanTermToNextPage = newScanTermToNextPage;
+            List<Book> crawledBooks = bookListCreator.getCrawledBooks(webDocument);
 
             List<Book> invalidBooks = filterBooksIsbn(crawledBooks, nextInvalidIsbnGroup[isbnGroupIndex]);
             if (invalidBooks.size() != 0) {
