@@ -35,29 +35,18 @@ public class Crawler implements BookCrawler {
             if (isbnGroupIndex > isbnSearchingTerm.length - 1) {
                 return null;
             }
-            WebDocument webDocument;
-            String newScanTermToNextPage;
-
-            if (scanTermToNextPage == null) {
-                log.info("First page crawling. Searching group: " + isbnSearchingTerm[isbnGroupIndex]);
-                webDocument = documentFactory.getFirstSearchingResult(isbnSearchingTerm[isbnGroupIndex]);
-            } else {
-                log.info("Next page crawling. ScanTerm: " + scanTermToNextPage);
-                webDocument = documentFactory.getNextSearchingPage(scanTermToNextPage);
-            }
-
-            newScanTermToNextPage = documentReader.getScanTermToNextPage(webDocument);
+            WebDocument searchingResult = getSearchingResult();
+            String newScanTermToNextPage = documentReader.getScanTermToNextPage(searchingResult);
             if (Objects.equals(scanTermToNextPage, newScanTermToNextPage)) {
                 return null;
             }
             scanTermToNextPage = newScanTermToNextPage;
-            List<Book> crawledBooks = bookListCreator.getCrawledBooks(webDocument);
+
+            List<Book> crawledBooks = bookListCreator.getCrawledBooks(searchingResult);
 
             List<Book> invalidBooks = filterBooksIsbn(crawledBooks, nextInvalidIsbnGroup[isbnGroupIndex]);
             if (invalidBooks.size() != 0) {
-                log.info("Finished the " + isbnSearchingTerm[isbnGroupIndex] + " book group.");
-                scanTermToNextPage = null;
-                isbnGroupIndex++;
+                scrollingToNextISBNGroup();
             }
 
             return filterBooksIsbn(crawledBooks, isbnSearchingTerm[isbnGroupIndex]);
@@ -72,10 +61,35 @@ public class Crawler implements BookCrawler {
         }
     }
 
+    private WebDocument getSearchingResult() {
+        if (scanTermToNextPage == null) {
+            return getWebDocumentFromFirstSearch();
+        }
+        return getWebDocumentFromFurtherSearching();
+    }
+
+    private WebDocument getWebDocumentFromFurtherSearching() {
+        WebDocument webDocument;
+        log.info("Next page crawling. ScanTerm: " + scanTermToNextPage);
+        webDocument = documentFactory.getNextSearchingPage(scanTermToNextPage);
+        return webDocument;
+    }
+
+    private WebDocument getWebDocumentFromFirstSearch() {
+        log.info("First page crawling. Searching group: " + isbnSearchingTerm[isbnGroupIndex]);
+        return documentFactory.getFirstSearchingResult(isbnSearchingTerm[isbnGroupIndex]);
+    }
+
     private List<Book> filterBooksIsbn(List<Book> crawledBooks, String isbnScanTerm) {
         return crawledBooks.stream()
                 .filter(book -> book.getIsbn().startsWith(isbnScanTerm))
                 .collect(Collectors.toList());
+    }
+
+    private void scrollingToNextISBNGroup() {
+        log.info("Finished the " + isbnSearchingTerm[isbnGroupIndex] + " book group.");
+        scanTermToNextPage = null;
+        isbnGroupIndex++;
     }
 
     private void errorScrolling() {
