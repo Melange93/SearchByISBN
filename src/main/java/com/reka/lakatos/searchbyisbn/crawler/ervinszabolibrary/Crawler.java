@@ -40,43 +40,31 @@ public class Crawler implements BookCrawler {
     public List<Book> getNextBooks() {
         try {
             if (ISBNGroupIndex == ISBN_GROUPS.length) {
-                System.out.println("here");
                 return null;
             }
 
             String lastNumber = calculateSearchingLastNumber();
-            printSearchingInformation(lastNumber);
-            List<Book> books = getCrawledBooks(lastNumber);
+            String searchingISBN = ISBN_GROUPS[ISBNGroupIndex] + lastNumber;
+            printSearchingInformation(searchingISBN);
+            List<Book> books = getCrawledBooks(searchingISBN);
             booksPageScrolling();
 
             return books;
         } catch (Exception e) {
+            String lastNumber = calculateSearchingLastNumber();
             log.error("Exception happened while crawling list book location! Page " + page
-                    + " Searching ISBN: " + ISBN_GROUPS[ISBNGroupIndex] + isbnSeventhNumber, e);
+                    + " Searching ISBN: " + ISBN_GROUPS[ISBNGroupIndex] + lastNumber, e);
 
             booksPageScrollingWhenExceptionHappened();
             return getNextBooks();
         }
     }
 
-    private void printSearchingInformation(String lastNumber) {
-        log.info("Start crawling: {}, Page number: {}, Searching ISBN: {}",
-                NAME, page + 1, ISBN_GROUPS[ISBNGroupIndex] + lastNumber);
-    }
-
-    private String calculateSearchingLastNumber() {
-        String lastNumber = String.valueOf(isbnSeventhNumber);
-        if (isbnSeventhNumber < 10) {
-            lastNumber = "0" + isbnSeventhNumber;
-        }
-        return lastNumber;
-    }
-
-    private List<Book> getCrawledBooks(String lastNumber) {
+    private List<Book> getCrawledBooks(String searchingISBN) {
 
         String isbnSearchingUrl = urlFactory.createISBNSearchingUrl(
                 page,
-                ISBN_GROUPS[ISBNGroupIndex] + lastNumber,
+                searchingISBN,
                 PAGE_SIZE
         );
         final Map<String, String> booksPropertiesPageUrlInformation =
@@ -93,6 +81,19 @@ public class Crawler implements BookCrawler {
         } catch (WebClientException e) {
             throw new BookListDownloadException("Unable to download the list book page! Url: " + ISBNSearchingUrl, e);
         }
+    }
+
+    private void printSearchingInformation(String isbn) {
+        log.info("Start crawling: {}, Page number: {}, Searching ISBN: {}",
+                NAME, page + 1, isbn);
+    }
+
+    private String calculateSearchingLastNumber() {
+        String lastNumber = String.valueOf(isbnSeventhNumber);
+        if (isbnSeventhNumber < 10) {
+            lastNumber = "0" + isbnSeventhNumber;
+        }
+        return lastNumber;
     }
 
     private void booksPageScrollingWhenExceptionHappened() {
