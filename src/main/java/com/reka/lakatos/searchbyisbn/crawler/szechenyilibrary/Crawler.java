@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -41,15 +40,10 @@ public class Crawler implements BookCrawler {
                 return null;
             }
             scanTermToNextPage = newScanTermToNextPage;
-
-            List<Book> crawledBooks = bookListCreator.getCrawledBooks(searchingResult);
-
-            List<Book> invalidBooks = filterBooksIsbn(crawledBooks, nextInvalidIsbnGroup[isbnGroupIndex]);
-            if (invalidBooks.size() != 0) {
+            if (scanTermToNextPage.startsWith(nextInvalidIsbnGroup[isbnGroupIndex])) {
                 scrollingToNextISBNGroup();
             }
-
-            return filterBooksIsbn(crawledBooks, isbnSearchingTerm[isbnGroupIndex]);
+            return bookListCreator.getCrawledBooks(searchingResult);
         } catch (FirstSearchingPageException e) {
             log.error(String.valueOf(e));
             errorScrolling();
@@ -78,12 +72,6 @@ public class Crawler implements BookCrawler {
     private WebDocument getWebDocumentFromFirstSearch() {
         log.info("First page crawling. Searching group: " + isbnSearchingTerm[isbnGroupIndex]);
         return documentFactory.getFirstSearchingResult(isbnSearchingTerm[isbnGroupIndex]);
-    }
-
-    private List<Book> filterBooksIsbn(List<Book> crawledBooks, String isbnScanTerm) {
-        return crawledBooks.stream()
-                .filter(book -> book.getIsbn().startsWith(isbnScanTerm))
-                .collect(Collectors.toList());
     }
 
     private void scrollingToNextISBNGroup() {
