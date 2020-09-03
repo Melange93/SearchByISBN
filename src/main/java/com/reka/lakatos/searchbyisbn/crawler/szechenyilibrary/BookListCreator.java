@@ -2,10 +2,7 @@ package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary;
 
 import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.DefaultBookCreator;
 import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.DefaultBookListPreparatory;
-import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.exception.BookEditionsPageException;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.exception.BookIdException;
-import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.exception.RelatedBookException;
-import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.exception.VisitBookException;
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.factory.WebDocumentFactory;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
@@ -19,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -32,75 +30,56 @@ public class BookListCreator {
     private final DefaultBookListPreparatory bookListPreparatory;
 
     public List<Book> getCrawledBooks(final WebDocument webDocument) {
-        List<Book> books = new ArrayList<>();
-
         List<String> bookEditionsPageLinks = documentReader.getBookEditionsPageLinks(webDocument);
-        for (String edition : bookEditionsPageLinks) {
-            List<String> allBooksEditionsLink = getAllBooksEditionsLink(edition);
-            for (String url : allBooksEditionsLink) {
-                try {
-                    WebDocument webDocument1 = documentFactory.visitBook(url);
-                    Optional<Map<String, String>> bookPropertiesMap = createBookPropertiesMap(webDocument1);
-                    bookPropertiesMap.ifPresent(bookProperties -> {
-                        Optional<Book> book = bookCreator.createBook(bookProperties);
-                        book.ifPresent(books::add);
-                    });
-                } catch (VisitBookException e) {
-                    log.error(String.valueOf(e));
-                }
-            }
-        }
-        return books;
+
+        return bookEditionsPageLinks.stream()
+                .map(this::getAllBooksEditionsLink)
+                .flatMap(List::stream)
+                .map(this::getBook)
+                .flatMap(Optional::stream)
+                .collect(Collectors.toList());
     }
 
-    private List<String> getAllBooksEditionsLink(String bookEditionsPageLink) {
-        List<String> booksEditionsLink = new ArrayList<>();
+    private Optional<Book> getBook(String bookUrl) {
         try {
-            Thread.sleep(1000L);
-            List<String> bookEditionsLink = getBookEditionsLink(bookEditionsPageLink);
-            booksEditionsLink.addAll(bookEditionsLink);
-        } catch (InterruptedException e) {
-            log.error("Failed to wait 1000 ms.");
-            return booksEditionsLink;
-        } catch (BookEditionsPageException e) {
-            log.error(String.valueOf(e));
-            return booksEditionsLink;
-        }
-        return booksEditionsLink;
-    }
+            WebDocument bookPage = documentFactory.visitBook(bookUrl);
+            Optional<Map<String, String>> bookPropertiesMap = createBookPropertiesMap(bookPage);
 
-    private List<String> getBookEditionsLink(final String allEditionsPageUrl) {
-        final WebDocument webDocument = documentFactory.visitBookEditionsLink(allEditionsPageUrl);
-        return documentReader.getEditionsLink(webDocument);
-    }
-
-    private Optional<Map<String, String>> createBookPropertiesMap(final WebDocument webDocument) {
-        try {
-            if (hasRelatedBooks(webDocument)) {
-                return Optional.empty();
+            if (bookPropertiesMap.isPresent()) {
+                return bookCreator.createBook(bookPropertiesMap.get());
             }
-        } catch (BookIdException | RelatedBookException e) {
+            return Optional.empty();
+        } catch (Exception e) {
             log.error(String.valueOf(e));
             return Optional.empty();
         }
+    }
 
-        final List<String> bookPropertiesName =
-                bookListPreparatory.prepareBookProperties(documentReader.getBookPropertiesName(webDocument));
-        final List<WebElement> bookPropertiesValuesWebElement =
-                documentReader.getBookPropertiesValue(webDocument);
-        List<String> bookPropertiesValues =
-                bookListPreparatory.prepareBookProperties(bookPropertiesValuesWebElement);
-
-        if (bookListPreparatory.hasContributors(bookPropertiesName)) {
-            bookListPreparatory.setContributors(
-                    bookPropertiesName,
-                    bookPropertiesValuesWebElement,
-                    bookPropertiesValues,
-                    "a"
-            );
+    private List<String> getAllBooksEditionsLink(String bookEditionsPageLink) {
+        try {
+            Thread.sleep(1000L);
+            final WebDocument webDocument = documentFactory.visitBookEditionsLink(bookEditionsPageLink);
+            return documentReader.getEditionsLink(webDocument);
+        } catch (InterruptedException e) {
+            log.error("Failed to wait 1000 ms.");
+            return new ArrayList<>();
         }
+    }
 
-        return Optional.of(bookListPreparatory.createPropertiesMap(bookPropertiesName, bookPropertiesValues));
+    private Optional<Map<String, String>> createBookPropertiesMap(final WebDocument webDocument) {
+        if (hasRelatedBooks(webDocument)) {
+            return Optional.empty();
+        }
+        final List<WebElement> propertiesNameWebElements = documentReader.getBookPropertiesName(webDocument);
+        final List<WebElement> propertiesValuesWebElement = documentReader.getBookPropertiesValue(webDocument);
+        final List<String> propertiesName = bookListPreparatory.prepareBookProperties(propertiesNameWebElements);
+        List<String> propertiesValues = bookListPreparatory.prepareBookProperties(propertiesValuesWebElement);
+
+        if (bookListPreparatory.hasContributors(propertiesName)) {
+            bookListPreparatory.setContributors(propertiesName, propertiesValuesWebElement, propertiesValues, "a");
+        }
+        Map<String, String> propertiesMap = bookListPreparatory.createPropertiesMap(propertiesName, propertiesValues);
+        return Optional.of(propertiesMap);
     }
 
     private boolean hasRelatedBooks(WebDocument webDocument) {
