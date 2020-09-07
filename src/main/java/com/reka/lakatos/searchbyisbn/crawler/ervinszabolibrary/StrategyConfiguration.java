@@ -12,9 +12,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -25,15 +22,19 @@ public class StrategyConfiguration {
     private final BookISBNManager bookISBNManager;
 
     @Bean
-    public Map<String, List<PropertyUpdatingStrategy>> getBookPropertyUpdatingStrategyMap() {
+    public Map<PropertyUpdatingStrategy, String> getBookPropertyUpdatingStrategyMap() {
         return Map.ofEntries(
-                Map.entry("Cím:", Arrays.asList(new DefaultTitlePropertyUpdatingStrategy(), new DefaultSpecialCoverTypePropertyUpdatingStrategy())),
-                Map.entry("Szerző:", Collections.singletonList(new DefaultAuthorPropertyUpdatingStrategy())),
-                Map.entry("ISBN:", Arrays.asList(new DefaultISBNPropertyUpdatingStrategy(), new DefaultBasicCoverTypePropertyUpdatingStrategy())),
-                Map.entry("Megjelenés:", Collections.singletonList(new DefaultPublisherPropertyUpdatingStrategy())),
-                Map.entry("Dátum:", Arrays.asList(new DefaultDatePropertyUpdatingStrategy(), new DefaultEditionNumberPropertyUpdatingStrategy("[\\d]+(?=\\.\\skiad\\.)"))),
-                Map.entry("Terjedelem:", Arrays.asList(new DefaultThicknessPropertyUpdatingStrategy(), new DefaultPageNumberPropertyUpdatingStrategy())),
-                Map.entry("Egyéb nevek:", Collections.singletonList(new DefaultContributorsPropertyUpdatingStrategy()))
+                Map.entry(new DefaultTitlePropertyUpdatingStrategy(), "Cím:"),
+                Map.entry(new DefaultSpecialCoverTypePropertyUpdatingStrategy(), "Cím:"),
+                Map.entry(new DefaultAuthorPropertyUpdatingStrategy(), "Szerző:"),
+                Map.entry(new DefaultISBNPropertyUpdatingStrategy(), "ISBN:"),
+                Map.entry(new DefaultBasicCoverTypePropertyUpdatingStrategy(), "ISBN:"),
+                Map.entry(new DefaultPublisherPropertyUpdatingStrategy(), "Megjelenés:"),
+                Map.entry(new DefaultDatePropertyUpdatingStrategy(), "Dátum:"),
+                Map.entry(new DefaultEditionNumberPropertyUpdatingStrategy("[\\d]+(?=\\.\\skiad\\.)"), "Dátum:"),
+                Map.entry(new DefaultThicknessPropertyUpdatingStrategy(), "Terjedelem:"),
+                Map.entry(new DefaultPageNumberPropertyUpdatingStrategy(), "Terjedelem:"),
+                Map.entry(new DefaultContributorsPropertyUpdatingStrategy(), "Egyéb nevek:")
         );
     }
 

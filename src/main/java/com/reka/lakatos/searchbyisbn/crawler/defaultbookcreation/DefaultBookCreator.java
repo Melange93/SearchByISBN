@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -16,7 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class DefaultBookCreator {
 
-    private final Map<String, List<PropertyUpdatingStrategy>> bookPropertyUpdatingStrategyMap;
+    private final Map<PropertyUpdatingStrategy, String> bookPropertyUpdatingStrategyMap;
     private final Map<String, PropertyValidatorStrategy> propertyValidatorStrategyMap;
 
     public Optional<Book> createBook(Map<String, String> bookProperties) {
@@ -25,30 +24,41 @@ public class DefaultBookCreator {
                         Collections.singletonList(new Edition()))
                 .build();
 
-        for (String key : bookProperties.keySet()) {
-            if (propertyValidatorStrategyMap.containsKey(key)) {
-                if (!propertyValidatorStrategyMap.get(key).validateProperty(bookProperties.get(key))) {
-                    return Optional.empty();
-                }
-            }
+        if (hasInvalidateBookProperties(bookProperties)) {
+            return Optional.empty();
         }
 
-        for (String key : bookProperties.keySet()) {
-            if (bookPropertyUpdatingStrategyMap.containsKey(key)) {
-                bookPropertyUpdatingStrategyMap
-                        .get(key)
-                        .forEach(
-                                updatingStrategy ->
-                                        updatingStrategy.updateProperty(book, bookProperties.get(key)
-                                        )
-                        );
-            }
-        }
+        updateBookFields(bookProperties, book);
 
         if (book.getIsbn() == null) {
             return Optional.empty();
         }
 
         return Optional.of(book);
+    }
+
+    private boolean hasInvalidateBookProperties(Map<String, String> bookProperties) {
+        for (String key : bookProperties.keySet()) {
+            if (propertyValidatorStrategyMap.containsKey(key)) {
+                if (!propertyValidatorStrategyMap.get(key).validateProperty(bookProperties.get(key))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void updateBookFields(Map<String, String> bookProperties, Book book) {
+        bookPropertyUpdatingStrategyMap.entrySet().stream()
+                .filter(propertyUpdatingEntry ->
+                        bookProperties.containsKey(propertyUpdatingEntry.getValue()))
+                .forEach(propertyUpdatingEntry ->
+                        propertyUpdatingEntry
+                                .getKey()
+                                .updateProperty(
+                                        book,
+                                        bookProperties.get(propertyUpdatingEntry.getValue())
+                                )
+                );
     }
 }
