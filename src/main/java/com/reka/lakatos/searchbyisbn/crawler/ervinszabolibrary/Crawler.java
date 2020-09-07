@@ -32,9 +32,9 @@ public class Crawler implements BookCrawler {
     private static final int MAX_NUMBER = 99;
 
     private int resultNumber;
-    private int page = 5;
-    private int isbnSeventhNumber = 99;
-    private int ISBNGroupIndex = 2;
+    private int page = 0;
+    private int isbnSeventhNumber = 0;
+    private int ISBNGroupIndex = 0;
 
     @Override
     public List<Book> getNextBooks() {
