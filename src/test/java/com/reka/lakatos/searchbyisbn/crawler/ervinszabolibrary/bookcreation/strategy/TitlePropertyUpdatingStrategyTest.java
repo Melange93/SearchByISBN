@@ -1,7 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.strategy;
 
-import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.DefaultTitlePropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.PropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.strategy.DefaultTitlePropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.CoverType;
 import org.junit.jupiter.api.BeforeEach;

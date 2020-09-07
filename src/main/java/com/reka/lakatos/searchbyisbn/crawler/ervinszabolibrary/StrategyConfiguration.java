@@ -1,6 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary;
 
-import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.*;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.PropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.strategy.*;
 import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.PropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.strategy.DefaultNotesPropertyValidatorStrategy;

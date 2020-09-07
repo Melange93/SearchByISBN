@@ -1,7 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.bookcreation.updatingtrategy;
 
-import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.DefaultEditionNumberPropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.PropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.strategy.DefaultEditionNumberPropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
 import com.reka.lakatos.searchbyisbn.document.Edition;
 import org.junit.jupiter.api.BeforeEach;
