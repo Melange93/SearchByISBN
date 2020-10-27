@@ -1,6 +1,6 @@
-package com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies;
+package com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.strategy;
 
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.PropertyUpdatingStrategy;
 import com.reka.lakatos.searchbyisbn.document.Book;
 
 import java.util.Arrays;

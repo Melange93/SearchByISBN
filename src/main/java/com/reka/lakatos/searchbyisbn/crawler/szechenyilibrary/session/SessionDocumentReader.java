@@ -4,6 +4,7 @@ import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.exception.
 import com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.exception.SessionIdReadingException;
 import com.reka.lakatos.searchbyisbn.webdocument.WebDocument;
 import com.reka.lakatos.searchbyisbn.webdocument.WebElement;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@ConditionalOnProperty(name = "crawler.book-crawler", havingValue = "szechenyi")
 public class SessionDocumentReader {
     private static final String[] SERVERS_URL = {
             "http://nektar1.oszk.hu/LVbin/LibriVision/",

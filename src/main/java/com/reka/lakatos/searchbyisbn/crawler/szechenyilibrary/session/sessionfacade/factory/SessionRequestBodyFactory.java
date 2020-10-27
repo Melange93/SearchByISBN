@@ -1,8 +1,10 @@
 package com.reka.lakatos.searchbyisbn.crawler.szechenyilibrary.session.sessionfacade.factory;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 @Service
+@ConditionalOnProperty(name = "crawler.book-crawler", havingValue = "szechenyi")
 public class SessionRequestBodyFactory {
 
     public String getSessionActivationRequestBody(final String sessionId) {

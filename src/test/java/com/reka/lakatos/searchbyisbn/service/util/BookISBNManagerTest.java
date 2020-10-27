@@ -19,10 +19,6 @@ class BookISBNManagerTest {
     @InjectMocks
     private BookISBNManager bookISBNManager;
 
-    private static final String VALID_ISBN = "978-963-06-5122-6";
-    private static final String NOT_VALID_ISBN = "978-963-00-7705-7";
-
-
     @Test
     void isValidISBNNull() {
         assertThat(bookISBNManager.isValidISBN(null)).isFalse();
@@ -35,14 +31,19 @@ class BookISBNManagerTest {
 
     @Test
     void isValidISBNValid() {
-        when(isbnValidator.isValid(VALID_ISBN)).thenReturn(true);
-        assertThat(bookISBNManager.isValidISBN(VALID_ISBN)).isTrue();
+        String validISBN = "978-963-06-5122-6";
+        when(isbnValidator.isValid("9789630651226")).thenReturn(true);
+        boolean result = bookISBNManager.isValidISBN(validISBN);
+        assertThat(result).isTrue();
     }
 
     @Test
     void isValidISBNNotValid() {
-        when(isbnValidator.isValid(NOT_VALID_ISBN)).thenReturn(false);
-        assertThat(bookISBNManager.isValidISBN(NOT_VALID_ISBN)).isFalse();
+        String notValidISBN = "978-963-00-7705-7";
+        when(isbnValidator.isValid("9789630077057")).thenReturn(false);
+
+        boolean result = bookISBNManager.isValidISBN(notValidISBN);
+        assertThat(result).isFalse();
     }
 
     @Test

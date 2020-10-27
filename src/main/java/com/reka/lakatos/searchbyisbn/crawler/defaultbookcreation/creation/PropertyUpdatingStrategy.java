@@ -1,4 +1,4 @@
-package com.reka.lakatos.searchbyisbn.crawler.bookcreation;
+package com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation;
 
 import com.reka.lakatos.searchbyisbn.document.Book;
 

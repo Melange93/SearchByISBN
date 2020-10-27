@@ -27,47 +27,48 @@ public class Crawler implements BookCrawler {
     private final WebClient webClient;
 
     private static final String NAME = "Ervin Szabo Library";
-    private static final String ISBN963 = "978963";
-    private static final String ISBN615 = "978615";
+    private static final String[] ISBN_GROUPS = {"978963", "978615", "963"};
     private static final String PAGE_SIZE = "10";
-    private static final int ISBN_MAX_SEVENTH_NUMBER = 9;
+    private static final int MAX_NUMBER = 99;
 
+    private int resultNumber;
     private int page = 0;
     private int isbnSeventhNumber = 0;
-    private String searchingISBNMainGroup = ISBN963;
+    private int ISBNGroupIndex = 0;
 
     @Override
     public List<Book> getNextBooks() {
         try {
-            log.info("Start crawling: {}, Page number: {}, Searching ISBN: {}",
-                    NAME, page + 1, searchingISBNMainGroup + isbnSeventhNumber);
-
-            List<Book> books = getCrawledBooks();
-            booksPageScrolling(books);
-
-            if (isCrawlerFinishedThisISBNGroup(books, ISBN615)) {
+            if (ISBNGroupIndex == ISBN_GROUPS.length) {
                 return null;
             }
 
+            String lastNumber = calculateSearchingLastNumber();
+            String searchingISBN = ISBN_GROUPS[ISBNGroupIndex] + lastNumber;
+            printSearchingInformation(searchingISBN);
+            List<Book> books = getCrawledBooks(searchingISBN);
+            booksPageScrolling();
+
             return books;
         } catch (Exception e) {
+            String lastNumber = calculateSearchingLastNumber();
             log.error("Exception happened while crawling list book location! Page " + page
-                    + " Searching ISBN: " + searchingISBNMainGroup + isbnSeventhNumber, e);
+                    + " Searching ISBN: " + ISBN_GROUPS[ISBNGroupIndex] + lastNumber, e);
 
             booksPageScrollingWhenExceptionHappened();
             return getNextBooks();
         }
     }
 
-    private List<Book> getCrawledBooks() {
+    private List<Book> getCrawledBooks(String searchingISBN) {
+
+        String isbnSearchingUrl = urlFactory.createISBNSearchingUrl(
+                page,
+                searchingISBN,
+                PAGE_SIZE
+        );
         final Map<String, String> booksPropertiesPageUrlInformation =
-                getInformationForBookPropertiesUrl(
-                        urlFactory.createISBNSearchingUrl(
-                                page,
-                                searchingISBNMainGroup + isbnSeventhNumber,
-                                PAGE_SIZE
-                        )
-                );
+                getInformationForBookPropertiesUrl(isbnSearchingUrl);
 
         return crawledBooksCreator.getCrawledBooks(booksPropertiesPageUrlInformation);
     }
@@ -75,42 +76,44 @@ public class Crawler implements BookCrawler {
     private Map<String, String> getInformationForBookPropertiesUrl(String ISBNSearchingUrl) {
         try {
             final WebDocument booksPage = webClient.sendGetRequest(ISBNSearchingUrl);
-
+            resultNumber = documentReaderFacade.getResultNumber(booksPage);
             return documentReaderFacade.getInformationForBookPropertiesPage(booksPage);
         } catch (WebClientException e) {
             throw new BookListDownloadException("Unable to download the list book page! Url: " + ISBNSearchingUrl, e);
         }
     }
 
+    private void printSearchingInformation(String isbn) {
+        log.info("Start crawling: {}, Page number: {}, Searching ISBN: {}",
+                NAME, page + 1, isbn);
+    }
+
+    private String calculateSearchingLastNumber() {
+        String lastNumber = String.valueOf(isbnSeventhNumber);
+        if (isbnSeventhNumber < 10) {
+            lastNumber = "0" + isbnSeventhNumber;
+        }
+        return lastNumber;
+    }
+
     private void booksPageScrollingWhenExceptionHappened() {
         page++;
     }
 
-    private void booksPageScrolling(List<Book> books) {
-        page++;
-
-        if (isCrawlerFinishedThisSeventhISBNNumberCrawling(books)) {
-            page = 0;
-            isbnSeventhNumber++;
+    private void booksPageScrolling() {
+        int remainingBooks = resultNumber - ((page + 1) * Integer.parseInt(PAGE_SIZE));
+        if (remainingBooks > 0) {
+            page++;
         }
 
-        if (isCrawlerFinishedThisISBNGroup(books, ISBN963)) {
+        if (remainingBooks <= 0) {
             page = 0;
-            isbnSeventhNumber = 0;
-            searchingISBNMainGroup = ISBN615;
+            if (isbnSeventhNumber >= MAX_NUMBER) {
+                isbnSeventhNumber = 0;
+                ISBNGroupIndex++;
+            } else {
+                isbnSeventhNumber++;
+            }
         }
-    }
-
-    private boolean isCrawlerFinishedThisSeventhISBNNumberCrawling(List<Book> books) {
-        return books != null
-                && books.size() == 0
-                && isbnSeventhNumber <= ISBN_MAX_SEVENTH_NUMBER;
-    }
-
-    private boolean isCrawlerFinishedThisISBNGroup(List<Book> books, String ISBNGroup) {
-        return books != null
-                && books.size() == 0
-                && isbnSeventhNumber > ISBN_MAX_SEVENTH_NUMBER
-                && searchingISBNMainGroup.equals(ISBNGroup);
     }
 }

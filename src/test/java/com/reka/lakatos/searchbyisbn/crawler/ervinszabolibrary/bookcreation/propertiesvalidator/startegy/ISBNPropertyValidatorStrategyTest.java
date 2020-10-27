@@ -1,7 +1,7 @@
 package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.propertiesvalidator.startegy;
 
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.PropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.service.util.BookISBNManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,10 @@ class ISBNPropertyValidatorStrategyTest {
 
     @Test
     void validatePropertyValidOne() {
-        assertThat(isbnPropertyValidatorStrategy.validateProperty("978-963-06-5122-6")).isTrue();
+        String testISBN = "978-963-06-5122-6";
+        when(bookISBNManager.cleanISBN(testISBN)).thenReturn("9789630651226");
+        boolean result = isbnPropertyValidatorStrategy.validateProperty("978-963-06-5122-6");
+        assertThat(result).isTrue();
     }
 
     @Test
@@ -53,8 +56,14 @@ class ISBNPropertyValidatorStrategyTest {
 
     @Test
     void validatePropertyTwoISBN13OneISBN10() {
+        String testISBN = "978-963-06-5122-6 978-963-07-5122-6 963-08-5122-6";
+
+        when(bookISBNManager.cleanISBN("978-963-06-5122-6")).thenReturn("9789630651226");
+        when(bookISBNManager.cleanISBN("978-963-07-5122-6")).thenReturn("9789630751226");
+        when(bookISBNManager.cleanISBN("963-08-5122-6")).thenReturn("9630851226");
+
         boolean result = isbnPropertyValidatorStrategy
-                .validateProperty("978-963-06-5122-6 978-963-07-5122-6 963-08-5122-6");
+                .validateProperty(testISBN);
         assertThat(result).isFalse();
     }
 
@@ -88,18 +97,14 @@ class ISBNPropertyValidatorStrategyTest {
 
     @Test
     void validatePropertyOneISBN13OneISBN10SameBook() {
-        String sameBookISBN13 = "978-963-06-5122-6";
-        String cleanISBN13 = "9789630651226";
+        String testISBN = "978-963-06-5122-6 963-06-5122-X";
 
-        String sameBookISBN10 = "963-06-5122-X";
-        String cleanISBN10 = "963065122X";
-
-        when(bookISBNManager.cleanISBN(sameBookISBN13)).thenReturn(cleanISBN13);
-        when(bookISBNManager.cleanISBN(sameBookISBN10)).thenReturn(cleanISBN10);
-        when(bookISBNManager.convertISBNToISBN13(cleanISBN10)).thenReturn(cleanISBN13);
+        when(bookISBNManager.cleanISBN("978-963-06-5122-6")).thenReturn("9789630651226");
+        when(bookISBNManager.cleanISBN("963-06-5122-X")).thenReturn("963065122X");
+        when(bookISBNManager.convertISBNToISBN13("963065122X")).thenReturn("9789630651226");
 
         boolean result = isbnPropertyValidatorStrategy
-                .validateProperty(sameBookISBN10 + " " + sameBookISBN13);
+                .validateProperty(testISBN);
 
         assertThat(result).isTrue();
     }

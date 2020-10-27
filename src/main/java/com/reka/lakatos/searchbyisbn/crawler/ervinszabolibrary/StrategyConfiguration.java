@@ -1,10 +1,10 @@
 package com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary;
 
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.PropertyUpdatingStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.defaultstrategies.*;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.PropertyValidatorStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
-import com.reka.lakatos.searchbyisbn.crawler.bookcreation.validator.strategy.DefaultNotesPropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.PropertyUpdatingStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.creation.strategy.*;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.PropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
+import com.reka.lakatos.searchbyisbn.crawler.defaultbookcreation.validator.strategy.DefaultNotesPropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.crawler.ervinszabolibrary.bookcreation.propertiesvalidator.startegy.SeeAlsoPropertyValidatorStrategy;
 import com.reka.lakatos.searchbyisbn.service.util.BookISBNManager;
 import lombok.RequiredArgsConstructor;
@@ -22,15 +22,19 @@ public class StrategyConfiguration {
     private final BookISBNManager bookISBNManager;
 
     @Bean
-    public Map<String, PropertyUpdatingStrategy> getBookPropertyUpdatingStrategyMap() {
+    public Map<PropertyUpdatingStrategy, String> getBookPropertyUpdatingStrategyMap() {
         return Map.ofEntries(
-                Map.entry("Cím:", new DefaultTitlePropertyUpdatingStrategy()),
-                Map.entry("Szerző:", new DefaultAuthorPropertyUpdatingStrategy()),
-                Map.entry("ISBN:", new DefaultISBNPropertyUpdatingStrategy()),
-                Map.entry("Megjelenés:", new DefaultPublisherPropertyUpdatingStrategy()),
-                Map.entry("Dátum:", new DefaultDatePropertyUpdatingStrategy()),
-                Map.entry("Terjedelem:", new DefaultSizePropertyUpdatingStrategy()),
-                Map.entry("Egyéb nevek:", new DefaultContributorsPropertyUpdatingStrategy())
+                Map.entry(new DefaultTitlePropertyUpdatingStrategy(), "Cím:"),
+                Map.entry(new DefaultSpecialCoverTypePropertyUpdatingStrategy(), "Cím:"),
+                Map.entry(new DefaultAuthorPropertyUpdatingStrategy(), "Szerző:"),
+                Map.entry(new DefaultISBNPropertyUpdatingStrategy(), "ISBN:"),
+                Map.entry(new DefaultBasicCoverTypePropertyUpdatingStrategy(), "ISBN:"),
+                Map.entry(new DefaultPublisherPropertyUpdatingStrategy(), "Megjelenés:"),
+                Map.entry(new DefaultDatePropertyUpdatingStrategy(), "Dátum:"),
+                Map.entry(new DefaultEditionNumberPropertyUpdatingStrategy("[\\d]+(?=\\.\\skiad\\.)"), "Dátum:"),
+                Map.entry(new DefaultThicknessPropertyUpdatingStrategy(), "Terjedelem:"),
+                Map.entry(new DefaultPageNumberPropertyUpdatingStrategy(), "Terjedelem:"),
+                Map.entry(new DefaultContributorsPropertyUpdatingStrategy(), "Egyéb nevek:")
         );
     }
 
