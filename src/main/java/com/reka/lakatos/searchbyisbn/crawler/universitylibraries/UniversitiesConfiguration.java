@@ -30,7 +30,6 @@ public class UniversitiesConfiguration {
                 Map.entry("http://hunteka.lib.semmelweis.hu/", Arrays.asList("book", "edocument", "map", "music")),
                 Map.entry("http://hunteka.neprajz.hu/", Arrays.asList("book", "edocument", "map", "music")),
                 Map.entry("http://hunteka.szepmuveszeti.hu/", Arrays.asList("book", "edocument", "map", "music")),
-                Map.entry("https://opac3-konyvtar.hadtori.hunteka.hu/", Arrays.asList("book", "edocument", "map", "music")),
                 Map.entry("http://hunteka.hoppmuseum.hu/", Arrays.asList("book", "edocument", "map", "music"))
         );
     }
