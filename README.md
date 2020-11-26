@@ -28,12 +28,7 @@ You can change them in the application.properties
 
 ##### How to run the web crawlers:
 
-<pre><ul><li>Metropolitan Ervin Szabó Library:
-   Set run configuration parameters to:
-        parameter name: crawler.book-crawler
-        parameter value: ervin
-   And run the application
-   </li>
+<pre><ul>
 <li>National Széchenyi Library:
   Set run configuration parameters to:
        parameter name: crawler.book-crawler
@@ -87,4 +82,14 @@ You can change them in the application.properties
          
          second parameter name: crawler.book-crawler.university-catalog-main-url
          second parameter value: http://hunteka.hoppmuseum.hu/
-    And run the application</li></ul></pre>
+    And run the application
+ </li>
+ <li>
+   *OUT OF WORK! The http://saman.fszek.hu/ page was updated.*
+   Metropolitan Ervin Szabó Library:
+   Set run configuration parameters to:
+        parameter name: crawler.book-crawler
+        parameter value: ervin
+   And run the application
+   </li>
+    </ul></pre>
