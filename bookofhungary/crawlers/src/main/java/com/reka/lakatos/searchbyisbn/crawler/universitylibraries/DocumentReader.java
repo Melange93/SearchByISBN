@@ -53,7 +53,6 @@ public class DocumentReader {
     }
 
     public String getFurtherSearchingUrl(WebDocument webDocument, String pageNumber, String resultPerPage) {
-        // TODO: 2020. 08. 27. create exception!
         String url = webDocument.select("#page_form_mobile-top").stream()
                 .filter(webElement -> webElement.hasAttr("jumpUrl"))
                 .findFirst()

@@ -10,8 +10,7 @@ public class URLFactory {
                 + pageSize
                 + "&view=short&sort=0&page="
                 + pageNumber
-                + "&perpage="
-                + pageSize
+                + "&perpage=0"
                 + "&action=perpage&actualsearchset=FIND+ISBN+%22"
                 + isbn
                 + "%25%22&actualsort=0&language=&currentpage=result&text0=&index0=&whichform=simplesearchpage&showmenu=&resultview=short&recnum=&marcposition=&text0=&index0=&ccltext=&resultsize=";
