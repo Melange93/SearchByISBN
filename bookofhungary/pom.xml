@@ -6,7 +6,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>crawlers-rename</module>
-        <module>books-view</module>
+        <module>database-reader</module>
         <module>crawlers</module>
     </modules>
     <groupId>com.reka.lakatos</groupId>
