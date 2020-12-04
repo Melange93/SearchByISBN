@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>crawlers</artifactId>
+        <groupId>com.reka.lakatos</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>crawlers-implementation</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>bookcreation-logic</module>
+        <module>crawlers-implementation-ervinszabo</module>
+        <module>crawlers-implementation-szechenyi</module>
+        <module>crawlers-implementation-universities</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.reka.lakatos</groupId>
+            <artifactId>crawlers-domain</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.reka.lakatos</groupId>
+            <artifactId>crawlers-webdocument</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.reka.lakatos</groupId>
+            <artifactId>crawlers-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>

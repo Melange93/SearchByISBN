@@ -17,6 +17,7 @@
         <module>crawlers-runner</module>
         <module>crawlers-service</module>
         <module>crawlers-webdocument</module>
+        <module>crawlers-implementation</module>
     </modules>
 
     <dependencies>
