@@ -8,7 +8,7 @@ import com.reka.lakatos.booksofhungary.crawlers.implementation.bookcrationlogic.
 import com.reka.lakatos.booksofhungary.crawlers.implementation.bookcrationlogic.defaultbookcreation.validator.strategy.DefaultNotValidPropertyValidatorStrategy;
 import com.reka.lakatos.booksofhungary.crawlers.implementation.universitylibraries.bookcreationstratgy.creation.PublisherPropertyUpdatingStrategy;
 import com.reka.lakatos.booksofhungary.crawlers.implementation.universitylibraries.bookcreationstratgy.creation.TitlePropertyUpdatingStrategy;
-import com.reka.lakatos.booksofhungary.crawlers.service.registrationservice.BookISBNManager;
+import com.reka.lakatos.booksofhungary.isbnmanager.service.BookISBNManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;

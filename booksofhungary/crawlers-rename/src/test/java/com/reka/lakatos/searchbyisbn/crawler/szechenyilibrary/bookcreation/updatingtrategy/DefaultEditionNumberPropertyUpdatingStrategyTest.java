@@ -11,7 +11,7 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class EditionNumberPropertyUpdatingStrategyTest {
+class DefaultEditionNumberPropertyUpdatingStrategyTest {
 
     private PropertyUpdatingStrategy editionNumberPropertyUpdating;
 

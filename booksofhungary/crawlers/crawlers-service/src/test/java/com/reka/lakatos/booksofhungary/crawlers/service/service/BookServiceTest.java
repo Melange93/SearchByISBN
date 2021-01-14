@@ -2,9 +2,9 @@ package com.reka.lakatos.booksofhungary.crawlers.service.service;
 
 import com.reka.lakatos.booksofhungary.crawlers.domain.database.Book;
 import com.reka.lakatos.booksofhungary.crawlers.service.BookService;
-import com.reka.lakatos.booksofhungary.crawlers.service.registrationservice.BookISBNManager;
 import com.reka.lakatos.booksofhungary.crawlers.service.registrationservice.BookRegistry;
 import com.reka.lakatos.booksofhungary.crawlers.service.registrationservice.RegistryResult;
+import com.reka.lakatos.booksofhungary.isbnmanager.service.BookISBNManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

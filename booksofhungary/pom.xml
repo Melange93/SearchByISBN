@@ -19,6 +19,7 @@
         <module>crawlers-rename</module>
         <module>database-reader</module>
         <module>crawlers</module>
+        <module>isbn-manager</module>
     </modules>
 
     <properties>

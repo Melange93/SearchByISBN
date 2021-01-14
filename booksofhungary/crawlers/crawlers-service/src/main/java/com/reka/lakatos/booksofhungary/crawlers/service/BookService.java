@@ -1,10 +1,10 @@
 package com.reka.lakatos.booksofhungary.crawlers.service;
 
 import com.reka.lakatos.booksofhungary.crawlers.domain.database.Book;
+import com.reka.lakatos.booksofhungary.isbnmanager.service.BookISBNManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import com.reka.lakatos.booksofhungary.crawlers.service.registrationservice.BookISBNManager;
 import com.reka.lakatos.booksofhungary.crawlers.service.registrationservice.BookRegistry;
 import com.reka.lakatos.booksofhungary.crawlers.service.registrationservice.RegistryResult;
 

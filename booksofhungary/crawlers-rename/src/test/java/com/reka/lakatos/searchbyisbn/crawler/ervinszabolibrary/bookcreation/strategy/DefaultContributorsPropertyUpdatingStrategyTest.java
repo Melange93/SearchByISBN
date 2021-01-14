@@ -14,7 +14,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ContributorsPropertyUpdatingStrategyTest {
+class DefaultContributorsPropertyUpdatingStrategyTest {
 
     private PropertyUpdatingStrategy contributorsPropertyUpdatingStrategy;
     private static final int TEST_EDITION_INDEX = 0;

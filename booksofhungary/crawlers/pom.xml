@@ -37,6 +37,12 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>com.reka.lakatos</groupId>
+            <artifactId>isbn-manager</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
         <!-- Test -->
         <dependency>
             <groupId>org.assertj</groupId>

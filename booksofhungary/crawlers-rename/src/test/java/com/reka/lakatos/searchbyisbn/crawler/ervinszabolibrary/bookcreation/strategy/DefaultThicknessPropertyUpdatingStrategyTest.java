@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SizePropertyUpdatingStrategyTest {
+class DefaultThicknessPropertyUpdatingStrategyTest {
 
     private PropertyUpdatingStrategy sizePropertyUpdatingStrategy;
     private static final int TEST_EDITION_INDEX = 0;

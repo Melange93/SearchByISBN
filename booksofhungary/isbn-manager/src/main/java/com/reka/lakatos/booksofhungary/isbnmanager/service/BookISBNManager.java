@@ -1,4 +1,4 @@
-package com.reka.lakatos.booksofhungary.crawlers.service.registrationservice;
+package com.reka.lakatos.booksofhungary.isbnmanager.service;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.routines.ISBNValidator;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class BookISBNManager {
 
+    private static final String[] HUNGARY_ISBN_STARTING_NUMBERS = {"978963", "978615", "963"};
     private static final int ISBN10_LENGTH = 10;
 
     private final ISBNValidator isbnValidator;
@@ -32,5 +33,14 @@ public class BookISBNManager {
 
     public boolean isISBN10(String isbn) {
         return isbn.length() == ISBN10_LENGTH;
+    }
+
+    public boolean isHungaryISBN(String ISBN) {
+        for (String startingNumber : HUNGARY_ISBN_STARTING_NUMBERS) {
+            if (ISBN.startsWith(startingNumber)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

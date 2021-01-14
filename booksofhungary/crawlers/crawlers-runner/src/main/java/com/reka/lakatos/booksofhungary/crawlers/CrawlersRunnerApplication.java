@@ -1,5 +1,6 @@
 package com.reka.lakatos.booksofhungary.crawlers;
 
+import com.reka.lakatos.booksofhungary.isbnmanager.service.BookISBNManager;
 import org.apache.commons.validator.routines.ISBNValidator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,8 +13,4 @@ public class CrawlersRunnerApplication {
 		SpringApplication.run(CrawlersRunnerApplication.class, args);
 	}
 
-	@Bean
-	public ISBNValidator getISBNValidator() {
-		return new ISBNValidator();
-	}
 }

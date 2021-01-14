@@ -1,11 +1,13 @@
-package com.reka.lakatos.booksofhungary.crawlers.service.service.registrationservice;
+package com.reka.lakatos.booksofhungary.isbnmanager.test;
 
-import com.reka.lakatos.booksofhungary.crawlers.service.registrationservice.BookISBNManager;
+import com.reka.lakatos.booksofhungary.isbnmanager.service.BookISBNManager;
 import org.apache.commons.validator.routines.ISBNValidator;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,18 +35,18 @@ class BookISBNManagerTest {
     @Test
     void isValidISBNValid() {
         String validISBN = "978-963-06-5122-6";
-        when(isbnValidator.isValid("9789630651226")).thenReturn(true);
+        Mockito.when(isbnValidator.isValid("9789630651226")).thenReturn(true);
         boolean result = bookISBNManager.isValidISBN(validISBN);
-        assertThat(result).isTrue();
+        Assertions.assertThat(result).isTrue();
     }
 
     @Test
     void isValidISBNNotValid() {
         String notValidISBN = "978-963-00-7705-7";
-        when(isbnValidator.isValid("9789630077057")).thenReturn(false);
+        Mockito.when(isbnValidator.isValid("9789630077057")).thenReturn(false);
 
         boolean result = bookISBNManager.isValidISBN(notValidISBN);
-        assertThat(result).isFalse();
+        Assertions.assertThat(result).isFalse();
     }
 
     @Test
@@ -58,9 +60,9 @@ class BookISBNManagerTest {
     void convertISBNToISBN13InputISBN10() {
         String isbn10 = "963-06-5122-X";
         String cleanIsbn10 = "963065122X";
-        when(isbnValidator.convertToISBN13(cleanIsbn10)).thenReturn("9789630651226");
+        Mockito.when(isbnValidator.convertToISBN13(cleanIsbn10)).thenReturn("9789630651226");
         String resultISBN = bookISBNManager.convertISBNToISBN13(isbn10);
-        assertThat(resultISBN).isEqualTo("9789630651226");
+        Assertions.assertThat(resultISBN).isEqualTo("9789630651226");
     }
 
     @Test

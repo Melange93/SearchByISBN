@@ -1,8 +1,8 @@
 package com.reka.lakatos.booksofhungary.crawlers.implementation.bookcrationlogic.defaultbookcreation.validator.strategy;
 
 import com.reka.lakatos.booksofhungary.crawlers.implementation.bookcrationlogic.defaultbookcreation.validator.PropertyValidatorStrategy;
+import com.reka.lakatos.booksofhungary.isbnmanager.service.BookISBNManager;
 import lombok.RequiredArgsConstructor;
-import com.reka.lakatos.booksofhungary.crawlers.service.registrationservice.BookISBNManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,6 @@ public class DefaultISBNPropertyValidatorStrategy implements PropertyValidatorSt
 
     private final BookISBNManager bookISBNManager;
 
-    private static final String[] HUNGARY_ISBN_STARTING_NUMBERS = {"978963", "978615", "963"};
     private static final String ISBN10_AND_ISBN13 =
             "(\\d{1,3}([- ])\\d{1,5}\\2\\d{1,7}\\2\\d{1,6}\\2(\\d|X))" +
             "|(\\d{1,5}([- ])\\d{1,7}\\5\\d{1,6}\\5(\\d|X))" +
@@ -61,20 +60,11 @@ public class DefaultISBNPropertyValidatorStrategy implements PropertyValidatorSt
         while (isbnMatcher.find()) {
             String isbn = isbnMatcher.group().trim();
             isbn = bookISBNManager.cleanISBN(isbn);
-            if (isHungaryISBN(isbn)) {
+            if (bookISBNManager.isHungaryISBN(isbn)) {
                 isbns.add(isbn);
             }
         }
 
         return isbns;
-    }
-
-    private boolean isHungaryISBN(String ISBN) {
-        for (String startingNumber : HUNGARY_ISBN_STARTING_NUMBERS) {
-            if (ISBN.startsWith(startingNumber)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

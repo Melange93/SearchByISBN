@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class DatePropertyUpdatingStrategyTest {
+class DefaultDatePropertyUpdatingStrategyTest {
 
     private PropertyUpdatingStrategy datePropertyUpdatingStrategy;
     private static final int TEST_EDITION_INDEX = 0;
