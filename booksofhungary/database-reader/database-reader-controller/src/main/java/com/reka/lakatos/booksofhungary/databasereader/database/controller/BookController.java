@@ -2,15 +2,11 @@ package com.reka.lakatos.booksofhungary.databasereader.database.controller;
 
 import com.reka.lakatos.booksofhungary.databasereader.database.domain.Book;
 import com.reka.lakatos.booksofhungary.databasereader.database.domain.BookResponse;
-import com.reka.lakatos.booksofhungary.databasereader.database.domain.Edition;
-import com.reka.lakatos.booksofhungary.databasereader.database.domain.EditionResponse;
 import com.reka.lakatos.booksofhungary.databasereader.database.service.BookService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,25 +17,27 @@ public class BookController {
 
     private final BookService bookService;
 
-    @GetMapping("/searchbook")
-    public BookResponse getBookByISBN(@RequestParam String isbn) {
-        Book book = bookService.getBookByISBN(isbn);
-        List<Edition> editions = book.getEditions();
-        List<EditionResponse> editionResponses = editions.stream()
-                .map(edition ->
-                        EditionResponse.builder()
-                                .contributors(edition.getContributors())
-                                .editionNumber(edition.getEditionNumber())
-                                .pageNumber(edition.getPageNumber())
-                                .thickness(edition.getThickness())
-                                .yearOfRelease(edition.getYearOfRelease())
-                                .build()
-                ).collect(Collectors.toList());
+    @RequestMapping(method = RequestMethod.GET, value = "/searchbook")
+    public List<BookResponse> getBooksByRequestParam(
+            @RequestParam(name = "param") String param,
+            @RequestParam(name = "input") String input
+    ) {
+        if (param == null || input == null) {
+            return new ArrayList<>();
+        }
+        return mapBooksToBookResponses(bookService.getBooksByParam(param, input));
+    }
 
+    private List<BookResponse> mapBooksToBookResponses(List<Book> books) {
+        return books.stream()
+                .map(this::mapBookToBookResponse)
+                .collect(Collectors.toList());
+    }
+
+    private BookResponse mapBookToBookResponse(Book book) {
         return BookResponse.builder()
                 .isbn(book.getIsbn())
                 .author(book.getAuthor())
-                .editions(editionResponses)
                 .publisher(book.getPublisher())
                 .title(book.getTitle())
                 .build();
