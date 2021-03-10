@@ -25,7 +25,9 @@ public class BookController {
         if (param == null || input == null) {
             return new ArrayList<>();
         }
-        return mapBooksToBookResponses(bookService.getBooksByParam(param, input));
+
+        final List<Book> booksByParam = bookService.getBooksByParam(param, input);
+        return mapBooksToBookResponses(booksByParam);
     }
 
     private List<BookResponse> mapBooksToBookResponses(List<Book> books) {
