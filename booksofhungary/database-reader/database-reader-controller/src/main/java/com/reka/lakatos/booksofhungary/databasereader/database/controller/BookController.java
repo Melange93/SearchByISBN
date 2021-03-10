@@ -38,7 +38,7 @@ public class BookController {
 
     private BookResponse mapBookToBookResponse(Book book) {
         return BookResponse.builder()
-                .isbn(book.getIsbn())
+                .isbn13(book.getIsbn())
                 .author(book.getAuthor())
                 .publisher(book.getPublisher())
                 .title(book.getTitle())
