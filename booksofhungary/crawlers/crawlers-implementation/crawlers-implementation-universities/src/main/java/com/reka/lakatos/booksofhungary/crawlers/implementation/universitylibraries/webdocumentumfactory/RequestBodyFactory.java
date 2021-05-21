@@ -18,8 +18,8 @@ public class RequestBodyFactory {
                 "&term1=" +
                 "&type1=title" +
                 "&logic2=AND" +
-                "&term2=" + documentType +
-                "&type2=documentType" +
+                "&term2=" +
+                "&type2=topic" +
                 "&dbid=solr" +
                 "&filter0filterintervalbegin=" +
                 "&filter0filterintervalend=" +
@@ -27,9 +27,10 @@ public class RequestBodyFactory {
                 "&filter1=" +
                 "&ftype1=publishPlace" +
                 "&filter2=" +
-                "&ftype2=documentSubtype" +
-                "&filter3=" +
-                "&ftype3=language" +
+                "&ftype2=language" +
+                "&ftype3=itemStatusFacet" +
+                "&flogic3=OR" +
+                "&filter4_0=" + documentType +
                 "&ftype4=documentType" +
                 "&flogic4=OR";
     }

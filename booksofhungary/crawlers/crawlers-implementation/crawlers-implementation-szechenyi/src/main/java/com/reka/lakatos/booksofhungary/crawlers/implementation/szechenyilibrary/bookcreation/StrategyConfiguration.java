@@ -4,6 +4,7 @@ import com.reka.lakatos.booksofhungary.crawlers.domain.database.CoverType;
 import com.reka.lakatos.booksofhungary.crawlers.implementation.bookcrationlogic.defaultbookcreation.creation.PropertyUpdatingStrategy;
 import com.reka.lakatos.booksofhungary.crawlers.implementation.bookcrationlogic.defaultbookcreation.creation.strategy.*;
 import com.reka.lakatos.booksofhungary.crawlers.implementation.bookcrationlogic.defaultbookcreation.validator.PropertyValidatorStrategy;
+import com.reka.lakatos.booksofhungary.crawlers.implementation.bookcrationlogic.defaultbookcreation.validator.strategy.DefaultCoverTypeValidatorStrategy;
 import com.reka.lakatos.booksofhungary.crawlers.implementation.bookcrationlogic.defaultbookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
 import com.reka.lakatos.booksofhungary.crawlers.implementation.szechenyilibrary.bookcreation.updatingtrategy.*;
 import com.reka.lakatos.booksofhungary.crawlers.implementation.szechenyilibrary.bookcreation.validation.ExtendISBNPropertyValidatorStrategy;
@@ -48,8 +49,6 @@ public class StrategyConfiguration {
                 Map.entry("hangfelvétel", CoverType.SOUND_RECORD),
                 Map.entry("elektronikus dok.", CoverType.DIGITAL),
                 Map.entry("elektronikus kartográfiai dok.", CoverType.DIGITAL),
-                Map.entry("nyomtatott kotta", CoverType.MUSIC_BOOK),
-                Map.entry("kotta", CoverType.MUSIC_BOOK),
                 Map.entry("kartográfiai dokumentum", CoverType.MAP),
                 Map.entry("elektronikus dokumentum", CoverType.DIGITAL),
                 Map.entry("térkép", CoverType.MAP)
@@ -63,7 +62,8 @@ public class StrategyConfiguration {
                                 new DefaultISBNPropertyValidatorStrategy(bookISBNManager),
                                 getPropertyValueContainsResult()
                         )
-                )
+                ),
+                Map.entry("Cím és szerzőségi közlés:", new DefaultCoverTypeValidatorStrategy())
         );
     }
 

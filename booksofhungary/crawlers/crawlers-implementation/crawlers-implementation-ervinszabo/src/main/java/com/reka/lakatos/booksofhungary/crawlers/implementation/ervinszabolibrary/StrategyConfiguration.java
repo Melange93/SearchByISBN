@@ -3,6 +3,7 @@ package com.reka.lakatos.booksofhungary.crawlers.implementation.ervinszabolibrar
 import com.reka.lakatos.booksofhungary.crawlers.implementation.bookcrationlogic.defaultbookcreation.creation.PropertyUpdatingStrategy;
 import com.reka.lakatos.booksofhungary.crawlers.implementation.bookcrationlogic.defaultbookcreation.creation.strategy.*;
 import com.reka.lakatos.booksofhungary.crawlers.implementation.bookcrationlogic.defaultbookcreation.validator.PropertyValidatorStrategy;
+import com.reka.lakatos.booksofhungary.crawlers.implementation.bookcrationlogic.defaultbookcreation.validator.strategy.DefaultCoverTypeValidatorStrategy;
 import com.reka.lakatos.booksofhungary.crawlers.implementation.bookcrationlogic.defaultbookcreation.validator.strategy.DefaultISBNPropertyValidatorStrategy;
 import com.reka.lakatos.booksofhungary.crawlers.implementation.bookcrationlogic.defaultbookcreation.validator.strategy.DefaultNotesPropertyValidatorStrategy;
 import com.reka.lakatos.booksofhungary.crawlers.implementation.ervinszabolibrary.bookcreation.propertiesvalidator.startegy.SeeAlsoPropertyValidatorStrategy;
@@ -43,7 +44,8 @@ public class StrategyConfiguration {
         return Map.ofEntries(
                 Map.entry("Megjegyzések:", new DefaultNotesPropertyValidatorStrategy()),
                 Map.entry("Lásd még:", new SeeAlsoPropertyValidatorStrategy()),
-                Map.entry("ISBN:", new DefaultISBNPropertyValidatorStrategy(bookISBNManager))
+                Map.entry("ISBN:", new DefaultISBNPropertyValidatorStrategy(bookISBNManager)),
+                Map.entry("Cím:", new DefaultCoverTypeValidatorStrategy())
         );
     }
 }

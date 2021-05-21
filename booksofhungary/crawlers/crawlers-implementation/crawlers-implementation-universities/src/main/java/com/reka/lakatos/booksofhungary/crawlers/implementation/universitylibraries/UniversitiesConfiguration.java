@@ -26,11 +26,11 @@ public class UniversitiesConfiguration {
 
     private Map<String, List<String>> getUniversitiesSearchingDocumentTypes() {
         return Map.ofEntries(
-                Map.entry("https://hunteka.sze.hu/", Arrays.asList("book", "edocument", "map", "music")),
-                Map.entry("http://hunteka.lib.semmelweis.hu/", Arrays.asList("book", "edocument", "map", "music")),
-                Map.entry("http://hunteka.neprajz.hu/", Arrays.asList("book", "edocument", "map", "music")),
-                Map.entry("http://hunteka.szepmuveszeti.hu/", Arrays.asList("book", "edocument", "map", "music")),
-                Map.entry("http://hunteka.hoppmuseum.hu/", Arrays.asList("book", "edocument", "map", "music"))
+                Map.entry("https://hunteka.sze.hu/", Arrays.asList("book", "edocument", "map")),
+                Map.entry("http://hunteka.lib.semmelweis.hu/", Arrays.asList("book", "edocument", "map")),
+                Map.entry("http://hunteka.neprajz.hu/", Arrays.asList("book", "edocument", "map")),
+                Map.entry("http://hunteka.szepmuveszeti.hu/", Arrays.asList("book", "edocument", "map")),
+                Map.entry("http://hunteka.hoppmuseum.hu/", Arrays.asList("book", "edocument", "map"))
         );
     }
 
@@ -38,8 +38,7 @@ public class UniversitiesConfiguration {
     public Map<String, CoverType> getCoverTypeByDocumentType() {
         return Map.ofEntries(
                 Map.entry("edocument", CoverType.DIGITAL),
-                Map.entry("map", CoverType.MAP),
-                Map.entry("music", CoverType.SOUND_RECORD)
+                Map.entry("map", CoverType.MAP)
         );
     }
 }

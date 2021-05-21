@@ -19,7 +19,8 @@ public class PublisherPropertyUpdatingStrategy implements PropertyUpdatingStrate
         Pattern publisherPattern = Pattern.compile("[^:]*?(?=[,])");
         Matcher matcher = publisherPattern.matcher(value);
         if (matcher.find()) {
-            book.setPublisher(matcher.group().trim());
+            String result = matcher.group().trim();
+            book.setPublisher(result);
         }
     }
 }

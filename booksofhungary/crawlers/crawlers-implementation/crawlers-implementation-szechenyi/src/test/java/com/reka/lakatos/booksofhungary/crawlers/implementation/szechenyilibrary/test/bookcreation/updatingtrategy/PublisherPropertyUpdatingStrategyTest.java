@@ -32,26 +32,4 @@ class PublisherPropertyUpdatingStrategyTest {
         String result = book.getPublisher();
         assertThat(result).isEqualTo("Térkép-Center");
     }
-
-    @Test
-    void updatePropertyDate() {
-        Book book = Book.builder().editions(Collections.singletonList(new Edition())).build();
-        String property = "Budapest : Térkép-Center, 2012.";
-
-        propertyUpdatingStrategy.updateProperty(book, property);
-
-        int result = book.getEditions().get(INDEX_OF_BASIC_EDITION).getYearOfRelease();
-        assertThat(result).isEqualTo(2012);
-    }
-
-    @Test
-    void updatePropertyInvalidDate() {
-        Book book = Book.builder().editions(Collections.singletonList(new Edition())).build();
-        String property = "Budapest : Térkép-Center, 2012-2018";
-
-        propertyUpdatingStrategy.updateProperty(book, property);
-
-        int result = book.getEditions().get(INDEX_OF_BASIC_EDITION).getYearOfRelease();
-        assertThat(result).isEqualTo(0);
-    }
 }
